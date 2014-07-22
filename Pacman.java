@@ -37,7 +37,6 @@ public class Pacman extends JPanel
   
   private static Graphics2D theG;
   
-  private static int firstRun = 0;
   private static long hitEnergizerAt;
   
   private static int pacmanScore = 0;
@@ -45,6 +44,7 @@ public class Pacman extends JPanel
   
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
+  private static JLabel isFrightenedLabel;
   
   private boolean controlTouch = false;
   
@@ -64,6 +64,10 @@ public class Pacman extends JPanel
     pacmanLivesLabel = new JLabel("Lives: " + pacmanLives, JLabel.LEFT);
     pacmanLivesLabel.setForeground(Color.WHITE);
     add(pacmanLivesLabel);
+    
+    isFrightenedLabel = new JLabel("     Normal", JLabel.LEFT);
+    isFrightenedLabel.setForeground(Color.WHITE);
+    add(isFrightenedLabel);
     
     initializeVariables();
   }
@@ -87,25 +91,34 @@ public class Pacman extends JPanel
     int x = (int) ghostStart.getX();
     int y = (int) ghostStart.getY();
     
+    //Left Inside
+    redGhost = new TheGhost(Color.RED, x, y);
+    redGhost.setX(x - 2);
+    //redGhost = new TheGhost(Color.RED, x - 2, y);
+    board[redGhost.getY()][redGhost.getX()] = GHOST;
+    theGhosts[0] = redGhost;
+    
     //Middle inside
     blueGhost = new TheGhost(Color.CYAN, x, y);
     board[blueGhost.getY()][blueGhost.getX()] = GHOST;
     theGhosts[1] = blueGhost;
     
     //Right inside
-    orangeGhost = new TheGhost(Color.ORANGE, x + 2, y);
+    orangeGhost = new TheGhost(Color.ORANGE, x, y);
+    orangeGhost.setX(x + 2);
+    //orangeGhost = new TheGhost(Color.ORANGE, x + 2, y);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
     
     //Outside
-    pinkGhost = new TheGhost(Color.PINK, x, y - 2);
+    pinkGhost = new TheGhost(Color.PINK, x, y);
+    pinkGhost.setY(y - 2);
+    //pinkGhost = new TheGhost(Color.PINK, x, y - 2);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
     
-    //Left Inside
-    redGhost = new TheGhost(Color.RED, x - 2, y);
-    board[redGhost.getY()][redGhost.getX()] = GHOST;
-    theGhosts[0] = redGhost;
+    for(int i = 0; i < theGhosts.length; i++)
+      System.out.println(theGhosts[i]);
     
     ghostPenQ.add(blueGhost);
     ghostPenQ.add(orangeGhost);
@@ -182,18 +195,22 @@ public class Pacman extends JPanel
   }
   
   /** If Pacman eats a ghost on frightened mode */
-  private void eatGhost(final PacmanItem.Direction theDirection) {
+  private void eatGhost(final PacmanItem.Direction theDirection) {   
+    pacmanScore += 200;
+    
     System.out.println("Current Pacman location: " + pacman.getY() + "\t" + pacman.getX());
     System.out.println("Pink Ghost: " + pinkGhost.getY() + "\t" + pinkGhost.getX());
+    
+    board[pinkGhost.getY()][pinkGhost.getX()] = PACMAN;
+    
+    moveItem(pacman, theDirection);
+    
+    pinkGhost.returnToStartPosition();   
+    board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
   }
   
   /** Paint method, called by repaint() */
   public void paintComponent(Graphics g) {
-    if(firstRun == 0) {
-      initializeVariables();
-      firstRun++;
-    }
-    
     theG = (Graphics2D) g;
     drawSquares();
     
@@ -270,7 +287,6 @@ public class Pacman extends JPanel
     
     for(int i = 0; i < theGhosts.length; i++) {
       drawGhost(theGhosts[i]);
-      System.out.println(theGhosts[i]);
     }
   }
   
@@ -369,8 +385,13 @@ public class Pacman extends JPanel
   }
   
   /** Updates the score and num lives labels */
-  private static synchronized void updateLabels() {
+  private synchronized void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore + "     ");
-    pacmanLivesLabel.setText("Lives: " + pacmanLives);
+    pacmanLivesLabel.setText("Lives: " + pacmanLives + "     ");
+    
+    if(isFrightened())
+      isFrightenedLabel.setText("Frightened Mode");
+    else
+      isFrightenedLabel.setText("Normal Mode");
   }
 }
