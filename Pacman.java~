@@ -1,11 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
-import java.awt.event.*;
 
-/** Written by Ryan D'souza
-  * Brown University CS 015 Final Project 
-  * Main Class of Pacman game*/
+import java.awt.event.*;
 
 public class Pacman extends JPanel
 {
@@ -37,7 +34,7 @@ public class Pacman extends JPanel
   private static JLabel pacmanLivesLabel;
   
   private static final int CALCULATION_NORMAL = Integer.MAX_VALUE/10;
-  private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE/30; //80;
+  private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE/20; //80
   private static final int FRIGHTENED_MODE = 800; //5 seconds
   
   private static long hitEnergizerAt;
@@ -45,7 +42,6 @@ public class Pacman extends JPanel
   
   private static final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
-  /** Constructor, initializes JPanel and board */
   public Pacman() {
     super();
     setSize(new Dimension(400, 400));
@@ -73,7 +69,7 @@ public class Pacman extends JPanel
       for(int y = 0; y < board[i].length; y++) {
         //Pacman starting location
         if(board[i][y] == PACMAN)
-          pacman = new ThePacman(y, i, Color.YELLOW);
+          pacman = new ThePacman(y, i);
         
         //Ghost starting location
         else if(board[i][y] == GHOST)
@@ -86,31 +82,30 @@ public class Pacman extends JPanel
     
     //Middle inside
     blueGhost = new TheGhost(Color.CYAN, x, y);
-    board[blueGhost.getY()][blueGhost.getX()] = GHOST;
+    board[y][x] = GHOST;
     theGhosts[1] = blueGhost;
     
     //Right inside
     orangeGhost = new TheGhost(Color.ORANGE, x + 2, y);
-    board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
+    board[y][x-2] = GHOST;
     theGhosts[2] = orangeGhost;
     
-    //Outside
+    //Left inside
     pinkGhost = new TheGhost(Color.PINK, x, y - 2);
-    board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
+    board[y][x-2] = GHOST;
     theGhosts[3] = pinkGhost;
     
-    //Left Inside
+    //Outside
     redGhost = new TheGhost(Color.RED, x - 2, y);
-    board[redGhost.getY()][redGhost.getX()] = GHOST;
+    board[y-2][x] = GHOST;
     theGhosts[0] = redGhost;
     
     ghostPenQ.add(blueGhost);
     ghostPenQ.add(orangeGhost);
-    ghostPenQ.add(redGhost);
+    ghostPenQ.add(pinkGhost);
   }
   
-  /** Returns an int representing the item that the parameter's item will hit
-    * based on the parameter item's direction */
+  
   private static int getItemInNextMove(final PacmanItem movingItem, 
                                        final PacmanItem.Direction theDirection) {
     try {
@@ -136,7 +131,6 @@ public class Pacman extends JPanel
     }
   }
   
-  /** Moves the item parameter based on the direction parameter */
   public synchronized void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
     
@@ -178,13 +172,11 @@ public class Pacman extends JPanel
     repaint();
   }
   
-  /** If Pacman eats a ghost on frightened mode */
   private void eatGhost(final PacmanItem.Direction theDirection) {
     System.out.println("Current Pacman location: " + pacman.getY() + "\t" + pacman.getX());
-    System.out.println("Pink Ghost: " + pinkGhost.getY() + "\t" + pinkGhost.getX());
+    System.out.println("Red Ghost: " + redGhost.getY() + "\t" + redGhost.getX());
   }
   
-  /** Paint method, called by repaint() */
   public void paintComponent(Graphics g) {
     if(firstRun == 0) {
       initializeVariables();
@@ -211,8 +203,6 @@ public class Pacman extends JPanel
     catch(Exception e) { e.printStackTrace(); }
   }
   
-  /** If Pacman hits a ghost and it's not on frightened mode
-    * Move pacman back to initial position, decrement lives */
   public void hitGhost() {
     board[pacman.getY()][pacman.getX()] = FREE;
     pacman.returnToStartPosition();
@@ -263,20 +253,29 @@ public class Pacman extends JPanel
             break;
         }
       }
-    }
-    
-    for(int i = 0; i < theGhosts.length; i++) {
-      drawGhost(theGhosts[i]);
-      System.out.println(theGhosts[i]);
+      
+      //Middle inside
+      theG.setColor(Color.CYAN);
+      drawGhost(blueGhost.getY() * SCALE, blueGhost.getX() * SCALE);
+      
+      //Right inside
+      theG.setColor(Color.ORANGE);
+      drawGhost(orangeGhost.getY() * SCALE, orangeGhost.getX() * SCALE);
+      
+      //Left inside
+      theG.setColor(Color.PINK);
+      drawGhost(pinkGhost.getY() * SCALE, pinkGhost.getX() * SCALE);
+      
+      //Outside
+      theG.setColor(Color.RED);
+      drawGhost(redGhost.getY() * SCALE, redGhost.getX() * SCALE);
     }
   }
   
-  /** Returns true if Pacman/Ghosts are frightened */
   private boolean isFrightened() {
     return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED_MODE;
   }
   
-  /** Main method, creates frame and adds game to it */
   public static void main(String[] ryan) {
     JFrame theFrame = new JFrame("Pacman");
     theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -286,13 +285,12 @@ public class Pacman extends JPanel
     theFrame.setVisible(true);
   }
   
-  /** Sets pacman's location in the board to PACMAN */
   private void updatePacmanBoard() {
     board[pacman.getY()][pacman.getX()] = PACMAN;
   }
   
-  /**Listens to keyboard events, sets the facing direction based on those events
-    * Then moves the item in regards to the facing direction */
+  /**Listens to keyboard events, sets the facing direction 
+    * based on that */
   private class ControlListener implements KeyListener 
   {
     public void keyPressed(KeyEvent e) { 
@@ -338,34 +336,25 @@ public class Pacman extends JPanel
     public void keyTyped(KeyEvent e) { }
   }
   
-  /** Draws the ghost in the parameter */
-  private static void drawGhost(TheGhost theGhost) {
-    theG.setColor(theGhost.getColor());
-    theG.fillRect(theGhost.getX() * SCALE, theGhost.getY() * SCALE , GHOST_SIZE, GHOST_SIZE);
+  
+  private static void drawGhost(int y, int x) {
+    theG.fillRect(x, y, GHOST_SIZE, GHOST_SIZE);
   }
   
-  /** Draws a black square at X and Y */
   private static void drawBlackSquare(int x, int y) {
     theG.setColor(Color.BLACK);
     theG.fillRect(y * SCALE, x * SCALE, SCALE, SCALE);
   }
   
-  /** Returns the board as a 2D array */
   public static int[][] getBoard() {      
     return  cs015.fnl.PacmanSupport.SupportMap.getMap();
   }
-  
-  /** Prints the board as a 2D array */
   public static void printBoard() {
     for(int y = 0; y < board.length; y++)
-    {
       for(int i = 0; i < board[y].length; i++)
-        System.out.print(board[y][i] + " ");
-      System.out.println();
-    }
+      System.out.println(board[y][i]);
   }
   
-  /** Updates the score and num lives labels */
   private static synchronized void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore + "     ");
     pacmanLivesLabel.setText("Lives: " + pacmanLives);
