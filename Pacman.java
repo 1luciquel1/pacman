@@ -9,15 +9,18 @@ import java.awt.event.*;
 
 public class Pacman extends JPanel
 {
-  private static final int SIZE = 23;
   private static final int board[][] = getBoard();
+  private static final TheGhost[] theGhosts = new TheGhost[4];
+  
   private static final int SCALE = 20;
-  private static Graphics2D theG;
   private static final int PACMAN_SIZE = 15;
   private static final int GHOST_SIZE = 20;
   private static final int DOT_SIZE = 5;
   private static final int ENERGIZER_SIZE = DOT_SIZE * 2;
-  private static int firstRun = 0;
+  
+  private static final int CALCULATION_NORMAL = Integer.MAX_VALUE/10;
+  private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE/30; //80;
+  private static final int FRIGHTENED_MODE = 800; //5 seconds
   
   private static final int WALL = 0;
   private static final int FREE = 1;
@@ -27,23 +30,23 @@ public class Pacman extends JPanel
   private static final int GHOST = 5;
   private static final int OUT = 6;
   
-  private static ThePacman pacman;
+  private static final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
+  
   private static TheGhost redGhost, pinkGhost, blueGhost, orangeGhost;
-  private static final TheGhost[] theGhosts = new TheGhost[4];
+  private static ThePacman pacman;
+  
+  private static Graphics2D theG;
+  
+  private static int firstRun = 0;
+  private static long hitEnergizerAt;
   
   private static int pacmanScore = 0;
   private static int pacmanLives = 3;
+  
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
   
-  private static final int CALCULATION_NORMAL = Integer.MAX_VALUE/10;
-  private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE/30; //80;
-  private static final int FRIGHTENED_MODE = 800; //5 seconds
-  
-  private static long hitEnergizerAt;
   private boolean controlTouch = false;
-  
-  private static final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
   /** Constructor, initializes JPanel and board */
   public Pacman() {
