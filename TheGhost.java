@@ -22,5 +22,5 @@ public class TheGhost extends PacmanItem
   public long getPenTime() { return this.startPenTime; }
   public void setPenTime(long time) { this.startPenTime = time; }
   
-  public String toString() { return "GHOST:\t" + theColor.toString() + "\tX: " + x + "\tY: " + y; }
+  public String toString() { return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y; }
 }
