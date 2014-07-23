@@ -450,7 +450,7 @@ public class Pacman extends JPanel {
     }
   }
   
-  /** Updates the score and num lives labels */
+  /** Updates the score, num lives, ghost pen release countdown, and ghost mode labels */
   private synchronized void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
     pacmanLivesLabel.setText("     Lives: " + pacmanLives + "     ");
