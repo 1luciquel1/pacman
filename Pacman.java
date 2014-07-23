@@ -20,7 +20,10 @@ public class Pacman extends JPanel {
   
   private static final int CALCULATION_NORMAL = Integer.MAX_VALUE/10;
   private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE/30; //80;
-  private static final int FRIGHTENED_MODE = 800; //5 seconds
+  
+  private static final int FRIGHTENED = 800; //SHOULD BE 7 SECONDS
+  private static final int CHASE = 20; //20 Seconds
+  private static final int SCATTER = 7; //7 Seconds
   
   private static final int WALL = 0;
   private static final int FREE = 1;
@@ -37,10 +40,7 @@ public class Pacman extends JPanel {
   
   private static Graphics2D theG;
   
-  private static long hitEnergizerAt;
-  
   private static final int GHOST_RELEASE = 5; //Release ghost every 5 seconds
-  private static long ghostReleasedAt;
   private static Point ghostReleasePoint;
   private static Point ghostSpawnPoint;
   
@@ -49,10 +49,16 @@ public class Pacman extends JPanel {
   
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
-  private static JLabel isFrightenedLabel;
+  private static JLabel ghostModeLabel;
   private static JLabel nextGhostReleaseLabel;
   
   private boolean controlTouch = false;
+  private static boolean isChaseMode; 
+  
+  private static long ghostModeStart;
+  private static long hitEnergizerAt;
+  private static long ghostReleasedAt;
+  
   
   /** Constructor, initializes JPanel and board */
   public Pacman() {
@@ -71,9 +77,9 @@ public class Pacman extends JPanel {
     pacmanLivesLabel.setForeground(Color.WHITE);
     add(pacmanLivesLabel);
     
-    isFrightenedLabel = new JLabel("     Normal", JLabel.LEFT);
-    isFrightenedLabel.setForeground(Color.WHITE);
-    add(isFrightenedLabel);
+    ghostModeLabel = new JLabel("     Normal", JLabel.LEFT);
+    ghostModeLabel.setForeground(Color.WHITE);
+    add(ghostModeLabel);
     
     nextGhostReleaseLabel = new JLabel("     Ghost Release", JLabel.LEFT);
     nextGhostReleaseLabel.setForeground(Color.WHITE);
@@ -133,9 +139,37 @@ public class Pacman extends JPanel {
     for(int i = 0; i < theGhosts.length; i++)
       System.out.println(theGhosts[i]);
     
-    ghostPenQ.add(blueGhost);
-    ghostPenQ.add(orangeGhost);
-    ghostPenQ.add(redGhost);
+    isChaseMode = true;
+    ghostModeStart = System.currentTimeMillis();
+  }
+  
+  /** @return true if chase mode */
+  public boolean isChaseMode() {
+    
+    //If it's chaseMode right now
+    if(isChaseMode) {
+      //if it's still chase mode
+      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) <= CHASE);
+      
+      //If ChaseMode is over now, start other mode
+      if(!isChaseMode)
+        ghostModeStart = System.currentTimeMillis();
+      
+      return isChaseMode;
+    }
+    
+    //If it's not chaseMode right now
+    else if(!isChaseMode) { 
+      //If it's still not chase mode
+      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) >= SCATTER);
+      
+      if(isChaseMode)
+        ghostModeStart = System.currentTimeMillis();
+      
+      return isChaseMode;
+    }
+    
+    return isChaseMode; 
   }
   
   /** If it is time, removes next ghost from pen and places ghost at
@@ -200,7 +234,7 @@ public class Pacman extends JPanel {
       return; 
     
     if(itemInNextDirection == GHOST) {
-      if(isFrightened())
+      if(ghostMode())
         eatGhost(theDirection);
       else
         hitGhost();
@@ -326,8 +360,8 @@ public class Pacman extends JPanel {
   }
   
   /** Returns true if Pacman/Ghosts are frightened */
-  private boolean isFrightened() {
-    return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED_MODE;
+  private boolean ghostMode() {
+    return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED;
   }
   
   /** Main method, creates frame and adds game to it */
@@ -421,16 +455,19 @@ public class Pacman extends JPanel {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
     pacmanLivesLabel.setText("     Lives: " + pacmanLives + "     ");
     
-    if(ghostPenQ.size() != 0) {
+    if(ghostPenQ.size() >= 0) {
       int timeToRelease = (int)GHOST_RELEASE - (int)((System.currentTimeMillis() - ghostReleasedAt)/1000);
       nextGhostReleaseLabel.setText("     Ghost Release: " + timeToRelease);
     }
     else
       nextGhostReleaseLabel.setText("     Ghost Release: N/A");
     
-    if(isFrightened())
-      isFrightenedLabel.setText("     Frightened Mode");
+    int timeLeft = (int) ((System.currentTimeMillis() - ghostModeStart)/1000);
+    if(ghostMode())
+      ghostModeLabel.setText("     Frightened Mode: " + (FRIGHTENED - timeLeft));
+    else if(isChaseMode())
+      ghostModeLabel.setText("     Chase Mode: " + (CHASE - timeLeft));
     else
-      isFrightenedLabel.setText("     Normal Mode");
+      ghostModeLabel.setText("     Scatter Mode: " + (SCATTER - timeLeft));
   }
 }
