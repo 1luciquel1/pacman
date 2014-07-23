@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 
 /** Written by Ryan D'souza
   * Brown University CS 015 Final Project 
@@ -53,6 +54,12 @@ public abstract class PacmanItem {
         default:
           break;
       }
+    }
+    
+    /** @param new point */
+    public void setPoint(final Point thePoint) {
+      this.x = (int) thePoint.getX();
+      this.y = (int) thePoint.getY();
     }
     
     /** @return colorOfItem */  
