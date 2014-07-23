@@ -7,8 +7,7 @@ import java.awt.event.*;
   * Brown University CS 015 Final Project 
   * Main Class of Pacman game*/
 
-public class Pacman extends JPanel
-{
+public class Pacman extends JPanel {
   private static final int board[][] = getBoard();
   private static final TheGhost[] theGhosts = new TheGhost[4];
   
@@ -138,7 +137,7 @@ public class Pacman extends JPanel
   private static void releaseGhosts() {
     if(ghostPenQ.size() != 0)
       if((System.currentTimeMillis() - ghostReleasedAt)/1000 == GHOST_RELEASE)
-        ghostLeavePen(ghostPenQ.remove());
+      ghostLeavePen(ghostPenQ.remove());
   }
   
   /** Removes ghost from its position on the board, updates 
@@ -180,7 +179,8 @@ public class Pacman extends JPanel
   }
   
   /** Moves the item parameter based on the direction parameter */
-  public synchronized void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
+  public synchronized void moveItem(final PacmanItem theItem, 
+                                    final PacmanItem.Direction theDirection) {
     controlTouch = false;
     
     if(theDirection == null)
@@ -193,8 +193,7 @@ public class Pacman extends JPanel
     if(itemInNextDirection == OUT)
       return; 
     
-    if(itemInNextDirection == GHOST)
-    {
+    if(itemInNextDirection == GHOST) {
       if(isFrightened())
         eatGhost(theDirection);
       else
@@ -342,8 +341,7 @@ public class Pacman extends JPanel
   
   /**Listens to keyboard events, sets the facing direction based on those events
     * Then moves the item in regards to the facing direction */
-  private class ControlListener implements KeyListener 
-  {
+  private class ControlListener implements KeyListener {
     public void keyPressed(KeyEvent e) { 
       
       controlTouch = true;
@@ -354,8 +352,7 @@ public class Pacman extends JPanel
       //Current location becomes nothing for Pacman
       board[pacman.getY()][pacman.getX()] = FREE;
       
-      switch(e.getKeyCode())
-      {
+      switch(e.getKeyCode()) {
         //LEFT
         case KeyEvent.VK_LEFT:
           movingDirection = PacmanItem.Direction.LEFT;
@@ -424,4 +421,4 @@ public class Pacman extends JPanel
     else
       isFrightenedLabel.setText("Normal Mode");
   }
-  }
+}
