@@ -38,11 +38,14 @@ public class Pacman extends JPanel
   private static Graphics2D theG;
   
   private static long hitEnergizerAt;
+  
+  private static final int GHOST_RELEASE = 5; //Release ghost every 5 seconds
   private static long ghostReleasedAt;
+  private static Point ghostReleasePoint;
+  private static Point ghostSpawnPoint;
   
   private static int pacmanScore = 0;
   private static int pacmanLives = 3;
-  private static Point ghostReleasePoint;
   
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
@@ -98,17 +101,21 @@ public class Pacman extends JPanel
     redGhost.setX(x - 2);
     board[redGhost.getY()][redGhost.getX()] = GHOST;
     theGhosts[0] = redGhost;
+    ghostPenQ.add(redGhost);
     
     //Middle inside
     blueGhost = new TheGhost(Color.CYAN, x, y);
     board[blueGhost.getY()][blueGhost.getX()] = GHOST;
     theGhosts[1] = blueGhost;
+    ghostPenQ.add(blueGhost);
+    ghostSpawnPoint = new Point(blueGhost.getX(), blueGhost.getY());
     
     //Right inside
     orangeGhost = new TheGhost(Color.ORANGE, x, y);
     orangeGhost.setX(x + 2);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
+    ghostPenQ.add(orangeGhost);
     
     //Outside
     pinkGhost = new TheGhost(Color.PINK, x, y);
@@ -116,6 +123,7 @@ public class Pacman extends JPanel
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
+    ghostReleasedAt = System.currentTimeMillis();
     
     for(int i = 0; i < theGhosts.length; i++)
       System.out.println(theGhosts[i]);
@@ -123,6 +131,25 @@ public class Pacman extends JPanel
     ghostPenQ.add(blueGhost);
     ghostPenQ.add(orangeGhost);
     ghostPenQ.add(redGhost);
+  }
+  
+  /** If it is time, removes next ghost from pen and places ghost at
+    * initial ghostReleasePoint */
+  private static void releaseGhosts() {
+    if(ghostPenQ.size() != 0)
+      if((System.currentTimeMillis() - ghostReleasedAt)/1000 == GHOST_RELEASE)
+        ghostLeavePen(ghostPenQ.remove());
+  }
+  
+  /** Removes ghost from its position on the board, updates 
+    * ghosts coordinates to that of initial point, 
+    * updates board to that value */
+  private static void ghostLeavePen(final TheGhost theGhost) {
+    board[theGhost.getY()][theGhost.getX()] = FREE;
+    theGhost.setX((int) ghostReleasePoint.getX());
+    theGhost.setY((int) ghostReleasePoint.getY());
+    board[theGhost.getY()][theGhost.getX()] = GHOST;
+    ghostReleasedAt = System.currentTimeMillis();
   }
   
   /** Returns an int representing the item that the parameter's item will hit
@@ -205,13 +232,16 @@ public class Pacman extends JPanel
     
     moveItem(pacman, theDirection);
     
-    pinkGhost.returnToStartPosition();   
+    pinkGhost.setPoint(ghostSpawnPoint);
+    ghostReleasedAt = System.currentTimeMillis();
+    ghostPenQ.add(pinkGhost);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
   }
   
   /** Paint method, called by repaint() */
   public void paintComponent(Graphics g) {
     theG = (Graphics2D) g;
+    releaseGhosts();
     drawSquares();
     
     moveItem(pacman, pacman.getFacingDirection());
@@ -394,4 +424,4 @@ public class Pacman extends JPanel
     else
       isFrightenedLabel.setText("Normal Mode");
   }
-}
+  }
