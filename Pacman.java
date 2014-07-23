@@ -8,6 +8,7 @@ import java.awt.event.*;
   * Main Class of Pacman game*/
 
 public class Pacman extends JPanel {
+  
   private static final int board[][] = getBoard();
   private static final TheGhost[] theGhosts = new TheGhost[4];
   
@@ -49,6 +50,7 @@ public class Pacman extends JPanel {
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
   private static JLabel isFrightenedLabel;
+  private static JLabel nextGhostReleaseLabel;
   
   private boolean controlTouch = false;
   
@@ -61,17 +63,21 @@ public class Pacman extends JPanel {
     setFocusable(true);
     requestFocusInWindow();
     
-    pacmanScoreLabel = new JLabel("Score: " + pacmanScore + "     ", JLabel.RIGHT);
+    pacmanScoreLabel = new JLabel("Score: " + pacmanScore, JLabel.RIGHT);
     pacmanScoreLabel.setForeground(Color.white);
     add(pacmanScoreLabel);
     
-    pacmanLivesLabel = new JLabel("Lives: " + pacmanLives, JLabel.LEFT);
+    pacmanLivesLabel = new JLabel("     Lives: " + pacmanLives, JLabel.LEFT);
     pacmanLivesLabel.setForeground(Color.WHITE);
     add(pacmanLivesLabel);
     
     isFrightenedLabel = new JLabel("     Normal", JLabel.LEFT);
     isFrightenedLabel.setForeground(Color.WHITE);
     add(isFrightenedLabel);
+    
+    nextGhostReleaseLabel = new JLabel("     Ghost Release", JLabel.LEFT);
+    nextGhostReleaseLabel.setForeground(Color.WHITE);
+    add(nextGhostReleaseLabel);
     
     initializeVariables();
   }
@@ -403,8 +409,7 @@ public class Pacman extends JPanel {
   
   /** Prints the board as a 2D array */
   public static void printBoard() {
-    for(int y = 0; y < board.length; y++)
-    {
+    for(int y = 0; y < board.length; y++) {
       for(int i = 0; i < board[y].length; i++)
         System.out.print(board[y][i] + " ");
       System.out.println();
@@ -413,12 +418,19 @@ public class Pacman extends JPanel {
   
   /** Updates the score and num lives labels */
   private synchronized void updateLabels() {
-    pacmanScoreLabel.setText("Score: " + pacmanScore + "     ");
-    pacmanLivesLabel.setText("Lives: " + pacmanLives + "     ");
+    pacmanScoreLabel.setText("Score: " + pacmanScore);
+    pacmanLivesLabel.setText("     Lives: " + pacmanLives + "     ");
+    
+    if(ghostPenQ.size() != 0) {
+      int timeToRelease = (int)GHOST_RELEASE - (int)((System.currentTimeMillis() - ghostReleasedAt)/1000);
+      nextGhostReleaseLabel.setText("     Ghost Release: " + timeToRelease);
+    }
+    else
+      nextGhostReleaseLabel.setText("     Ghost Release: N/A");
     
     if(isFrightened())
-      isFrightenedLabel.setText("Frightened Mode");
+      isFrightenedLabel.setText("     Frightened Mode");
     else
-      isFrightenedLabel.setText("Normal Mode");
+      isFrightenedLabel.setText("     Normal Mode");
   }
 }
