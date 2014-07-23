@@ -38,9 +38,11 @@ public class Pacman extends JPanel
   private static Graphics2D theG;
   
   private static long hitEnergizerAt;
+  private static long ghostReleasedAt;
   
   private static int pacmanScore = 0;
   private static int pacmanLives = 3;
+  private static Point ghostReleasePoint;
   
   private static JLabel pacmanScoreLabel;
   private static JLabel pacmanLivesLabel;
@@ -94,7 +96,6 @@ public class Pacman extends JPanel
     //Left Inside
     redGhost = new TheGhost(Color.RED, x, y);
     redGhost.setX(x - 2);
-    //redGhost = new TheGhost(Color.RED, x - 2, y);
     board[redGhost.getY()][redGhost.getX()] = GHOST;
     theGhosts[0] = redGhost;
     
@@ -106,16 +107,15 @@ public class Pacman extends JPanel
     //Right inside
     orangeGhost = new TheGhost(Color.ORANGE, x, y);
     orangeGhost.setX(x + 2);
-    //orangeGhost = new TheGhost(Color.ORANGE, x + 2, y);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
     
     //Outside
     pinkGhost = new TheGhost(Color.PINK, x, y);
     pinkGhost.setY(y - 2);
-    //pinkGhost = new TheGhost(Color.PINK, x, y - 2);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
+    ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     
     for(int i = 0; i < theGhosts.length; i++)
       System.out.println(theGhosts[i]);
