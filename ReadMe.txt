@@ -6,6 +6,8 @@ Run Pacman.java ( javac *.java; java Pacman.java )
 
 Pacman.java contains the main method that begins everything.
 
+IMPORTANT: cs015.jar MUST BE ADDED AS A PROJECT LIBRARY OR CLASSPATH. The .jar contains a 2D array that represents the board and its contents. 
+
 Brown University CS 015 Final Project
 
 Project Specifications: 
