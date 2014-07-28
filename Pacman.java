@@ -282,7 +282,7 @@ public class Pacman extends JPanel {
   
   /** Moves Ghost back to pen */
   public void ghostRespawn(final TheGhost theEaten) {
-    theEaten.setPoint(new Point(new Random().nextInt(23), new Random().nextInt(23)));
+    theEaten.setPoint(ghostSpawnPoint);
     ghostPenQ.add(theEaten);
     updateBoard(theEaten.getPoint(), GHOST);
     ghostReleasedAt = System.currentTimeMillis();
