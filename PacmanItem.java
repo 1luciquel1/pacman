@@ -66,13 +66,19 @@ public abstract class PacmanItem {
     public Color getColor() { return this.theColor; }
     
     /** @param colorOfitem */
-    public void setColor(Color tC) { this.theColor = tC; }
+    public void setColor(Color tC) { 
+      this.theColor = tC; 
+    }
     
     /** @return startingXPosition */
-    public int getStartX() { return this.startX; }
+    public int getStartX() {
+      return this.startX; 
+    }
     
     /** @return startingYPosition */
-    public int getStartY() { return this.startY; }
+    public int getStartY() { 
+      return this.startY;
+    }
     
     /** Returns the item to initial position by
       * setting X and Y coordinates to the ones first given in the constructor */

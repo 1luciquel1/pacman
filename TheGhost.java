@@ -10,8 +10,7 @@ public class TheGhost extends PacmanItem
   private long startPenTime;
   
   /** Constructor */
-  public TheGhost(Color theColor, int x, int y)
-  {
+  public TheGhost(Color theColor, int x, int y) {
     super(x, y, theColor);
     
     //For the time the ghost is in the pen
@@ -19,8 +18,14 @@ public class TheGhost extends PacmanItem
   }
   
   /** @return timeTheGhost was in the pen */
-  public long getPenTime() { return this.startPenTime; }
-  public void setPenTime(long time) { this.startPenTime = time; }
+  public long getPenTime() { 
+    return this.startPenTime; 
+  }
+  public void setPenTime(long time) { 
+    this.startPenTime = time; 
+  }
   
-  public String toString() { return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y; }
+  public String toString() {
+    return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y;
+  }
 }
