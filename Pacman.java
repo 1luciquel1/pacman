@@ -277,6 +277,11 @@ public class Pacman extends JPanel {
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
   }
   
+  /** Update board location with that Pacman type */
+  public void updateBoard(final Point thePoint, final int theItem) {
+    board[(int)thePoint.getY()][(int)thePoint.getX()] = theItem;
+  }
+  
   /** Paint method, called by repaint() */
   public void paintComponent(Graphics g) {
     theG = (Graphics2D) g;
