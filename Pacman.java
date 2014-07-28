@@ -12,6 +12,8 @@ public class Pacman extends JPanel {
   private static final int board[][] = getBoard();
   private static final TheGhost[] theGhosts = new TheGhost[4];
   
+  private static final String SPACE = "     ";
+  
   private static final int SCALE = 20;
   private static final int PACMAN_SIZE = 15;
   private static final int GHOST_SIZE = 20;
@@ -72,15 +74,15 @@ public class Pacman extends JPanel {
     pacmanScoreLabel.setForeground(Color.white);
     add(pacmanScoreLabel);
     
-    pacmanLivesLabel = new JLabel("     Lives: " + pacmanLives, JLabel.LEFT);
+    pacmanLivesLabel = new JLabel(SPACE + "Lives: " + pacmanLives, JLabel.LEFT);
     pacmanLivesLabel.setForeground(Color.WHITE);
     add(pacmanLivesLabel);
     
-    ghostModeLabel = new JLabel("     Normal", JLabel.LEFT);
+    ghostModeLabel = new JLabel(SPACE + "Normal", JLabel.LEFT);
     ghostModeLabel.setForeground(Color.WHITE);
     add(ghostModeLabel);
     
-    nextGhostReleaseLabel = new JLabel("     Ghost Release", JLabel.LEFT);
+    nextGhostReleaseLabel = new JLabel(SPACE + "Ghost Release", JLabel.LEFT);
     nextGhostReleaseLabel.setForeground(Color.WHITE);
     add(nextGhostReleaseLabel);
     
@@ -468,21 +470,21 @@ public class Pacman extends JPanel {
   /** Updates the score, num lives, ghost pen release countdown, and ghost mode labels */
   private synchronized void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
-    pacmanLivesLabel.setText("     Lives: " + pacmanLives + "     ");
+    pacmanLivesLabel.setText(SPACE + "Lives: " + pacmanLives + "     ");
     
     if(ghostPenQ.size() != 0) {
       int timeToRelease = (int)GHOST_RELEASE - (int)((System.currentTimeMillis() - ghostReleasedAt)/1000);
-      nextGhostReleaseLabel.setText("     Ghost Release: " + timeToRelease);
+      nextGhostReleaseLabel.setText(SPACE + "Ghost Release: " + timeToRelease);
     }
     else if(ghostPenQ.size() <= 0)
-      nextGhostReleaseLabel.setText("     Ghost Release: N/A");
+      nextGhostReleaseLabel.setText(SPACE + "Ghost Release: N/A");
     
     int timeLeft = (int) ((System.currentTimeMillis() - ghostModeStart)/1000);
     if(ghostMode())
-      ghostModeLabel.setText("     Frightened Mode: " + (FRIGHTENED - timeLeft));
+      ghostModeLabel.setText(SPACE + "Frightened Mode: " + (FRIGHTENED - timeLeft));
     else if(isChaseMode())
-      ghostModeLabel.setText("     Chase Mode: " + (CHASE - timeLeft));
+      ghostModeLabel.setText(SPACE + "Chase Mode: " + (CHASE - timeLeft));
     else
-      ghostModeLabel.setText("     Scatter Mode: " + (SCATTER - timeLeft));
+      ghostModeLabel.setText(SPACE + "Scatter Mode: " + (SCATTER - timeLeft));
   }
 }
