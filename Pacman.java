@@ -264,17 +264,34 @@ public class Pacman extends JPanel {
   private void eatGhost(final PacmanItem.Direction theDirection) {   
     pacmanScore += 200;
     
-    System.out.println("Current Pacman location: " + pacman.getY() + "\t" + pacman.getX());
-    System.out.println("Pink Ghost: " + pinkGhost.getY() + "\t" + pinkGhost.getX());
+    final Point pacmanOriginalPoint = pacman.getPoint();
+    pacman.move(theDirection);
+    final Point pacmanOnGhostPoint = pacman.getPoint();
     
-    board[pinkGhost.getY()][pinkGhost.getX()] = PACMAN;
+    TheGhost aboutToBeEaten = null;
+    for(int i = 0; i < theGhosts.length; i++) {
+      if(theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
+        aboutToBeEaten = theGhosts[i];
+        break;
+      }
+    }
     
-    moveItem(pacman, theDirection);
+    //Make Pacman's old location free
+    updateBoard(pacmanOriginalPoint, FREE);
     
-    pinkGhost.setPoint(ghostSpawnPoint);
+    //Set Pacman's new location
+    updateBoard(pacmanOnGhostPoint, PACMAN);
+    
+    //Move eaten ghost back to start point in pen
+    aboutToBeEaten.setPoint(ghostSpawnPoint);
+    
+    //Add it to queue
+    ghostPenQ.add(aboutToBeEaten);
+    
+    //Set ghost's spawn point to ghost
+    updateBoard(aboutToBeEaten.getPoint(), GHOST);
+    
     ghostReleasedAt = System.currentTimeMillis();
-    ghostPenQ.add(pinkGhost);
-    board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
   }
   
   /** Update board location with that Pacman type */
