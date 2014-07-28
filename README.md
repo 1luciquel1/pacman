@@ -2,11 +2,12 @@ Written by Ryan D'souza
 
 Pacman as a Java GUI
 
-Run Pacman.java ( javac *.java; java Pacman.java )
-
 Pacman.java contains the main method that begins everything.
 
-IMPORTANT: cs015.jar MUST BE ADDED AS A PROJECT LIBRARY OR CLASSPATH. The .jar contains a 2D array that represents the board and its contents. 
+Running Instructions:
+1. cs015.jar should be added to the project library/file path. The .jar contains a 2D array that represents the board and its contents. 
+2. Compile all files ( javac *.java )
+3. Run the main method of the Pacman.java file ( java Pacman )
 
 Brown University CS 015 Final Project
 
