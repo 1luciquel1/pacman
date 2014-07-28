@@ -117,6 +117,11 @@ public abstract class PacmanItem {
       this.y = y;
     }
     
+    /** @return Pointform of object's location */
+    public Point getPoint() {
+      return new Point(x, y);
+    }
+    
     /** Sets the name of the item based on the color */
     private String getName() {
       if(theColor == Color.YELLOW)
