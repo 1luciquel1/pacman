@@ -138,58 +138,10 @@ public class Pacman extends JPanel {
     ghostReleasedAt = System.currentTimeMillis();
     
     //for(int i = 0; i < theGhosts.length; i++)
-      //System.out.println(theGhosts[i]);
+    //System.out.println(theGhosts[i]);
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
-  }
-  
-  /** @return true if chase mode */
-  public boolean isChaseMode() {
-    
-    //If it's chaseMode right now
-    if(isChaseMode) {
-      //if it's still chase mode
-      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) <= CHASE);
-      
-      //If ChaseMode is over now, start other mode
-      if(!isChaseMode)
-        ghostModeStart = System.currentTimeMillis();
-      
-      return isChaseMode;
-    }
-    
-    //If it's not chaseMode right now
-    else if(!isChaseMode) { 
-      //If it's still not chase mode
-      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) >= SCATTER);
-      
-      if(isChaseMode)
-        ghostModeStart = System.currentTimeMillis();
-      
-      return isChaseMode;
-    }
-    
-    return isChaseMode; 
-  }
-  
-  /** If it is time, removes next ghost from pen and places ghost at
-    * initial ghostReleasePoint */
-  private static void releaseGhosts() {
-    if(ghostPenQ.size() != 0)
-      if((System.currentTimeMillis() - ghostReleasedAt)/1000 == GHOST_RELEASE)
-      ghostLeavePen(ghostPenQ.remove());
-  }
-  
-  /** Removes ghost from its position on the board, updates 
-    * ghosts coordinates to that of initial point, 
-    * updates board to that value */
-  private static void ghostLeavePen(final TheGhost theGhost) {
-    board[theGhost.getY()][theGhost.getX()] = FREE;
-    theGhost.setX((int) ghostReleasePoint.getX());
-    theGhost.setY((int) ghostReleasePoint.getY());
-    board[theGhost.getY()][theGhost.getX()] = GHOST;
-    ghostReleasedAt = System.currentTimeMillis();
   }
   
   /** Returns an int representing the item that the parameter's item will hit
@@ -220,8 +172,7 @@ public class Pacman extends JPanel {
   }
   
   /** Moves the item parameter based on the direction parameter */
-  public synchronized void moveItem(final PacmanItem theItem, 
-                                    final PacmanItem.Direction theDirection) {
+  public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
     
     if(theDirection == null)
@@ -282,19 +233,6 @@ public class Pacman extends JPanel {
     updateBoard(pacmanOnGhostPoint, PACMAN);
   }
   
-  /** Moves Ghost back to pen */
-  public void ghostRespawn(final TheGhost theEaten) {
-    theEaten.setPoint(ghostSpawnPoint);
-    ghostPenQ.add(theEaten);
-    updateBoard(theEaten.getPoint(), GHOST);
-    ghostReleasedAt = System.currentTimeMillis();
-  }
-  
-  /** Update board location with that Pacman type */
-  public void updateBoard(final Point thePoint, final int theItem) {
-    board[(int)thePoint.getY()][(int)thePoint.getX()] = theItem;
-  }
-  
   /** Paint method, called by repaint() */
   public void paintComponent(Graphics g) {
     theG = (Graphics2D) g;
@@ -321,11 +259,11 @@ public class Pacman extends JPanel {
   /** If Pacman hits a ghost and it's not on frightened mode
     * Move pacman back to initial position, decrement lives */
   public void hitGhost() {
-    board[pacman.getY()][pacman.getX()] = FREE;
+    updateBoard(pacman.getPoint(), FREE);
     pacman.returnToStartPosition();
+    updateBoard(pacman.getPoint(), PACMAN);
     pacmanLives--;
     updateLabels();
-    updatePacmanBoard();
     repaint();
   }
   
@@ -370,30 +308,9 @@ public class Pacman extends JPanel {
         }
       }
     }
-    
     for(int i = 0; i < theGhosts.length; i++) {
       drawGhost(theGhosts[i]);
     }
-  }
-  
-  /** Returns true if Pacman/Ghosts are frightened */
-  private boolean ghostMode() {
-    return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED;
-  }
-  
-  /** Main method, creates frame and adds game to it */
-  public static void main(String[] ryan) {
-    JFrame theFrame = new JFrame("Pacman");
-    theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    theFrame.setSize(500, 500);
-    
-    theFrame.add(new Pacman());
-    theFrame.setVisible(true);
-  }
-  
-  /** Sets pacman's location in the board to PACMAN */
-  private void updatePacmanBoard() {
-    board[pacman.getY()][pacman.getX()] = PACMAN;
   }
   
   /**Listens to keyboard events, sets the facing direction based on those events
@@ -441,6 +358,81 @@ public class Pacman extends JPanel {
     public void keyTyped(KeyEvent e) { }
   }
   
+  /** Main method, creates frame and adds game to it */
+  public static void main(String[] ryan) {
+    JFrame theFrame = new JFrame("Pacman");
+    theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    theFrame.setSize(500, 500);
+    
+    theFrame.add(new Pacman());
+    theFrame.setVisible(true);
+  }
+  
+  /** If it is time, removes next ghost from pen and places ghost at
+    * initial ghostReleasePoint */
+  private static void releaseGhosts() {
+    if(ghostPenQ.size() != 0)
+      if((System.currentTimeMillis() - ghostReleasedAt)/1000 == GHOST_RELEASE)
+      ghostLeavePen(ghostPenQ.remove());
+  }
+  
+  /** Removes ghost from its position on the board, updates 
+    * ghosts coordinates to that of initial point, 
+    * updates board to that value */
+  private static void ghostLeavePen(final TheGhost theGhost) {
+    board[theGhost.getY()][theGhost.getX()] = FREE;
+    theGhost.setX((int) ghostReleasePoint.getX());
+    theGhost.setY((int) ghostReleasePoint.getY());
+    board[theGhost.getY()][theGhost.getX()] = GHOST;
+    ghostReleasedAt = System.currentTimeMillis();
+  }
+  
+  /** Moves Ghost back to pen */
+  public void ghostRespawn(final TheGhost theEaten) {
+    theEaten.setPoint(ghostSpawnPoint);
+    ghostPenQ.add(theEaten);
+    updateBoard(theEaten.getPoint(), GHOST);
+    ghostReleasedAt = System.currentTimeMillis();
+  }
+  
+  /** Update board location with that Pacman type */
+  public void updateBoard(final Point thePoint, final int theItem) {
+    board[(int)thePoint.getY()][(int)thePoint.getX()] = theItem;
+  }
+  
+  /** @return true if chase mode */
+  public boolean isChaseMode() {
+    
+    //If it's chaseMode right now
+    if(isChaseMode) {
+      //if it's still chase mode
+      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) <= CHASE);
+      
+      //If ChaseMode is over now, start other mode
+      if(!isChaseMode)
+        ghostModeStart = System.currentTimeMillis();
+      
+      return isChaseMode;
+    }
+    
+    //If it's not chaseMode right now
+    else if(!isChaseMode) { 
+      //If it's still not chase mode
+      isChaseMode = (((System.currentTimeMillis() - ghostModeStart)/1000) >= SCATTER);
+      
+      if(isChaseMode)
+        ghostModeStart = System.currentTimeMillis();
+      
+      return isChaseMode;
+    }
+    return isChaseMode; 
+  }
+  
+  /** Returns true if Pacman/Ghosts are frightened */
+  private boolean ghostMode() {
+    return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED;
+  }
+  
   /** Draws the ghost in the parameter */
   private static void drawGhost(TheGhost theGhost) {
     theG.setColor(theGhost.getColor());
@@ -468,7 +460,7 @@ public class Pacman extends JPanel {
   }
   
   /** Updates the score, num lives, ghost pen release countdown, and ghost mode labels */
-  private synchronized void updateLabels() {
+  private void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
     pacmanLivesLabel.setText(SPACE + "Lives: " + pacmanLives + "     ");
     
