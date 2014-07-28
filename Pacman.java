@@ -59,7 +59,6 @@ public class Pacman extends JPanel {
   private static long hitEnergizerAt;
   private static long ghostReleasedAt;
   
-  
   /** Constructor, initializes JPanel and board */
   public Pacman() {
     super();
@@ -268,11 +267,9 @@ public class Pacman extends JPanel {
     pacman.move(theDirection);
     final Point pacmanOnGhostPoint = pacman.getPoint();
     
-    TheGhost aboutToBeEaten = null;
     for(int i = 0; i < theGhosts.length; i++) {
       if(theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
-        aboutToBeEaten = theGhosts[i];
-        break;
+        ghostRespawn(theGhosts[i]);
       }
     }
     
@@ -281,16 +278,13 @@ public class Pacman extends JPanel {
     
     //Set Pacman's new location
     updateBoard(pacmanOnGhostPoint, PACMAN);
-    
-    //Move eaten ghost back to start point in pen
-    aboutToBeEaten.setPoint(ghostSpawnPoint);
-    
-    //Add it to queue
-    ghostPenQ.add(aboutToBeEaten);
-    
-    //Set ghost's spawn point to ghost
-    updateBoard(aboutToBeEaten.getPoint(), GHOST);
-    
+  }
+  
+  /** Moves Ghost back to pen */
+  public void ghostRespawn(final TheGhost theEaten) {
+    theEaten.setPoint(new Point(new Random().nextInt(23), new Random().nextInt(23)));
+    ghostPenQ.add(theEaten);
+    updateBoard(theEaten.getPoint(), GHOST);
     ghostReleasedAt = System.currentTimeMillis();
   }
   
