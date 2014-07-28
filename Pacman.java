@@ -136,8 +136,8 @@ public class Pacman extends JPanel {
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     ghostReleasedAt = System.currentTimeMillis();
     
-    for(int i = 0; i < theGhosts.length; i++)
-      System.out.println(theGhosts[i]);
+    //for(int i = 0; i < theGhosts.length; i++)
+      //System.out.println(theGhosts[i]);
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
@@ -330,7 +330,6 @@ public class Pacman extends JPanel {
     pacmanLives--;
     updateLabels();
     updatePacmanBoard();
-    System.out.println("GHOST");
     repaint();
   }
   
