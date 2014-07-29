@@ -57,7 +57,7 @@ public abstract class PacmanItem {
     }
     
     /** @return ProspectivePoint if the item were to move in that direction */
-    public Point prospectiveDirection(final Direction theDirection) {
+    public Point getProspectivePoint(final Direction theDirection) {
       switch(theDirection) {
         case UP:
           return new Point(x, y - 1);

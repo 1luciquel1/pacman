@@ -180,6 +180,15 @@ public class Pacman extends JPanel {
   public Point[] validNeighborS(final TheGhost theGhost) {
     ArrayList<Point> thePoints = new ArrayList<Point>();
     
+    if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.UP)) != WALL)
+      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.UP));
+    if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.DOWN)) != WALL)
+      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.DOWN));
+    if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.LEFT)) != WALL)
+      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.LEFT));
+    if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT)) != WALL)
+      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT));
+    
     return thePoints.toArray(new Point[thePoints.size()]);
   }
   
