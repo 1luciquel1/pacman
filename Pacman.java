@@ -172,12 +172,12 @@ public class Pacman extends JPanel {
   }
   
   /** Return int of item in that Point */
-  public int getItemAtPoint(final Point thePoint) { 
+  public static int getItemAtPoint(final Point thePoint) { 
     return board[(int) thePoint.getY()][ (int) thePoint.getX()];
   }
   
   /** Returns an array of points that the parameter can move (anything but a wall) */
-  public Point[] validNeighborS(final TheGhost theGhost) {
+  public static Point[] getValidNeighbors(final TheGhost theGhost) {
     ArrayList<Point> thePoints = new ArrayList<Point>();
     
     if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.UP)) != WALL)
