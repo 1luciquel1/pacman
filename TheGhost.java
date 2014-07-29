@@ -4,8 +4,7 @@ import java.awt.Color;
   * Brown University CS 015 Final Project 
   * Represents the ghosts in the Pacman game */
 
-public class TheGhost extends PacmanItem
-{
+public class TheGhost extends PacmanItem {
   private Color theColor;
   private long startPenTime;
   

@@ -176,7 +176,7 @@ public class Pacman extends JPanel {
     return board[(int) thePoint.getY()][ (int) thePoint.getX()];
   }
   
-  /** Returns an array of points that the parameter can move (anything but a wall) */
+  /** Returns an array of points in 1 step in any direction that the ghost can move */
   public static Point[] getValidNeighbors(final TheGhost theGhost) {
     ArrayList<Point> thePoints = new ArrayList<Point>();
     
@@ -192,6 +192,10 @@ public class Pacman extends JPanel {
     return thePoints.toArray(new Point[thePoints.size()]);
   }
   
+  /** Returns an array of points that the Point can move (anything but a wall) */
+  public static Point[] getValidNeighbors(final Point thePoint) {
+    return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY()));
+  }
   
   /** Moves the item parameter based on the direction parameter */
   public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
