@@ -188,7 +188,6 @@ public class Pacman extends JPanel {
       thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.LEFT));
     if(getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT)) != WALL)
       thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT));
-    
     return thePoints.toArray(new Point[thePoints.size()]);
   }
   
