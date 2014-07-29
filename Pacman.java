@@ -171,6 +171,14 @@ public class Pacman extends JPanel {
     }
   }
   
+  /** Returns an array of points that the parameter can move (anything but a wall) */
+  public Point[] validNeighborS(final TheGhost theGhost) {
+    ArrayList<Point> thePoints = new ArrayList<Point>();
+    
+    return thePoints.toArray(new Point[thePoints.size()]);
+  }
+  
+  
   /** Moves the item parameter based on the direction parameter */
   public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
