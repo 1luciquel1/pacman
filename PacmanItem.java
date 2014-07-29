@@ -56,6 +56,22 @@ public abstract class PacmanItem {
       }
     }
     
+    /** @return ProspectivePoint if the item were to move in that direction */
+    public Point prospectiveDirection(final Direction theDirection) {
+      switch(theDirection) {
+        case UP:
+          return new Point(x, y - 1);
+        case DOWN:
+          return new Point(x, y + 1);
+        case LEFT:
+          return new Point(x - 1, y);
+        case RIGHT:
+          return new Point(x + 1, y);
+        default:
+          return null;
+      }
+    }
+    
     /** @param new point */
     public void setPoint(final Point thePoint) {
       this.x = (int) thePoint.getX();
