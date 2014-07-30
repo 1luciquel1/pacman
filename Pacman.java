@@ -196,6 +196,39 @@ public class Pacman extends JPanel {
     return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY()));
   }
   
+  /** Returns an array of directions for getting theGhost to the Points */
+  public PacmanItem.Direction[] getDirections(final TheGhost theGhost, final Point[] thePoints) {
+    PacmanItem.Direction[] theDirections = new PacmanItem.Direction[thePoints.length];
+    
+    for(int i = 0; i < thePoints.length; i++) {
+      
+      //If x's are the same 
+      if((int) thePoints[i].getX() == theGhost.getX()) {
+        //If y is greater, lower down
+        if((int) thePoints[i].getY() > theGhost.getY()) {
+          theDirections[i] = PacmanItem.Direction.DOWN;
+        }
+        //If y is less, up
+        else if((int) thePoints[i].getY() < theGhost.getY()) {
+          theDirections[i] = PacmanItem.Direction.UP;
+        }
+      }
+      
+      //If y's are the same
+      else if((int) thePoints[i].getY() == theGhost.getY()) {
+        //If x is greater, further out
+        if((int) thePoints[i].getX() > theGhost.getX()) {
+          theDirections[i] = PacmanItem.Direction.RIGHT;
+        }
+        //If x is less, further in
+        if((int) thePoints[i].getX() < theGhost.getX()) {
+          theDirections[i] = PacmanItem.Direction.LEFT;
+        }
+      }
+    }
+    return theDirections;
+  }
+  
   /** Moves the item parameter based on the direction parameter */
   public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
