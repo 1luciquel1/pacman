@@ -54,7 +54,7 @@ public class Pacman extends JPanel {
   private static JLabel ghostModeLabel;
   private static JLabel nextGhostReleaseLabel;
   
-  private boolean controlTouch = false;
+  private static boolean controlTouch = false;
   private static boolean isChaseMode; 
   
   private static long ghostModeStart;
@@ -144,7 +144,22 @@ public class Pacman extends JPanel {
     ghostModeStart = System.currentTimeMillis();
     
     Point[] pinkPossibilities = getValidNeighbors(pinkGhost);
+    pinkGhost.addPoints(pinkPossibilities);
     
+    printPointPossibilitiesAndDirections(pinkGhost);
+  }
+  
+  /** Prints the possibilities a Ghost can move in and the direction */
+  public static void printPointPossibilitiesAndDirections(final TheGhost theGhost) {
+    System.out.println("Ghost X: " + theGhost.getX() + "\tY:" + theGhost.getY());
+    
+    final Point[] thePoints = theGhost.getPoints();
+    
+    for(Point thePoint : thePoints) {
+      System.out.println("Point X: " + thePoint.getX() + 
+                         "\tY: " + thePoint.getY() + 
+                         "\tDirection: " + getDirection(theGhost, thePoint));
+    }
   }
   
   /** Returns an int representing the item that the parameter's item will hit
@@ -199,8 +214,13 @@ public class Pacman extends JPanel {
     return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY()));
   }
   
+  /** Returns the direction to get from theGhost to the Point */
+  public static PacmanItem.Direction getDirection(final TheGhost theGhost, final Point thePoint) {
+    return getDirections(theGhost, new Point[]{thePoint})[0];
+  }
+  
   /** Returns an array of directions for getting theGhost to the Points */
-  public PacmanItem.Direction[] getDirections(final TheGhost theGhost, final Point[] thePoints) {
+  public static PacmanItem.Direction[] getDirections(final TheGhost theGhost, final Point[] thePoints) {
     PacmanItem.Direction[] theDirections = new PacmanItem.Direction[thePoints.length];
     
     for(int i = 0; i < thePoints.length; i++) {
@@ -274,7 +294,7 @@ public class Pacman extends JPanel {
   }
   
   /** If Pacman eats a ghost on frightened mode */
-  private void eatGhost(final PacmanItem.Direction theDirection) {   
+  private static void eatGhost(final PacmanItem.Direction theDirection) {   
     pacmanScore += 200;
     
     final Point pacmanOriginalPoint = pacman.getPoint();
@@ -449,7 +469,7 @@ public class Pacman extends JPanel {
   }
   
   /** Moves Ghost back to pen */
-  public void ghostRespawn(final TheGhost theEaten) {
+  public static void ghostRespawn(final TheGhost theEaten) {
     theEaten.setPoint(ghostSpawnPoint);
     ghostPenQ.add(theEaten);
     updateBoard(theEaten.getPoint(), GHOST);
@@ -457,12 +477,12 @@ public class Pacman extends JPanel {
   }
   
   /** Update board location with that Pacman type */
-  public void updateBoard(final Point thePoint, final int theItem) {
+  public static void updateBoard(final Point thePoint, final int theItem) {
     board[(int)thePoint.getY()][(int)thePoint.getX()] = theItem;
   }
   
   /** @return true if chase mode */
-  public boolean isChaseMode() {
+  public static boolean isChaseMode() {
     
     //If it's chaseMode right now
     if(isChaseMode) {
@@ -490,7 +510,7 @@ public class Pacman extends JPanel {
   }
   
   /** Returns true if Pacman/Ghosts are frightened */
-  private boolean ghostMode() {
+  private static boolean ghostMode() {
     return ((System.currentTimeMillis() - hitEnergizerAt)/ 1000) < FRIGHTENED;
   }
   
@@ -521,7 +541,7 @@ public class Pacman extends JPanel {
   }
   
   /** Updates the score, num lives, ghost pen release countdown, and ghost mode labels */
-  private void updateLabels() {
+  private static void updateLabels() {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
     pacmanLivesLabel.setText(SPACE + "Lives: " + pacmanLives + "     ");
     

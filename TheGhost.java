@@ -44,6 +44,10 @@ public class TheGhost extends PacmanItem {
     this.prospectivePoints.addAll(Arrays.asList(thePoints));
   }
   
+  public Point[] getPoints() {
+    return prospectivePoints.toArray(new Point[prospectivePoints.size()]);
+  }
+  
   /** @return timeTheGhost was in the pen */
   public long getPenTime() { 
     return this.startPenTime; 
