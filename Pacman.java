@@ -142,6 +142,9 @@ public class Pacman extends JPanel {
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
+    
+    Point[] pinkPossibilities = getValidNeighbors(pinkGhost);
+    
   }
   
   /** Returns an int representing the item that the parameter's item will hit
