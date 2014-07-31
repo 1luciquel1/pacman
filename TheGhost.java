@@ -12,6 +12,28 @@ public class TheGhost extends PacmanItem {
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
   
+  private static final int SIZE = 23;
+  private final int[][] theBoard = new int[SIZE][SIZE];
+  
+  private static final int WALL = -1;
+  private static final int UNEXPLORED = Integer.MAX_VALUE;
+  private static final int GHOST = 0;
+  
+  public void updateGrid(final int[][] pacmanBoard) { 
+    for(int i = 0; i < pacmanBoard.length; i++) {
+      for(int y = 0; y < pacmanBoard[i].length; y++) { 
+        if(pacmanBoard[i][y] == Pacman.WALL) {
+          this.theBoard[i][y] = this.WALL;
+        }
+        else {
+          this.theBoard[i][y] = this.UNEXPLORED;
+        }
+      }
+    }
+    this.theBoard[this.y][this.x] = GHOST;
+  }
+  
+  
   /** Constructor */
   public TheGhost(Color theColor, int x, int y) {
     super(x, y, theColor);

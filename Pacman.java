@@ -27,13 +27,13 @@ public class Pacman extends JPanel {
   private static final int CHASE = 20; //20 Seconds
   private static final int SCATTER = 7; //7 Seconds
   
-  private static final int WALL = 0;
-  private static final int FREE = 1;
-  private static final int DOT = 2;
-  private static final int ENERGIZER = 3;
-  private static final int PACMAN = 4;
-  private static final int GHOST = 5;
-  private static final int OUT = 6;
+  public static final int WALL = 0;
+  public static final int FREE = 1;
+  public static final int DOT = 2;
+  public static final int ENERGIZER = 3;
+  public static final int PACMAN = 4;
+  public static final int GHOST = 5;
+  public static final int OUT = 6;
   
   private static final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
