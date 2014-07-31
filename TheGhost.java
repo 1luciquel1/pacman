@@ -32,14 +32,48 @@ public class TheGhost extends PacmanItem {
     }
     this.theBoard[this.y][this.x] = GHOST;
   }
-  
-  
-  /** Constructor */
-  public TheGhost(Color theColor, int x, int y) {
-    super(x, y, theColor);
+ 
+  public Point nextAvailable(final Point current, final int num) {
+    if(itemAtPoint(Direction.LEFT, current) == UNEXPLORED) {
+      updateBoard(current, Direction.LEFT, num);
+      return super.getNewPoint(current, Direction.LEFT);
+    }
     
-    //For the time the ghost is in the pen
-    startPenTime = System.currentTimeMillis();
+    if(itemAtPoint(Direction.RIGHT, current) == UNEXPLORED) {
+      updateBoard(current, Direction.RIGHT, num);
+      return super.getNewPoint(current, Direction.RIGHT);
+    }
+    
+    if(itemAtPoint(Direction.UP, current) == UNEXPLORED) {
+      updateBoard(current, Direction.UP, num);
+      return super.getNewPoint(current, Direction.UP);
+    }
+    
+    if(itemAtPoint(Direction.DOWN, current) == UNEXPLORED) {
+      updateBoard(current, Direction.DOWN, num);
+      return super.getNewPoint(current, Direction.DOWN);
+    }
+    return current;
+  }
+  
+  /** Updates the board at the given Point given the next Direction and the number */
+  public void updateBoard(final Point thePoint, final Direction theDirection, final int num) { 
+    updateBoard(super.getNewPoint(thePoint, theDirection), num);
+  }
+  
+  /** Updates the board at the given Point with the given number */
+  public void updateBoard(final Point thePoint, final int num) { 
+    theBoard[(int) thePoint.getY()][(int) thePoint.getX()] = num;
+  }
+  
+  /** Returns the item at a Point given the Point and its Direction */
+  public int itemAtPoint(final Direction theDirection, final Point thePoint) { 
+    return itemAtPoint(super.getNewPoint(thePoint, theDirection));
+  }
+  
+  /** Returns the item at a Point */
+  public int itemAtPoint(final Point thePoint) { 
+    return theBoard[(int)thePoint.getY()][(int) thePoint.getX()];
   }
   
   public Queue<Point> getProspectivePoints() {
@@ -70,15 +104,34 @@ public class TheGhost extends PacmanItem {
     return prospectivePoints.toArray(new Point[prospectivePoints.size()]);
   }
   
+  /** Constructor */
+  public TheGhost(Color theColor, int x, int y, final int[][] pacmanGrid) {
+    super(x, y, theColor);
+    
+    //For the time the ghost is in the pen
+    startPenTime = System.currentTimeMillis();
+    
+    this.updateGrid(pacmanGrid);
+  }
+  
   /** @return timeTheGhost was in the pen */
   public long getPenTime() { 
     return this.startPenTime; 
   }
+  
   public void setPenTime(long time) { 
     this.startPenTime = time; 
   }
   
   public String toString() {
     return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y;
+  }
+  public void printBoard() {
+    for(int i = 0; i < theBoard.length; i++) {
+      for(int y = 0; y < theBoard[i].length; y++) {
+        System.out.print(theBoard[i][y] + "\t");
+      }
+      System.out.println("");
+    }
   }
 }

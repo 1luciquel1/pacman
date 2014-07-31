@@ -72,6 +72,22 @@ public abstract class PacmanItem {
       }
     }
     
+    /** Returns a new Point from the given point and the direction */
+    public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
+      switch(theDirection) { 
+                case UP:
+          return new Point((int) theOriginal.getX(), (int) theOriginal.getY() - 1);
+        case DOWN:
+          return new Point((int) theOriginal.getX(), (int) theOriginal.getY() + 1);
+        case LEFT:
+          return new Point((int) theOriginal.getX() - 1, (int) theOriginal.getY());
+        case RIGHT:
+          return new Point((int) theOriginal.getX() + 1, (int) theOriginal.getY());
+        default:
+          return null;
+      }
+    }
+    
     /** @param new point */
     public void setPoint(final Point thePoint) {
       this.x = (int) thePoint.getX();

@@ -109,28 +109,28 @@ public class Pacman extends JPanel {
     int y = (int) ghostStart.getY();
     
     //Left Inside
-    redGhost = new TheGhost(Color.RED, x, y);
+    redGhost = new TheGhost(Color.RED, x, y, board);
     redGhost.setX(x - 2);
     board[redGhost.getY()][redGhost.getX()] = GHOST;
     theGhosts[0] = redGhost;
     ghostPenQ.add(redGhost);
     
     //Middle inside
-    blueGhost = new TheGhost(Color.CYAN, x, y);
+    blueGhost = new TheGhost(Color.CYAN, x, y, board);
     board[blueGhost.getY()][blueGhost.getX()] = GHOST;
     theGhosts[1] = blueGhost;
     ghostPenQ.add(blueGhost);
     ghostSpawnPoint = new Point(blueGhost.getX(), blueGhost.getY());
     
     //Right inside
-    orangeGhost = new TheGhost(Color.ORANGE, x, y);
+    orangeGhost = new TheGhost(Color.ORANGE, x, y, board);
     orangeGhost.setX(x + 2);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
     ghostPenQ.add(orangeGhost);
     
     //Outside
-    pinkGhost = new TheGhost(Color.PINK, x, y);
+    pinkGhost = new TheGhost(Color.PINK, x, y, board);
     pinkGhost.setY(y - 2);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
@@ -211,7 +211,7 @@ public class Pacman extends JPanel {
   
   /** Returns an array of points that the Point can move (anything but a wall) */
   public static Point[] getValidNeighbors(final Point thePoint) {
-    return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY()));
+    return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY(), board));
   }
   
   /** Returns the direction to get from theGhost to the Point */
