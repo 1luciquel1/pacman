@@ -32,28 +32,29 @@ public class TheGhost extends PacmanItem {
     }
     this.theBoard[this.y][this.x] = GHOST;
   }
- 
-  public Point nextAvailable(final Point current, final int num) {
-    if(itemAtPoint(Direction.LEFT, current) == UNEXPLORED) {
-      updateBoard(current, Direction.LEFT, num);
-      return super.getNewPoint(current, Direction.LEFT);
-    }
+  
+  private int counter = 0;
+  
+  /** Checks all 4 directions around the point
+    * If that item does not have my number and it's not a wall
+    * Add it to the queue and set its number to mine + 1 */
+  public void availableInDirections(final Point current) {
     
-    if(itemAtPoint(Direction.RIGHT, current) == UNEXPLORED) {
-      updateBoard(current, Direction.RIGHT, num);
-      return super.getNewPoint(current, Direction.RIGHT);
+    //Go through all the directions
+    for(Direction theDirection : theDirections) { 
+      
+      final Point newPoint = getNewPoint(current, theDirection);
+      
+      //If the value in that direction does not have the value I currently have
+      //and is not a wall
+      if(itemAtPoint(newPoint) != itemAtPoint(current) && itemAtPoint(newPoint) != WALL) {
+        //Add it to the queue
+        prospectivePoints.add(newPoint);
+        
+        //Increment its value from mine
+        setValue(newPoint, itemAtPoint(current) + 1);
+      }
     }
-    
-    if(itemAtPoint(Direction.UP, current) == UNEXPLORED) {
-      updateBoard(current, Direction.UP, num);
-      return super.getNewPoint(current, Direction.UP);
-    }
-    
-    if(itemAtPoint(Direction.DOWN, current) == UNEXPLORED) {
-      updateBoard(current, Direction.DOWN, num);
-      return super.getNewPoint(current, Direction.DOWN);
-    }
-    return current;
   }
   
   /** Updates the board at the given Point given the next Direction and the number */
@@ -74,6 +75,10 @@ public class TheGhost extends PacmanItem {
   /** Returns the item at a Point */
   public int itemAtPoint(final Point thePoint) { 
     return theBoard[(int)thePoint.getY()][(int) thePoint.getX()];
+  }
+    /** Set item at Point to a certain value */
+  public void setValue(final Point thePoint, final int theNum) { 
+    theBoard[(int)thePoint.getY()][(int) thePoint.getX()] = theNum;
   }
   
   public Queue<Point> getProspectivePoints() {
@@ -112,6 +117,15 @@ public class TheGhost extends PacmanItem {
     startPenTime = System.currentTimeMillis();
     
     this.updateGrid(pacmanGrid);
+    
+    availableInDirections(getPoint());
+    
+    System.out.println("GHOST\t" + x + "\t" + y);
+    Point[] p = getPoints();
+    
+    for(Point p1 : p) { 
+      System.out.println("AVAILABLE\t" + p1.getX() + "\t" + p1.getY());
+    }
   }
   
   /** @return timeTheGhost was in the pen */

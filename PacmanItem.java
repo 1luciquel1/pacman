@@ -12,6 +12,8 @@ public abstract class PacmanItem {
   protected int startX, startY;
   protected Color theColor;
   protected String name = "";
+  protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN,
+    Direction.LEFT, Direction.RIGHT};
   
   /** Constructor */
   public PacmanItem(final int x, final int y, final Color theColor){

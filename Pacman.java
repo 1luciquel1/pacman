@@ -42,7 +42,7 @@ public class Pacman extends JPanel {
   
   private static Graphics2D theG;
   
-  private static final int GHOST_RELEASE = 5; //Release ghost every 5 seconds
+  private static final int GHOST_RELEASE = 120; //Release ghost every 5 seconds
   private static Point ghostReleasePoint;
   private static Point ghostSpawnPoint;
   
@@ -155,11 +155,11 @@ public class Pacman extends JPanel {
     
     final Point[] thePoints = theGhost.getPoints();
     
-    for(Point thePoint : thePoints) {
+    /*for(Point thePoint : thePoints) {
       System.out.println("Point X: " + thePoint.getX() + 
                          "\tY: " + thePoint.getY() + 
                          "\tDirection: " + getDirection(theGhost, thePoint));
-    }
+    }*/
   }
   
   /** Returns an int representing the item that the parameter's item will hit
