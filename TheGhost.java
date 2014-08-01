@@ -118,7 +118,7 @@ public class TheGhost extends PacmanItem {
     
     this.updateGrid(pacmanGrid);
     
-    availableInDirections(getPoint());
+    availableInDirections(new Point(x, y));
     
     System.out.println("GHOST\t" + x + "\t" + y);
     Point[] p = getPoints();
