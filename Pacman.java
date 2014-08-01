@@ -66,7 +66,6 @@ public class Pacman extends JPanel {
     super();
     setSize(new Dimension(400, 400));
     setMinimumSize(new Dimension(400, 400));
-    addKeyListener(new ControlListener());
     setFocusable(true);
     requestFocusInWindow();
     
@@ -87,6 +86,8 @@ public class Pacman extends JPanel {
     add(nextGhostReleaseLabel);
     
     initializeVariables();
+    addKeyListener(new ControlListener());
+    new javax.swing.Timer(0, theListener).start();
   }
   
   /** Initalizes pacman and ghosts start locations */
@@ -156,16 +157,16 @@ public class Pacman extends JPanel {
     final Point[] thePoints = theGhost.getPoints();
     
     /*for(Point thePoint : thePoints) {
-      System.out.println("Point X: " + thePoint.getX() + 
-                         "\tY: " + thePoint.getY() + 
-                         "\tDirection: " + getDirection(theGhost, thePoint));
-    }*/
+     System.out.println("Point X: " + thePoint.getX() + 
+     "\tY: " + thePoint.getY() + 
+     "\tDirection: " + getDirection(theGhost, thePoint));
+     }*/
   }
   
   /** Returns an int representing the item that the parameter's item will hit
     * based on the parameter item's direction */
   private int getItemInNextMove(final PacmanItem movingItem, 
-                                       final PacmanItem.Direction theDirection) {
+                                final PacmanItem.Direction theDirection) {
     try {
       switch(theDirection) {
         case UP:
@@ -393,6 +394,37 @@ public class Pacman extends JPanel {
       drawGhost(theGhosts[i]);
     }
   }
+  
+  private ActionListener theListener = new ActionListener() {
+    public void actionPerformed(final ActionEvent event) { 
+      
+      final String arrowDirection = (String) event.getActionCommand();
+      
+      if(arrowDirection == null)
+        return;
+      
+      //Direction item will move in
+      PacmanItem.Direction movingDirection;
+      
+      //Current location becomes nothing for Pacman
+      board[pacman.getY()][pacman.getX()] = FREE;
+      
+      //RIGHT
+      if(arrowDirection.equals("RIGHT"))
+        movingDirection = PacmanItem.Direction.RIGHT;
+      else if(arrowDirection.equals("LEFT"))
+        movingDirection = PacmanItem.Direction.LEFT;
+      else if(arrowDirection.equals("UP"))
+        movingDirection = PacmanItem.Direction.UP;
+      else if(arrowDirection.equals("DOWN"))
+        movingDirection = PacmanItem.Direction.DOWN;
+      else
+        movingDirection = null;
+      
+      moveItem(pacman, movingDirection);
+      repaint();
+    }
+  };
   
   /**Listens to keyboard events, sets the facing direction based on those events
     * Then moves the item in regards to the facing direction */
