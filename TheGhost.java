@@ -1,11 +1,13 @@
 import java.awt.Color;
 import java.awt.Point;
+import java.text.DecimalFormat;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Arrays;
-/** Written by Ryan D'souza
-  * Brown University CS 015 Final Project 
-  * Represents the ghosts in the Pacman game */
+
+/**
+ * Written by Ryan D'souza Brown University CS 015 Final Project Represents the ghosts in the Pacman game
+ */
 
 public class TheGhost extends PacmanItem {
   private Color theColor;
@@ -19,13 +21,12 @@ public class TheGhost extends PacmanItem {
   private static final int UNEXPLORED = Integer.MAX_VALUE;
   private static final int GHOST = 0;
   
-  public void updateGrid(final int[][] pacmanBoard) { 
-    for(int i = 0; i < pacmanBoard.length; i++) {
-      for(int y = 0; y < pacmanBoard[i].length; y++) { 
-        if(pacmanBoard[i][y] == Pacman.WALL) {
+  public void updateGrid(final int[][] pacmanBoard) {
+    for (int i = 0; i < pacmanBoard.length; i++) {
+      for (int y = 0; y < pacmanBoard[i].length; y++) {
+        if (pacmanBoard[i][y] == Pacman.WALL) {
           this.theBoard[i][y] = this.WALL;
-        }
-        else {
+        } else {
           this.theBoard[i][y] = this.UNEXPLORED;
         }
       }
@@ -35,50 +36,68 @@ public class TheGhost extends PacmanItem {
   
   private int counter = 0;
   
-  /** Checks all 4 directions around the point
-    * If that item does not have my number and it's not a wall
-    * Add it to the queue and set its number to mine + 1 */
+  /**
+   * Checks all 4 directions around the point If that item does not have my number and it's not a wall Add it to the
+   * queue and set its number to mine + 1
+   */
   public void availableInDirections(final Point current) {
     
-    //Go through all the directions
-    for(Direction theDirection : theDirections) { 
+    // Go through all the directions
+    for (Direction theDirection : theDirections) {
       
       final Point newPoint = getNewPoint(current, theDirection);
       
-      //If the value in that direction does not have the value I currently have
-      //and is not a wall
-      if(itemAtPoint(newPoint) != itemAtPoint(current) && itemAtPoint(newPoint) != WALL) {
-        //Add it to the queue
+      // If the value in that direction does not have the value I currently have
+      // and is not a wall
+      if (itemAtPoint(newPoint) == UNEXPLORED) {
+        // Add it to the queue
         prospectivePoints.add(newPoint);
         
-        //Increment its value from mine
+        // Increment its value from mine
         setValue(newPoint, itemAtPoint(current) + 1);
       }
     }
   }
   
+  public void explore() {
+    prospectivePoints.clear();
+    
+    prospectivePoints.add(new Point(x, y));
+    
+    while (!prospectivePoints.isEmpty()) {
+      Point p = prospectivePoints.remove();
+      
+      availableInDirections(p);
+      
+      printBoard();
+    }
+    
+    printBoard();
+  }
+  
   /** Updates the board at the given Point given the next Direction and the number */
-  public void updateBoard(final Point thePoint, final Direction theDirection, final int num) { 
+  public void updateBoard(final Point thePoint, final Direction theDirection, final int num) {
     updateBoard(super.getNewPoint(thePoint, theDirection), num);
   }
   
   /** Updates the board at the given Point with the given number */
-  public void updateBoard(final Point thePoint, final int num) { 
+  public void updateBoard(final Point thePoint, final int num) {
     theBoard[(int) thePoint.getY()][(int) thePoint.getX()] = num;
   }
   
   /** Returns the item at a Point given the Point and its Direction */
-  public int itemAtPoint(final Direction theDirection, final Point thePoint) { 
+  public int itemAtPoint(final Direction theDirection, final Point thePoint) {
     return itemAtPoint(super.getNewPoint(thePoint, theDirection));
   }
   
   /** Returns the item at a Point */
-  public int itemAtPoint(final Point thePoint) { 
-    return theBoard[(int)thePoint.getY()][(int) thePoint.getX()];
+  public int itemAtPoint(final Point thePoint) {
+    return theBoard[(int) thePoint.getY()][(int) thePoint.getX()];
   }
-    /** Set item at Point to a certain value */
-  public void setValue(final Point thePoint, final int theNum) { 
-    theBoard[(int)thePoint.getY()][(int) thePoint.getX()] = theNum;
+  
+  /** Set item at Point to a certain value */
+  public void setValue(final Point thePoint, final int theNum) {
+    theBoard[(int) thePoint.getY()][(int) thePoint.getX()] = theNum;
   }
   
   public Queue<Point> getProspectivePoints() {
@@ -113,39 +132,51 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final int[][] pacmanGrid) {
     super(x, y, theColor);
     
-    //For the time the ghost is in the pen
+    // For the time the ghost is in the pen
     startPenTime = System.currentTimeMillis();
     
     this.updateGrid(pacmanGrid);
     
-    availableInDirections(new Point(x, y));
+    explore();
     
     System.out.println("GHOST\t" + x + "\t" + y);
     Point[] p = getPoints();
     
-    for(Point p1 : p) { 
+    for (Point p1 : p) {
       System.out.println("AVAILABLE\t" + p1.getX() + "\t" + p1.getY());
     }
   }
   
   /** @return timeTheGhost was in the pen */
-  public long getPenTime() { 
-    return this.startPenTime; 
+  public long getPenTime() {
+    return this.startPenTime;
   }
   
-  public void setPenTime(long time) { 
-    this.startPenTime = time; 
+  public void setPenTime(long time) {
+    this.startPenTime = time;
   }
   
   public String toString() {
     return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y;
   }
+  
   public void printBoard() {
-    for(int i = 0; i < theBoard.length; i++) {
-      for(int y = 0; y < theBoard[i].length; y++) {
-        System.out.print(theBoard[i][y] + "\t");
+    DecimalFormat df = new DecimalFormat("00");
+    
+    for (int i = 0; i < theBoard.length; i++) {
+      for (int y = 0; y < theBoard[i].length; y++) {
+        
+        if (theBoard[i][y] == WALL) {
+          System.out.print("XX");
+        } else if (theBoard[i][y] == UNEXPLORED) {
+          System.out.print("--");
+        } else {
+          System.out.print(df.format(theBoard[i][y]));
+        }
       }
-      System.out.println("");
+      System.out.println();
     }
+    
+    System.out.println();
   }
 }
