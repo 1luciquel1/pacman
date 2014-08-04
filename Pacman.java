@@ -137,6 +137,7 @@ public class Pacman extends JPanel {
     theGhosts[3] = pinkGhost;
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     ghostReleasedAt = System.currentTimeMillis();
+    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     
     // for(int i = 0; i < theGhosts.length; i++)
     // System.out.println(theGhosts[i]);
