@@ -37,8 +37,8 @@ public class TheGhost extends PacmanItem {
   private int counter = 0;
   
   /**
-   * Checks all 4 directions around the point If that item does not have my number and it's not a wall 
-   * Add it to the queue and set its number to mine + 1
+   * Checks all 4 directions around the point If that item does not have my number and it's not a wall Add it to the
+   * queue and set its number to mine + 1
    */
   public void availableInDirections(final Point current) {
     
@@ -47,16 +47,9 @@ public class TheGhost extends PacmanItem {
       
       final Point newPoint = getNewPoint(current, theDirection);
       
-      if(newPoint.getX() >= theBoard.length || newPoint.getY() >= theBoard[0].length) { 
-        //Skip
-      }
-      else if(newPoint.getX() < 0 || newPoint.getY() < 0) { 
-        //Skip
-      }
-      
       // If the value in that direction does not have the value I currently have
       // and is not a wall
-      else if (itemAtPoint(newPoint) == UNEXPLORED) {
+      if (itemAtPoint(newPoint) == UNEXPLORED) {
         // Add it to the queue
         prospectivePoints.add(newPoint);
         
@@ -68,11 +61,17 @@ public class TheGhost extends PacmanItem {
   
   public void explore() {
     prospectivePoints.clear();
+    
     prospectivePoints.add(new Point(x, y));
     
     while (!prospectivePoints.isEmpty()) {
-      availableInDirections(prospectivePoints.remove());
+      Point p = prospectivePoints.remove();
+      
+      availableInDirections(p);
+      
+      printBoard();
     }
+    
     printBoard();
   }
   
@@ -177,6 +176,7 @@ public class TheGhost extends PacmanItem {
       }
       System.out.println();
     }
+    
     System.out.println();
   }
 }
