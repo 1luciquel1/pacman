@@ -505,6 +505,7 @@ public class Pacman extends JPanel {
     theGhost.setX((int) ghostReleasePoint.getX());
     theGhost.setY((int) ghostReleasePoint.getY());
     board[theGhost.getY()][theGhost.getX()] = GHOST;
+    theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
     ghostReleasedAt = System.currentTimeMillis();
   }
   
