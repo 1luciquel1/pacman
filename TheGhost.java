@@ -20,13 +20,18 @@ public class TheGhost extends PacmanItem {
   private static final int WALL = -1;
   private static final int UNEXPLORED = Integer.MAX_VALUE;
   private static final int GHOST = 0;
+  private static final int PACMAN = Integer.MIN_VALUE;
   
   private void updateGrid(final int[][] pacmanBoard) {
     for (int i = 0; i < pacmanBoard.length; i++) {
       for (int y = 0; y < pacmanBoard[i].length; y++) {
         if (pacmanBoard[i][y] == Pacman.WALL) {
           this.theBoard[i][y] = this.WALL;
-        } else {
+        }
+        else if(pacmanBoard[i][y] == Pacman.PACMAN) { 
+          this.theBoard[i][y] = this.PACMAN;
+        }
+        else {
           this.theBoard[i][y] = this.UNEXPLORED;
         }
       }
@@ -159,11 +164,11 @@ public class TheGhost extends PacmanItem {
       for (int y = 0; y < theBoard[i].length; y++) {
         
         if (theBoard[i][y] == WALL) {
-          System.out.print("XX");
+          System.out.print("XX\t");
         } else if (theBoard[i][y] == UNEXPLORED) {
-          System.out.print("--");
+          System.out.print("--\t");
         } else {
-          System.out.print(df.format(theBoard[i][y]));
+          System.out.print(df.format(theBoard[i][y]) + "\t");
         }
       }
       System.out.println();
