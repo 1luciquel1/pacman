@@ -321,7 +321,12 @@ public class Pacman extends JPanel {
     drawSquares();
     
     moveItem(pacman, pacman.getFacingDirection());
-    try {
+    pinkGhost.updateBoard(board);
+    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
+    
+    try { Thread.sleep(100); } 
+    catch(Exception e) { } 
+    /*try {
       int temp = 0;
       
       if (((System.currentTimeMillis() - hitEnergizerAt) / 1000) <= 5) {
@@ -334,7 +339,7 @@ public class Pacman extends JPanel {
       repaint();
     } catch (Exception e) {
       e.printStackTrace();
-    }
+    }*/
   }
   
   /**

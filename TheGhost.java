@@ -20,9 +20,9 @@ public class TheGhost extends PacmanItem {
   private static final int WALL = -1;
   private static final int UNEXPLORED = Integer.MAX_VALUE;
   private static final int GHOST = 0;
-  private static final int PACMAN = Integer.MIN_VALUE;
+  private static final int PACMAN = -2;
   
-  private void updateGrid(final int[][] pacmanBoard) {
+  public void updateBoard(final int[][] pacmanBoard) {
     for (int i = 0; i < pacmanBoard.length; i++) {
       for (int y = 0; y < pacmanBoard[i].length; y++) {
         if (pacmanBoard[i][y] == Pacman.WALL) {
@@ -62,8 +62,9 @@ public class TheGhost extends PacmanItem {
       }
       
       else if(itemAtPoint(newPoint) == PACMAN) {
-        prospectivePoints.clear();
+        setValue(newPoint, itemAtPoint(current) + 1);
         pacmanLoc = newPoint;
+        prospectivePoints.clear();
         return;
       }
       
@@ -86,7 +87,7 @@ public class TheGhost extends PacmanItem {
     while (!prospectivePoints.isEmpty()) {
       availableInDirections(prospectivePoints.remove());
     }
-    printBoard();
+    //printBoard();
     
     if(pacmanLoc != null) { 
       super.move(pacmanToGhost());
@@ -95,19 +96,22 @@ public class TheGhost extends PacmanItem {
   
   private Direction pacmanToGhost() { 
     int itemAtNow = itemAtPoint(pacmanLoc);
+    //System.out.println(itemAtNow);
     Point workBackwards = pacmanLoc;
     Direction moveDirection = null;
     
-    while(itemAtNow > 1) { 
+    while(itemAtNow > 0) { 
       for(Direction theDirection : theDirections) { 
-        if(itemAtPoint(getNewPoint(pacmanLoc, theDirection)) < itemAtNow) {
+        System.out.println(itemAtNow);
+        final Point newPoint = getNewPoint(workBackwards, theDirection);
+        if(itemAtPoint(newPoint) == (itemAtNow - 1)) {
           moveDirection = theDirection; 
-          workBackwards = getNewPoint(workBackwards, theDirection);
+          workBackwards = newPoint;
           itemAtNow = itemAtPoint(workBackwards);
+         // System.out.println("Now\t" + itemAtNow);
         }
       }
     }
-    
     return moveDirection;
   }
   
@@ -171,7 +175,7 @@ public class TheGhost extends PacmanItem {
     // For the time the ghost is in the pen
     startPenTime = System.currentTimeMillis();
     
-    this.updateGrid(pacmanGrid);
+    this.updateBoard(pacmanGrid);
   }
   
   /** @return timeTheGhost was in the pen */
