@@ -490,9 +490,10 @@ public class Pacman extends JPanel {
    * If it is time, removes next ghost from pen and places ghost at initial ghostReleasePoint
    */
   private void releaseGhosts() {
-    if (ghostPenQ.size() != 0)
+    if (ghostPenQ.size() != 0) {
       if ((System.currentTimeMillis() - ghostReleasedAt) / 1000 == GHOST_RELEASE)
-      ghostLeavePen(ghostPenQ.remove());
+        ghostLeavePen(ghostPenQ.remove());
+    }
   }
   
   /**
