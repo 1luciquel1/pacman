@@ -35,8 +35,7 @@ public abstract class PacmanItem {
       
       if(theD == null) { 
         return;
-      }
-      
+      }   
       switch(theD) {
         case UP:
           this.y--;

@@ -96,19 +96,17 @@ public class TheGhost extends PacmanItem {
   
   private Direction pacmanToGhost() { 
     int itemAtNow = itemAtPoint(pacmanLoc);
-    //System.out.println(itemAtNow);
     Point workBackwards = pacmanLoc;
     Direction moveDirection = null;
     
     while(itemAtNow != 0) { 
       for(Direction theDirection : theDirections) { 
-        //System.out.println(itemAtNow);
         final Point newPoint = getNewPoint(workBackwards, theDirection);
+        
         if(itemAtPoint(newPoint) == (itemAtNow - 1) && itemAtPoint(newPoint) != this.WALL) {
           moveDirection = theDirection; 
           workBackwards = newPoint;
           itemAtNow = itemAtPoint(workBackwards);
-          //System.out.println("Now\t" + itemAtNow);
         }
       }
     }
@@ -125,8 +123,6 @@ public class TheGhost extends PacmanItem {
     else if(moveDirection == Direction.DOWN) { 
       return Direction.UP;
     }
-    
-    System.out.println("ERROR");
     return moveDirection;
   }
   
