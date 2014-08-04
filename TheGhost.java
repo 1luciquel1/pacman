@@ -113,6 +113,21 @@ public class TheGhost extends PacmanItem {
         }
       }
     }
+    
+    if(moveDirection == Direction.RIGHT) { 
+      return Direction.LEFT;
+    }
+    else if(moveDirection == Direction.LEFT) { 
+      return Direction.RIGHT; 
+    }
+    else if(moveDirection == Direction.UP) { 
+      return Direction.DOWN;
+    }
+    else if(moveDirection == Direction.DOWN) { 
+      return Direction.UP;
+    }
+    
+    System.out.println("ERROR");
     return moveDirection;
   }
   
