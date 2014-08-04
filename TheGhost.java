@@ -34,15 +34,17 @@ public class TheGhost extends PacmanItem {
     this.theBoard[this.y][this.x] = GHOST;
   }
   
+  /** Starts the Breadthfirst algorithm for the start point */
+  public void startBreadthFirstAlgorithm(final Point startPoint) { 
+    explore(startPoint);
+  }
+  
   /**
    * Checks all 4 directions around the point If that item does not have my number and it's not a wall 
    * Add it to the queue and set its number to mine + 1
    */
   private void availableInDirections(final Point current) {
-    
-    // Go through all the directions
     for (Direction theDirection : theDirections) {
-      
       final Point newPoint = getNewPoint(current, theDirection);
       
       if(newPoint.getX() >= theBoard.length || newPoint.getY() >= theBoard[0].length) { 
