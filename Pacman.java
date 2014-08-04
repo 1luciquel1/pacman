@@ -587,11 +587,12 @@ public class Pacman extends JPanel {
     pacmanScoreLabel.setText("Score: " + pacmanScore);
     pacmanLivesLabel.setText(SPACE + "Lives: " + pacmanLives + "     ");
     
-    if (ghostPenQ.size() != 0) {
+    if (ghostPenQ.size() >= 0) {
       int timeToRelease = (int) GHOST_RELEASE - (int) ((System.currentTimeMillis() - ghostReleasedAt) / 1000);
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: " + timeToRelease);
-    } else if (ghostPenQ.size() <= 0)
+    } else if (ghostPenQ.size() < 0) {
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: N/A");
+    }
     
     int timeLeft = (int) ((System.currentTimeMillis() - ghostModeStart) / 1000);
     if (ghostMode())
