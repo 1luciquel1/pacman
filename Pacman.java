@@ -323,8 +323,10 @@ public class Pacman extends JPanel {
     moveItem(pacman, pacman.getFacingDirection());
     pinkGhost.updateBoard(board);
     pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
+    updateBoard(pinkGhost.getPoint(), GHOST);
+    System.out.println(pinkGhost.getPoint().toString() + "\tHERE");
     
-    try { Thread.sleep(100); } 
+    try { Thread.sleep(1000); } 
     catch(Exception e) { } 
     /*try {
       int temp = 0;
@@ -595,7 +597,7 @@ public class Pacman extends JPanel {
     if (ghostPenQ.size() >= 0) {
       int timeToRelease = (int) GHOST_RELEASE - (int) ((System.currentTimeMillis() - ghostReleasedAt) / 1000);
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: " + timeToRelease);
-    } else if (ghostPenQ.size() < 0) {
+    } else if (ghostPenQ.size() < 0 || (GHOST_RELEASE - ((System.currentTimeMillis() - ghostReleasedAt) / 1000)) < 0) {
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: N/A");
     }
     
