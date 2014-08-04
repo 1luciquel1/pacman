@@ -91,7 +91,6 @@ public class TheGhost extends PacmanItem {
     
     if(pacmanLoc != null) { 
       super.move(pacmanToGhost());
-      
     }
   }
   

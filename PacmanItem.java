@@ -32,6 +32,11 @@ public abstract class PacmanItem {
     * depending on the direction it is moving in 
     @param direction to move in */
     public void move(Direction theD){
+      
+      if(theD == null) { 
+        return;
+      }
+      
       switch(theD) {
         case UP:
           this.y--;

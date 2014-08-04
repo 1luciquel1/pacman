@@ -326,7 +326,9 @@ public class Pacman extends JPanel {
     updateBoard(pinkGhost.getPoint(), FREE);
     pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     updateBoard(pinkGhost.getPoint(), GHOST);
-    System.out.println(pinkGhost.getPoint().toString() + "\tHERE");
+    if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
+      hitGhost();
+    }
     
     try {
       int temp = 0;
