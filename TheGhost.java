@@ -59,6 +59,11 @@ public class TheGhost extends PacmanItem {
         //Skip
       }
       
+      else if(itemAtPoint(newPoint) == PACMAN) {
+        prospectivePoints.clear();
+        return;
+      }
+      
       // If the value in that direction does not have the value I currently have
       // and is not a wall
       else if (itemAtPoint(newPoint) == UNEXPLORED) {

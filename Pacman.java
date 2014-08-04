@@ -106,8 +106,8 @@ public class Pacman extends JPanel {
       }
     }
     
-    int x = (int) ghostStart.getX();
-    int y = (int) ghostStart.getY();
+    final int x = (int) ghostStart.getX();
+    final int y = (int) ghostStart.getY();
     
     // Left Inside
     redGhost = new TheGhost(Color.RED, x, y, board);
