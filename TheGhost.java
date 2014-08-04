@@ -44,6 +44,8 @@ public class TheGhost extends PacmanItem {
     explore(startPoint);
   }
   
+  private Point pacmanLoc = null;
+  
   /**
    * Checks all 4 directions around the point If that item does not have my number and it's not a wall 
    * Add it to the queue and set its number to mine + 1
@@ -61,6 +63,7 @@ public class TheGhost extends PacmanItem {
       
       else if(itemAtPoint(newPoint) == PACMAN) {
         prospectivePoints.clear();
+        pacmanLoc = newPoint;
         return;
       }
       
@@ -84,6 +87,28 @@ public class TheGhost extends PacmanItem {
       availableInDirections(prospectivePoints.remove());
     }
     printBoard();
+    
+    if(pacmanLoc != null) { 
+      super.move(pacmanToGhost());
+    }
+  }
+  
+  private Direction pacmanToGhost() { 
+    int itemAtNow = itemAtPoint(pacmanLoc);
+    Point workBackwards = pacmanLoc;
+    Direction moveDirection = null;
+    
+    while(itemAtNow > 1) { 
+      for(Direction theDirection : theDirections) { 
+        if(itemAtPoint(getNewPoint(pacmanLoc, theDirection)) < itemAtNow) {
+          moveDirection = theDirection; 
+          workBackwards = getNewPoint(workBackwards, theDirection);
+          itemAtNow = itemAtPoint(workBackwards);
+        }
+      }
+    }
+    
+    return moveDirection;
   }
   
   /** Updates the board at the given Point given the next Direction and the number */
