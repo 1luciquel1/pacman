@@ -101,7 +101,7 @@ public class TheGhost extends PacmanItem {
     Point workBackwards = pacmanLoc;
     Direction moveDirection = null;
     
-    while(itemAtNow != 1) { 
+    while(itemAtNow != 0) { 
       for(Direction theDirection : theDirections) { 
         //System.out.println(itemAtNow);
         final Point newPoint = getNewPoint(workBackwards, theDirection);
