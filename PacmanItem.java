@@ -9,7 +9,8 @@ import java.awt.Point;
 public abstract class PacmanItem {
   protected byte x, y;
   protected Direction facingDirection;
-  protected byte startX, startY;
+  protected final byte startX;
+  protected final byte startY;
   protected Color theColor;
   protected String name = "";
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN,

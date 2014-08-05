@@ -46,7 +46,7 @@ public class Pacman extends JPanel {
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
-  private byte pacmanScore = 0;
+  private int pacmanScore = 0;
   private byte pacmanLives = 3;
   
   private JLabel pacmanScoreLabel;
@@ -293,6 +293,27 @@ public class Pacman extends JPanel {
     repaint();
   }
   
+  private void eatGhost() { 
+    System.out.println("Eating");
+    pacmanScore += 200;
+    final Point pacmanOnGhostPoint = pacman.getPoint();
+    for (byte i = 0; i < theGhosts.length; i++) {
+      if (theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
+        theGhosts[i].returnToStartPosition();
+        //ghostRespawn(theGhosts[i]);
+        System.out.println("fohnd");
+      }
+    }    
+        updateBoard(pacmanOnGhostPoint, PACMAN);
+    pinkGhost.updateBoard(board);
+    updateBoard(pinkGhost.getPoint(), FREE);
+    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
+    updateBoard(pinkGhost.getPoint(), GHOST);
+    // Set Pacman's new location
+
+    repaint();
+  }
+  
   /** If Pacman eats a ghost on frightened mode */
   private void eatGhost(final PacmanItem.Direction theDirection) {
     pacmanScore += 200;
@@ -327,7 +348,12 @@ public class Pacman extends JPanel {
     pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     updateBoard(pinkGhost.getPoint(), GHOST);
     if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
-      hitGhost();
+      if(ghostMode()) {
+        eatGhost();
+      }
+      else { 
+        hitGhost();
+      }
     }
     
     try {
@@ -405,7 +431,6 @@ public class Pacman extends JPanel {
   
   private ActionListener theListener = new ActionListener() {
     public void actionPerformed(final ActionEvent event) {
-      
       final String arrowDirection = (String) event.getActionCommand();
       
       if (arrowDirection == null)
@@ -493,6 +518,10 @@ public class Pacman extends JPanel {
     
     theFrame.add(new Pacman());
     theFrame.setVisible(true);
+  }
+  
+  public boolean ifFrightened() { 
+    return ghostMode();
   }
   
   /**
