@@ -1,6 +1,6 @@
 Written by Ryan D'souza
 
-Pacman as a Java GUI
+Pacman as a Java GUI. Very conservative memory usage (uses bytes, not ints).
 
 Pacman.java contains the main method that begins everything.
 
