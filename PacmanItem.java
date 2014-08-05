@@ -7,16 +7,16 @@ import java.awt.Point;
   * ie. ghosts or Pacman */
 
 public abstract class PacmanItem {
-  protected int x, y;
+  protected byte x, y;
   protected Direction facingDirection;
-  protected int startX, startY;
+  protected byte startX, startY;
   protected Color theColor;
   protected String name = "";
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN,
     Direction.LEFT, Direction.RIGHT};
   
   /** Constructor */
-  public PacmanItem(final int x, final int y, final Color theColor){
+  public PacmanItem(final byte x, final byte y, final Color theColor){
     this.x = x;
     this.y = y;
     this.theColor = theColor;
@@ -82,13 +82,13 @@ public abstract class PacmanItem {
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
       switch(theDirection) { 
         case UP:
-          return new Point((int) theOriginal.getX(), (int) theOriginal.getY() - 1);
+          return new Point((byte) theOriginal.getX(), (byte) theOriginal.getY() - 1);
         case DOWN:
-          return new Point((int) theOriginal.getX(), (int) theOriginal.getY() + 1);
+          return new Point((byte) theOriginal.getX(), (byte) theOriginal.getY() + 1);
         case LEFT:
-          return new Point((int) theOriginal.getX() - 1, (int) theOriginal.getY());
+          return new Point((byte) theOriginal.getX() - 1, (byte) theOriginal.getY());
         case RIGHT:
-          return new Point((int) theOriginal.getX() + 1, (int) theOriginal.getY());
+          return new Point((byte) theOriginal.getX() + 1, (byte) theOriginal.getY());
         default:
           return null;
       }
@@ -96,12 +96,14 @@ public abstract class PacmanItem {
     
     /** @param new point */
     public void setPoint(final Point thePoint) {
-      this.x = (int) thePoint.getX();
-      this.y = (int) thePoint.getY();
+      this.x = (byte) thePoint.getX();
+      this.y = (byte) thePoint.getY();
     }
     
     /** @return colorOfItem */  
-    public Color getColor() { return this.theColor; }
+    public Color getColor() { 
+      return this.theColor;
+    }
     
     /** @param colorOfitem */
     public void setColor(Color tC) { 
@@ -147,18 +149,18 @@ public abstract class PacmanItem {
     }
     
     /** @return item y coordinate */
-    public int getY() {
+    public byte getY() {
       return this.y;
     }
     
     /** @param item's new x coordinate */
     public void setX(int x) {
-      this.x = x;
+      this.x = (byte) x;
     }
     
     /** @param item's new y coordinate */
     public void setY(int y) {
-      this.y = y;
+      this.y = (byte) y;
     }
     
     /** @return Pointform of object's location */

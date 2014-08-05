@@ -14,17 +14,17 @@ public class TheGhost extends PacmanItem {
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
   
-  private static final int SIZE = 23;
-  private final int[][] theBoard = new int[SIZE][SIZE];
+  private static final byte SIZE = 23;
+  private final byte[][] theBoard = new byte[SIZE][SIZE];
   
-  private static final int WALL = -1;
-  private static final int UNEXPLORED = Integer.MAX_VALUE;
-  private static final int GHOST = 0;
-  private static final int PACMAN = -2;
+  private static final byte WALL = -1;
+  private static final byte UNEXPLORED = Byte.MAX_VALUE;
+  private static final byte GHOST = 0;
+  private static final byte PACMAN = -2;
   
-  public void updateBoard(final int[][] pacmanBoard) {
-    for (int i = 0; i < pacmanBoard.length; i++) {
-      for (int y = 0; y < pacmanBoard[i].length; y++) {
+  public void updateBoard(final byte[][] pacmanBoard) {
+    for (byte i = 0; i < pacmanBoard.length; i++) {
+      for (byte y = 0; y < pacmanBoard[i].length; y++) {
         if (pacmanBoard[i][y] == Pacman.WALL) {
           this.theBoard[i][y] = this.WALL;
         }
@@ -95,7 +95,7 @@ public class TheGhost extends PacmanItem {
   }
   
   private Direction pacmanToGhost() { 
-    int itemAtNow = itemAtPoint(pacmanLoc);
+    byte itemAtNow = itemAtPoint(pacmanLoc);
     Point workBackwards = pacmanLoc;
     Direction moveDirection = null;
     
@@ -127,28 +127,28 @@ public class TheGhost extends PacmanItem {
   }
   
   /** Updates the board at the given Point given the next Direction and the number */
-  private void updateBoard(final Point thePoint, final Direction theDirection, final int num) {
+  private void updateBoard(final Point thePoint, final Direction theDirection, final byte num) {
     updateBoard(super.getNewPoint(thePoint, theDirection), num);
   }
   
   /** Updates the board at the given Point with the given number */
-  private void updateBoard(final Point thePoint, final int num) {
-    theBoard[(int) thePoint.getY()][(int) thePoint.getX()] = num;
+  private void updateBoard(final Point thePoint, final byte num) {
+    theBoard[(byte)thePoint.getY()][(byte) thePoint.getX()] = num;
   }
   
   /** Returns the item at a Point given the Point and its Direction */
-  private int itemAtPoint(final Direction theDirection, final Point thePoint) {
+  private byte itemAtPoint(final Direction theDirection, final Point thePoint) {
     return itemAtPoint(super.getNewPoint(thePoint, theDirection));
   }
   
   /** Returns the item at a Point */
-  private int itemAtPoint(final Point thePoint) {
-    return theBoard[(int) thePoint.getY()][(int) thePoint.getX()];
+  private byte itemAtPoint(final Point thePoint) {
+    return theBoard[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
   
   /** Set item at Point to a certain value */
   public void setValue(final Point thePoint, final int theNum) {
-    theBoard[(int) thePoint.getY()][(int) thePoint.getX()] = theNum;
+    theBoard[(byte) thePoint.getY()][(byte) thePoint.getX()] = (byte) theNum;
   }
   
   public Queue<Point> getProspectivePoints() {
@@ -180,8 +180,8 @@ public class TheGhost extends PacmanItem {
   }
   
   /** Constructor */
-  public TheGhost(Color theColor, int x, int y, final int[][] pacmanGrid) {
-    super(x, y, theColor);
+  public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid) {
+    super((byte)x, (byte)y, theColor);
     
     // For the time the ghost is in the pen
     startPenTime = System.currentTimeMillis();
@@ -205,8 +205,8 @@ public class TheGhost extends PacmanItem {
   public void printBoard() {
     DecimalFormat df = new DecimalFormat("00");
     
-    for (int i = 0; i < theBoard.length; i++) {
-      for (int y = 0; y < theBoard[i].length; y++) {
+    for (byte i = 0; i < theBoard.length; i++) {
+      for (byte y = 0; y < theBoard[i].length; y++) {
         
         if (theBoard[i][y] == WALL) {
           System.out.print("XX\t");

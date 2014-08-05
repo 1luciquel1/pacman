@@ -9,31 +9,31 @@ import java.awt.event.*;
 
 public class Pacman extends JPanel {
   
-  private final int board[][] = getBoard();
+  private final byte board[][] = getBoard();
   private final TheGhost[] theGhosts = new TheGhost[4];
   
   private static final String SPACE = "     ";
   
-  private static final int SCALE = 20;
-  private static final int PACMAN_SIZE = 15;
-  private static final int GHOST_SIZE = 20;
-  private static final int DOT_SIZE = 5;
-  private static final int ENERGIZER_SIZE = DOT_SIZE * 2;
+  private static final byte SCALE = 20;
+  private static final byte PACMAN_SIZE = 15;
+  private static final byte GHOST_SIZE = 20;
+  private static final byte DOT_SIZE = 5;
+  private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
   private static final int CALCULATION_NORMAL = Integer.MAX_VALUE / 10;
   private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE / 30; // 80;
   
-  private static final int FRIGHTENED = 800; // SHOULD BE 7 SECONDS
-  private static final int CHASE = 20; // 20 Seconds
-  private static final int SCATTER = 7; // 7 Seconds
+  private static final byte FRIGHTENED = 100; // SHOULD BE 7 SECONDS
+  private static final byte CHASE = 20; // 20 Seconds
+  private static final byte SCATTER = 7; // 7 Seconds
   
-  public static final int WALL = 0;
-  public static final int FREE = 1;
-  public static final int DOT = 2;
-  public static final int ENERGIZER = 3;
-  public static final int PACMAN = 4;
-  public static final int GHOST = 5;
-  public static final int OUT = 6;
+  public static final byte WALL = 0;
+  public static final byte FREE = 1;
+  public static final byte DOT = 2;
+  public static final byte ENERGIZER = 3;
+  public static final byte PACMAN = 4;
+  public static final byte GHOST = 5;
+  public static final byte OUT = 6;
   
   private final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
@@ -46,8 +46,8 @@ public class Pacman extends JPanel {
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
-  private int pacmanScore = 0;
-  private int pacmanLives = 3;
+  private byte pacmanScore = 0;
+  private byte pacmanLives = 3;
   
   private JLabel pacmanScoreLabel;
   private JLabel pacmanLivesLabel;
@@ -94,8 +94,8 @@ public class Pacman extends JPanel {
   public void initializeVariables() {
     Point ghostStart = null;
     
-    for (int i = 0; i < board.length; i++) {
-      for (int y = 0; y < board[i].length; y++) {
+    for (byte i = 0; i < board.length; i++) {
+      for (byte y = 0; y < board[i].length; y++) {
         // Pacman starting location
         if (board[i][y] == PACMAN)
           pacman = new ThePacman(y, i, Color.YELLOW);
@@ -106,8 +106,8 @@ public class Pacman extends JPanel {
       }
     }
     
-    final int x = (int) ghostStart.getX();
-    final int y = (int) ghostStart.getY();
+    final byte x = (byte) ghostStart.getX();
+    final byte y = (byte) ghostStart.getY();
     
     // Left Inside
     redGhost = new TheGhost(Color.RED, x, y, board);
@@ -166,7 +166,7 @@ public class Pacman extends JPanel {
   /**
    * Returns an int representing the item that the parameter's item will hit based on the parameter item's direction
    */
-  private int getItemInNextMove(final PacmanItem movingItem, final PacmanItem.Direction theDirection) {
+  private byte getItemInNextMove(final PacmanItem movingItem, final PacmanItem.Direction theDirection) {
     try {
       switch (theDirection) {
         case UP:
@@ -182,7 +182,7 @@ public class Pacman extends JPanel {
           return board[movingItem.getY()][movingItem.getX() + 1];
           
         default:
-          return Integer.MAX_VALUE;
+          return Byte.MAX_VALUE;
       }
     } catch (Exception e) {
       return OUT;
@@ -190,8 +190,8 @@ public class Pacman extends JPanel {
   }
   
   /** Return int of item in that Point */
-  public int getItemAtPoint(final Point thePoint) {
-    return board[(int) thePoint.getY()][(int) thePoint.getX()];
+  public byte getItemAtPoint(final Point thePoint) {
+    return board[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
   
   /** Returns an array of points in 1 step in any direction that the ghost can move */
@@ -211,7 +211,7 @@ public class Pacman extends JPanel {
   
   /** Returns an array of points that the Point can move (anything but a wall) */
   public Point[] getValidNeighbors(final Point thePoint) {
-    return getValidNeighbors(new TheGhost(null, (int) thePoint.getX(), (int) thePoint.getY(), board));
+    return getValidNeighbors(new TheGhost(null, (byte) thePoint.getX(), (byte) thePoint.getY(), board));
   }
   
   /** Returns the direction to get from theGhost to the Point */
@@ -223,28 +223,28 @@ public class Pacman extends JPanel {
   public PacmanItem.Direction[] getDirections(final TheGhost theGhost, final Point[] thePoints) {
     PacmanItem.Direction[] theDirections = new PacmanItem.Direction[thePoints.length];
     
-    for (int i = 0; i < thePoints.length; i++) {
+    for (byte i = 0; i < thePoints.length; i++) {
       
       // If x's are the same
-      if ((int) thePoints[i].getX() == theGhost.getX()) {
+      if ((byte) thePoints[i].getX() == theGhost.getX()) {
         // If y is greater, lower down
-        if ((int) thePoints[i].getY() > theGhost.getY()) {
+        if ((byte) thePoints[i].getY() > theGhost.getY()) {
           theDirections[i] = PacmanItem.Direction.DOWN;
         }
         // If y is less, up
-        else if ((int) thePoints[i].getY() < theGhost.getY()) {
+        else if ((byte) thePoints[i].getY() < theGhost.getY()) {
           theDirections[i] = PacmanItem.Direction.UP;
         }
       }
       
       // If y's are the same
-      else if ((int) thePoints[i].getY() == theGhost.getY()) {
+      else if ((byte) thePoints[i].getY() == theGhost.getY()) {
         // If x is greater, further out
-        if ((int) thePoints[i].getX() > theGhost.getX()) {
+        if ((byte) thePoints[i].getX() > theGhost.getX()) {
           theDirections[i] = PacmanItem.Direction.RIGHT;
         }
         // If x is less, further in
-        if ((int) thePoints[i].getX() < theGhost.getX()) {
+        if ((byte) thePoints[i].getX() < theGhost.getX()) {
           theDirections[i] = PacmanItem.Direction.LEFT;
         }
       }
@@ -261,7 +261,7 @@ public class Pacman extends JPanel {
     
     theItem.setFacingDirection(theDirection);
     
-    final int itemInNextDirection = getItemInNextMove(pacman, theDirection);
+    final byte itemInNextDirection = getItemInNextMove(pacman, theDirection);
     
     if (itemInNextDirection == OUT)
       return;
@@ -301,7 +301,7 @@ public class Pacman extends JPanel {
     pacman.move(theDirection);
     final Point pacmanOnGhostPoint = pacman.getPoint();
     
-    for (int i = 0; i < theGhosts.length; i++) {
+    for (byte i = 0; i < theGhosts.length; i++) {
       if (theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
         ghostRespawn(theGhosts[i]);
       }
@@ -359,8 +359,8 @@ public class Pacman extends JPanel {
   
   /** Draws the entire board, including ghosts and pacman */
   public void drawSquares() {
-    for (int i = 0; i < board.length; i++) {
-      for (int y = 0; y < board[i].length; y++) {
+    for (byte i = 0; i < board.length; i++) {
+      for (byte y = 0; y < board[i].length; y++) {
         switch (board[i][y]) {
           case WALL:
             theG.setColor(Color.BLUE);
@@ -398,7 +398,7 @@ public class Pacman extends JPanel {
         }
       }
     }
-    for (int i = 0; i < theGhosts.length; i++) {
+    for (byte i = 0; i < theGhosts.length; i++) {
       drawGhost(theGhosts[i]);
     }
   }
@@ -511,8 +511,8 @@ public class Pacman extends JPanel {
    */
   private void ghostLeavePen(final TheGhost theGhost) {
     board[theGhost.getY()][theGhost.getX()] = FREE;
-    theGhost.setX((int) ghostReleasePoint.getX());
-    theGhost.setY((int) ghostReleasePoint.getY());
+    theGhost.setX((byte) ghostReleasePoint.getX());
+    theGhost.setY((byte) ghostReleasePoint.getY());
     board[theGhost.getY()][theGhost.getX()] = GHOST;
     theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
     ghostReleasedAt = System.currentTimeMillis();
@@ -527,8 +527,8 @@ public class Pacman extends JPanel {
   }
   
   /** Update board location with that Pacman type */
-  public void updateBoard(final Point thePoint, final int theItem) {
-    board[(int) thePoint.getY()][(int) thePoint.getX()] = theItem;
+  public void updateBoard(final Point thePoint, final byte theItem) {
+    board[(byte) thePoint.getY()][(byte) thePoint.getX()] = theItem;
   }
   
   /** @return true if chase mode */
@@ -577,15 +577,24 @@ public class Pacman extends JPanel {
   }
   
   /** Returns the board as a 2D array */
-  public static int[][] getBoard() {
-    return cs015.fnl.PacmanSupport.SupportMap.getMap();
+  public static byte[][] getBoard() {
+    final int[][] theMap = cs015.fnl.PacmanSupport.SupportMap.getMap();
+    final byte[][] theMapByte = new byte[theMap.length][theMap[0].length];
+    
+    for(int i = 0; i < theMap.length; i++) { 
+      for(int y = 0; y < theMap[i].length; y++) { 
+        theMapByte[(byte)i][(byte)y] = (byte) theMap[i][y];
+      }
+    }
+    return theMapByte;
   }
   
   /** Prints the board as a 2D array */
   public void printBoard() {
-    for (int y = 0; y < board.length; y++) {
-      for (int i = 0; i < board[y].length; i++)
+    for (byte y = 0; y < board.length; y++) {
+      for (byte i = 0; i < board[y].length; i++) {
         System.out.print(board[y][i] + " ");
+      }
       System.out.println();
     }
   }

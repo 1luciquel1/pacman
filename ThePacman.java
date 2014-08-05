@@ -5,7 +5,7 @@ import java.awt.Color;
   * Represents the Pacman */
 
 public class ThePacman extends PacmanItem {
-  public ThePacman(int x, int y, Color theColor) {
+  public ThePacman(byte x, byte y, Color theColor) {
     super(x, y, theColor);
   }
 }
