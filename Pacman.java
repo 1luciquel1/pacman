@@ -330,6 +330,9 @@ public class Pacman extends JPanel {
     drawSquares();
   }
   
+  /** Thread that has most of the game logic
+    * Handles updated ghosts' board and BFA
+    * and movements */
   private class GameLogic implements Runnable { 
     @Override
     public void run() { 
@@ -375,7 +378,6 @@ public class Pacman extends JPanel {
         pacmanLives--;
         updateLabels();
         return;
-        
       }
     }   
   }
@@ -426,20 +428,17 @@ public class Pacman extends JPanel {
     }
   }
   
+  /** Translate arrow key presses to pacman movements */
   private ActionListener theListener = new ActionListener() {
     public void actionPerformed(final ActionEvent event) {
       final String arrowDirection = (String) event.getActionCommand();
       
       if (arrowDirection == null)
         return;
-      
-      // Direction item will move in
+
       PacmanItem.Direction movingDirection;
-      
-      // Current location becomes nothing for Pacman
       board[pacman.getY()][pacman.getX()] = FREE;
       
-      // RIGHT
       if (arrowDirection.equals("RIGHT"))
         movingDirection = PacmanItem.Direction.RIGHT;
       else if (arrowDirection.equals("LEFT"))
@@ -516,10 +515,6 @@ public class Pacman extends JPanel {
     theFrame.setVisible(true);
   }
   
-  public boolean ifFrightened() { 
-    return ghostMode();
-  }
-  
   /**
    * If it is time, removes next ghost from pen and places ghost at initial ghostReleasePoint
    */
@@ -585,13 +580,9 @@ public class Pacman extends JPanel {
     return isChaseMode;
   }
   
-  /** Returns true if Pacman/Ghosts are frightened */
-  private boolean ghostMode() {
-    return ((System.currentTimeMillis() - hitEnergizerAt) / 1000) < FRIGHTENED;
-  }
-  
+  /** Returns true if frightened */
   private boolean isFrightened() { 
-    return ghostMode();
+    return ((System.currentTimeMillis() - hitEnergizerAt) / 1000) < FRIGHTENED;
   }
   
   /** Draws the ghost in the parameter */
@@ -642,7 +633,7 @@ public class Pacman extends JPanel {
     }
     
     int timeLeft = (int) ((System.currentTimeMillis() - ghostModeStart) / 1000);
-    if (ghostMode())
+    if (isFrightened())
       ghostModeLabel.setText(SPACE + "Frightened Mode: " + (FRIGHTENED - timeLeft));
     else if (isChaseMode())
       ghostModeLabel.setText(SPACE + "Chase Mode: " + (CHASE - timeLeft));
