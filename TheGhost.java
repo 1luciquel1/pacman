@@ -144,6 +144,12 @@ public class TheGhost extends PacmanItem {
   
   /** Returns the item at a Point */
   private byte itemAtPoint(final Point thePoint) {
+    if(thePoint.getX() >= theBoard.length || thePoint.getY() >= theBoard[0].length) { 
+      return PACMAN;
+    }
+    if(thePoint.getX() < 0 || thePoint.getY() < 0) { 
+      return PACMAN;
+    }
     return theBoard[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
   
