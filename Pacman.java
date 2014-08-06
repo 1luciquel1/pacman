@@ -281,7 +281,6 @@ public class Pacman extends JPanel {
     board[pacman.getY()][pacman.getX()] = PACMAN;
     
     updateLabels();
-    repaint();
   }
   
   private void eatGhost() { 
@@ -296,13 +295,10 @@ public class Pacman extends JPanel {
         ghostRespawn(theGhost);
       }
     }    
-    repaint();
   }
   
   /** If Pacman eats a ghost on frightened mode */
   private void eatGhost(final PacmanItem.Direction theDirection) {
-    
-    
     final Point pacmanOriginalPoint = pacman.getPoint();
     pacman.move(theDirection);
     final Point pacmanOnGhostPoint = pacman.getPoint();
@@ -326,22 +322,8 @@ public class Pacman extends JPanel {
   public void paintComponent(Graphics g) {
     theG = (Graphics2D) g;
     releaseGhosts();
+    updateLabels();
     drawSquares();
-    
-    try {
-      //Thread.sleep(1000);
-      /*int temp = 0;
-      if (((System.currentTimeMillis() - hitEnergizerAt) / 1000) <= 5) {
-        for (int i = 0; i < CALCULATION_ENERGIZER && !controlTouch; i++)
-          temp += i;
-      } else {
-        for (int i = 0; i < CALCULATION_NORMAL && !controlTouch; i++)
-          temp += i;
-      }*/
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    repaint();
   }
   
   private class GameLogic implements Runnable { 
@@ -358,17 +340,7 @@ public class Pacman extends JPanel {
             updateBoard(theGhost.getPoint(), GHOST);
           }
         }
-        
         eatGhost();
-        
-        if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
-          if(ghostMode()) {
-            eatGhost();
-          }
-          else { 
-            hitGhost();
-          }
-        }
         
         try { 
           Thread.sleep(100);
@@ -376,10 +348,10 @@ public class Pacman extends JPanel {
         catch(Exception e) { 
           e.printStackTrace();
         }
+        repaint();
       }
     }
   };
-  
   
   /**
    * If Pacman hits a ghost and it's not on frightened mode Move pacman back to initial position, decrement lives
@@ -393,7 +365,6 @@ public class Pacman extends JPanel {
     updateBoard(pacman.getPoint(), PACMAN);
     pacmanLives--;
     updateLabels();
-    repaint();
   }
   
   /** Draws the entire board, including ghosts and pacman */
@@ -468,7 +439,6 @@ public class Pacman extends JPanel {
         movingDirection = null;
       
       moveItem(pacman, movingDirection);
-      repaint();
     }
   };
   
