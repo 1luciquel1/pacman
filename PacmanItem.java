@@ -166,10 +166,10 @@ public abstract class PacmanItem {
     
     /** @return Pointform of object's location */
     public Point getPoint() {
-      thePoint.setX(x);
+      return new Point(x, y);
+      /*thePoint.setX(x);
       thePoint.setY(y);
-      return thePoint;
-      //return new Point(x, y);
+      return thePoint;*/
     }
     
     /** Sets the name of the item based on the color */

@@ -18,11 +18,11 @@ public class Point {
   }
   
   public byte getX() { 
-    return x;
+    return this.x;
   }
   
   public byte getY() {
-    return y;
+    return this.y;
   }
   
   public void setX(final byte newX) { 
@@ -31,5 +31,14 @@ public class Point {
   
   public void setY(final byte newY) { 
     this.y = newY;
+  }
+  
+  @Override
+  public String toString() { 
+    return "X: " + this.x + "\tY: " + y;
+  }
+  
+  public boolean equals(final Point theOtherPoint) { 
+    return (this.x == theOtherPoint.getX() && this.y == theOtherPoint.getY());
   }
 }

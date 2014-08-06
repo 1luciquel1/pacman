@@ -45,7 +45,7 @@ public class Pacman extends JPanel {
   
   private Graphics2D theG;
   
-  private static final int GHOST_RELEASE = 30; // Release ghost every 5 seconds
+  private static final int GHOST_RELEASE = 10; // Release ghost every 5 seconds
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
@@ -147,18 +147,6 @@ public class Pacman extends JPanel {
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
-  }
-  
-  /** Prints the possibilities a Ghost can move in and the direction */
-  public void printPointPossibilitiesAndDirections(final TheGhost theGhost) {
-    System.out.println("Ghost X: " + theGhost.getX() + "\tY:" + theGhost.getY());
-    
-    final Point[] thePoints = theGhost.getPoints();
-    
-    /*
-     * for(Point thePoint : thePoints) { System.out.println("Point X: " + thePoint.getX() + "\tY: " +
-     * thePoint.getY() + "\tDirection: " + getDirection(theGhost, thePoint)); }
-     */
   }
   
   /**
@@ -296,16 +284,15 @@ public class Pacman extends JPanel {
   }
   
   private void eatGhost() { 
-    pacmanScore += 200;
     final Point pacmanOnGhostPoint = pacman.getPoint();
     for (TheGhost theGhost : theGhosts) {
       if (theGhost.getPoint().equals(pacmanOnGhostPoint)) {
+        pacmanScore += 200;
         theGhost.returnToStartPosition();
         //pinkGhost.updateBoard(board);
         updateBoard(theGhost.getPoint(), FREE);
-        //pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
         updateBoard(theGhost.getPoint(), GHOST);
-        //ghostRespawn(theGhosts[i]);
+        ghostRespawn(theGhost);
       }
     }    
     repaint();
@@ -313,7 +300,7 @@ public class Pacman extends JPanel {
   
   /** If Pacman eats a ghost on frightened mode */
   private void eatGhost(final PacmanItem.Direction theDirection) {
-    pacmanScore += 200;
+    
     
     final Point pacmanOriginalPoint = pacman.getPoint();
     pacman.move(theDirection);
@@ -321,7 +308,9 @@ public class Pacman extends JPanel {
     
     for (byte i = 0; i < theGhosts.length; i++) {
       if (theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
+        pacmanScore += 200;
         ghostRespawn(theGhosts[i]);
+        theGhosts[i].returnToStartPosition();
       }
     }
     
@@ -337,11 +326,10 @@ public class Pacman extends JPanel {
     theG = (Graphics2D) g;
     releaseGhosts();
     drawSquares();
-    
+    eatGhost();
     moveItem(pacman, pacman.getFacingDirection());
-    
+    eatGhost();
     for(TheGhost theGhost : theGhosts) { 
-      
       if(theGhost.isReleased()) { 
         theGhost.updateBoard(board);
         updateBoard(theGhost.getPoint(), FREE);
@@ -349,6 +337,8 @@ public class Pacman extends JPanel {
         updateBoard(theGhost.getPoint(), GHOST);
       }
     }
+    
+    eatGhost();
     
     if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
       if(ghostMode()) {
@@ -360,6 +350,7 @@ public class Pacman extends JPanel {
     }
     
     try {
+      //Thread.sleep(1000);
       int temp = 0;
       if (((System.currentTimeMillis() - hitEnergizerAt) / 1000) <= 5) {
         for (int i = 0; i < CALCULATION_ENERGIZER && !controlTouch; i++)
@@ -368,16 +359,19 @@ public class Pacman extends JPanel {
         for (int i = 0; i < CALCULATION_NORMAL && !controlTouch; i++)
           temp += i;
       }
-      repaint();
     } catch (Exception e) {
       e.printStackTrace();
     }
+          repaint();
   }
   
   /**
    * If Pacman hits a ghost and it's not on frightened mode Move pacman back to initial position, decrement lives
    */
   public void hitGhost() {
+    if(isFrightened()) { 
+      return;
+    }
     updateBoard(pacman.getPoint(), FREE);
     pacman.returnToStartPosition();
     updateBoard(pacman.getPoint(), PACMAN);
@@ -595,6 +589,10 @@ public class Pacman extends JPanel {
   /** Returns true if Pacman/Ghosts are frightened */
   private boolean ghostMode() {
     return ((System.currentTimeMillis() - hitEnergizerAt) / 1000) < FRIGHTENED;
+  }
+  
+  private boolean isFrightened() { 
+    return ghostMode();
   }
   
   /** Draws the ghost in the parameter */
