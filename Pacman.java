@@ -42,7 +42,7 @@ public class Pacman extends JPanel {
   
   private Graphics2D theG;
   
-  private static final int GHOST_RELEASE = 120; // Release ghost every 5 seconds
+  private static final int GHOST_RELEASE = 30; // Release ghost every 5 seconds
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
@@ -138,7 +138,6 @@ public class Pacman extends JPanel {
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     ghostReleasedAt = System.currentTimeMillis();
     pinkGhost.release();
-    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     
     // for(int i = 0; i < theGhosts.length; i++)
     // System.out.println(theGhosts[i]);
@@ -252,21 +251,25 @@ public class Pacman extends JPanel {
   public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
     
-    if (theDirection == null)
+    if (theDirection == null) {
       return;
+    }
     
     theItem.setFacingDirection(theDirection);
     
     final byte itemInNextDirection = getItemInNextMove(pacman, theDirection);
     
-    if (itemInNextDirection == OUT)
+    if (itemInNextDirection == OUT) {
       return;
+    }
     
     if (itemInNextDirection == GHOST) {
-      if (ghostMode())
+      if (ghostMode()) {
         eatGhost(theDirection);
-      else
+      }
+      else {
         hitGhost();
+      }
       return;
     }
     
@@ -290,14 +293,12 @@ public class Pacman extends JPanel {
   }
   
   private void eatGhost() { 
-    System.out.println("Eating");
     pacmanScore += 200;
     final Point pacmanOnGhostPoint = pacman.getPoint();
     for (byte i = 0; i < theGhosts.length; i++) {
       if (theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
         theGhosts[i].returnToStartPosition();
         //ghostRespawn(theGhosts[i]);
-        System.out.println("fohnd");
       }
     }    
     pinkGhost.updateBoard(board);
@@ -336,10 +337,16 @@ public class Pacman extends JPanel {
     
     moveItem(pacman, pacman.getFacingDirection());
     
-    pinkGhost.updateBoard(board);
-    updateBoard(pinkGhost.getPoint(), FREE);
-    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
-    updateBoard(pinkGhost.getPoint(), GHOST);
+    for(TheGhost theGhost : theGhosts) { 
+      
+      if(theGhost.isReleased()) { 
+        theGhost.updateBoard(board);
+        updateBoard(theGhost.getPoint(), FREE);
+        theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
+        updateBoard(theGhost.getPoint(), GHOST);
+      }
+    }
+    
     if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
       if(ghostMode()) {
         eatGhost();
@@ -536,7 +543,6 @@ public class Pacman extends JPanel {
     theGhost.setX((byte) ghostReleasePoint.getX());
     theGhost.setY((byte) ghostReleasePoint.getY());
     board[theGhost.getY()][theGhost.getX()] = GHOST;
-    theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
     ghostReleasedAt = System.currentTimeMillis();
     theGhost.release();
   }
