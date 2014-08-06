@@ -90,6 +90,7 @@ public class Pacman extends JPanel {
     
     initializeVariables();
     addKeyListener(new ControlListener());
+    new Thread(new GameLogic()).start();
     new javax.swing.Timer(0, theListener).start();
   }
   
@@ -326,44 +327,59 @@ public class Pacman extends JPanel {
     theG = (Graphics2D) g;
     releaseGhosts();
     drawSquares();
-    eatGhost();
-    moveItem(pacman, pacman.getFacingDirection());
-    eatGhost();
-    for(TheGhost theGhost : theGhosts) { 
-      if(theGhost.isReleased()) { 
-        theGhost.updateBoard(board);
-        updateBoard(theGhost.getPoint(), FREE);
-        theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
-        updateBoard(theGhost.getPoint(), GHOST);
-      }
-    }
-    
-    eatGhost();
-    
-    if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
-      if(ghostMode()) {
-        eatGhost();
-      }
-      else { 
-        hitGhost();
-      }
-    }
     
     try {
       //Thread.sleep(1000);
-      int temp = 0;
+      /*int temp = 0;
       if (((System.currentTimeMillis() - hitEnergizerAt) / 1000) <= 5) {
         for (int i = 0; i < CALCULATION_ENERGIZER && !controlTouch; i++)
           temp += i;
       } else {
         for (int i = 0; i < CALCULATION_NORMAL && !controlTouch; i++)
           temp += i;
-      }
+      }*/
     } catch (Exception e) {
       e.printStackTrace();
     }
-          repaint();
+    repaint();
   }
+  
+  private class GameLogic implements Runnable { 
+    @Override
+    public void run() { 
+      while(true)  {
+        eatGhost();
+        moveItem(pacman, pacman.getFacingDirection());
+        for(TheGhost theGhost : theGhosts) { 
+          if(theGhost.isReleased()) { 
+            theGhost.updateBoard(board);
+            updateBoard(theGhost.getPoint(), FREE);
+            theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
+            updateBoard(theGhost.getPoint(), GHOST);
+          }
+        }
+        
+        eatGhost();
+        
+        if(getItemAtPoint(pinkGhost.getPoint()) == PACMAN || getItemAtPoint(pacman.getPoint()) == GHOST) { 
+          if(ghostMode()) {
+            eatGhost();
+          }
+          else { 
+            hitGhost();
+          }
+        }
+        
+        try { 
+          Thread.sleep(100);
+        }
+        catch(Exception e) { 
+          e.printStackTrace();
+        }
+      }
+    }
+  };
+  
   
   /**
    * If Pacman hits a ghost and it's not on frightened mode Move pacman back to initial position, decrement lives
