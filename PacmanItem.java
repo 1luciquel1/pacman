@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Point;
 
 /** Written by Ryan D'souza
   * Brown University CS 015 Final Project 
@@ -15,6 +14,7 @@ public abstract class PacmanItem {
   protected String name = "";
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN,
     Direction.LEFT, Direction.RIGHT};
+  protected final Point thePoint = new Point();
   
   /** Constructor */
   public PacmanItem(final byte x, final byte y, final Color theColor){
@@ -83,13 +83,13 @@ public abstract class PacmanItem {
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
       switch(theDirection) { 
         case UP:
-          return new Point((byte) theOriginal.getX(), (byte) theOriginal.getY() - 1);
+          return new Point(theOriginal.getX(), theOriginal.getY() - 1);
         case DOWN:
-          return new Point((byte) theOriginal.getX(), (byte) theOriginal.getY() + 1);
+          return new Point(theOriginal.getX(), theOriginal.getY() + 1);
         case LEFT:
-          return new Point((byte) theOriginal.getX() - 1, (byte) theOriginal.getY());
+          return new Point(theOriginal.getX() - 1, theOriginal.getY());
         case RIGHT:
-          return new Point((byte) theOriginal.getX() + 1, (byte) theOriginal.getY());
+          return new Point(theOriginal.getX() + 1, theOriginal.getY());
         default:
           return null;
       }
@@ -145,7 +145,7 @@ public abstract class PacmanItem {
     }
     
     /** @return item x coordinate */
-    public int getX() {
+    public byte getX() {
       return this.x;
     }
     
@@ -154,19 +154,22 @@ public abstract class PacmanItem {
       return this.y;
     }
     
-    /** @param item's new x coordinate */
+    /** @param item's  x coordinate */
     public void setX(int x) {
       this.x = (byte) x;
     }
     
-    /** @param item's new y coordinate */
+    /** @param item's  y coordinate */
     public void setY(int y) {
       this.y = (byte) y;
     }
     
     /** @return Pointform of object's location */
     public Point getPoint() {
-      return new Point(x, y);
+      thePoint.setX(x);
+      thePoint.setY(y);
+      return thePoint;
+      //return new Point(x, y);
     }
     
     /** Sets the name of the item based on the color */

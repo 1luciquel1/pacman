@@ -1,7 +1,10 @@
-import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Dimension;
 
 /**
  * Written by Ryan D'souza Brown University CS 015 Final Project Main Class of Pacman game
@@ -295,16 +298,16 @@ public class Pacman extends JPanel {
   private void eatGhost() { 
     pacmanScore += 200;
     final Point pacmanOnGhostPoint = pacman.getPoint();
-    for (byte i = 0; i < theGhosts.length; i++) {
-      if (theGhosts[i].getPoint().equals(pacmanOnGhostPoint)) {
-        theGhosts[i].returnToStartPosition();
+    for (TheGhost theGhost : theGhosts) {
+      if (theGhost.getPoint().equals(pacmanOnGhostPoint)) {
+        theGhost.returnToStartPosition();
+        //pinkGhost.updateBoard(board);
+        updateBoard(theGhost.getPoint(), FREE);
+        //pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
+        updateBoard(theGhost.getPoint(), GHOST);
         //ghostRespawn(theGhosts[i]);
       }
     }    
-    pinkGhost.updateBoard(board);
-    updateBoard(pinkGhost.getPoint(), FREE);
-    pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
-    updateBoard(pinkGhost.getPoint(), GHOST);
     repaint();
   }
   

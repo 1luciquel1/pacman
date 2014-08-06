@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Point;
 import java.text.DecimalFormat;
 import java.util.Queue;
 import java.util.LinkedList;

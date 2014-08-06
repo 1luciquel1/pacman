@@ -5,7 +5,17 @@ public class Point {
   public Point(final byte x, final byte y) { 
     this.x = x;
     this.y = y;
-  } 
+  }
+  
+  public Point() { 
+    this.x = (byte) 0;
+    this.y = (byte) 0;
+  }
+  
+  public Point(final int x, final int y) { 
+    this.x = (byte) x;
+    this.y = (byte) y;
+  }
   
   public byte getX() { 
     return x;
