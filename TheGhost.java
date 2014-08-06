@@ -22,6 +22,8 @@ public class TheGhost extends PacmanItem {
   private static final byte GHOST = 0;
   private static final byte PACMAN = -2;
   
+  private boolean isReleased = false;
+  
   public void updateBoard(final byte[][] pacmanBoard) {
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
@@ -187,6 +189,19 @@ public class TheGhost extends PacmanItem {
     startPenTime = System.currentTimeMillis();
     
     this.updateBoard(pacmanGrid);
+  }
+  
+  /** Returns true if the ghost has been released from the pen */
+  public boolean isReleased() { 
+    return isReleased;
+  }
+  
+  public void release() { 
+    isReleased = true;
+  }
+  
+  public void setInPen() { 
+    isReleased = false;
   }
   
   /** @return timeTheGhost was in the pen */
