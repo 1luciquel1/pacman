@@ -49,7 +49,7 @@ public class Pacman extends JPanel {
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
-  private byte pacmanScore = 0;
+  private long pacmanScore = 0;
   private byte pacmanLives = 3;
   
   private JLabel pacmanScoreLabel;
