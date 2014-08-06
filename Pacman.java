@@ -46,7 +46,7 @@ public class Pacman extends JPanel {
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
-  private int pacmanScore = 0;
+  private byte pacmanScore = 0;
   private byte pacmanLives = 3;
   
   private JLabel pacmanScoreLabel;
@@ -137,6 +137,7 @@ public class Pacman extends JPanel {
     theGhosts[3] = pinkGhost;
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     ghostReleasedAt = System.currentTimeMillis();
+    pinkGhost.release();
     pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     
     // for(int i = 0; i < theGhosts.length; i++)
@@ -144,11 +145,6 @@ public class Pacman extends JPanel {
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
-    
-    Point[] pinkPossibilities = getValidNeighbors(pinkGhost);
-    pinkGhost.addPoints(pinkPossibilities);
-    
-    printPointPossibilitiesAndDirections(pinkGhost);
   }
   
   /** Prints the possibilities a Ghost can move in and the direction */
@@ -304,13 +300,10 @@ public class Pacman extends JPanel {
         System.out.println("fohnd");
       }
     }    
-        updateBoard(pacmanOnGhostPoint, PACMAN);
     pinkGhost.updateBoard(board);
     updateBoard(pinkGhost.getPoint(), FREE);
     pinkGhost.startBreadthFirstAlgorithm(pinkGhost.getPoint());
     updateBoard(pinkGhost.getPoint(), GHOST);
-    // Set Pacman's new location
-
     repaint();
   }
   
@@ -545,6 +538,7 @@ public class Pacman extends JPanel {
     board[theGhost.getY()][theGhost.getX()] = GHOST;
     theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
     ghostReleasedAt = System.currentTimeMillis();
+    theGhost.release();
   }
   
   /** Moves Ghost back to pen */
@@ -553,6 +547,7 @@ public class Pacman extends JPanel {
     ghostPenQ.add(theEaten);
     updateBoard(theEaten.getPoint(), GHOST);
     ghostReleasedAt = System.currentTimeMillis();
+    theEaten.setInPen();
   }
   
   /** Update board location with that Pacman type */
