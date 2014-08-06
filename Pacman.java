@@ -90,6 +90,11 @@ public class Pacman extends JPanel {
     
     initializeVariables();
     addKeyListener(new ControlListener());
+    start();
+  }
+  
+  /** Start the other threads */
+  public void start() { 
     new Thread(new GameLogic()).start();
     new javax.swing.Timer(0, theListener).start();
   }
@@ -151,7 +156,7 @@ public class Pacman extends JPanel {
   }
   
   /**
-   * Returns an int representing the item that the parameter's item will hit based on the parameter item's direction
+   * Returns a byte representing the item that the parameter's item will hit based on the parameter item's direction
    */
   private byte getItemInNextMove(final PacmanItem movingItem, final PacmanItem.Direction theDirection) {
     try {
@@ -176,7 +181,7 @@ public class Pacman extends JPanel {
     }
   }
   
-  /** Return int of item in that Point */
+  /** Return byte of item in that Point */
   public byte getItemAtPoint(final Point thePoint) {
     return board[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
@@ -211,8 +216,6 @@ public class Pacman extends JPanel {
     PacmanItem.Direction[] theDirections = new PacmanItem.Direction[thePoints.length];
     
     for (byte i = 0; i < thePoints.length; i++) {
-      
-      // If x's are the same
       if ((byte) thePoints[i].getX() == theGhost.getX()) {
         // If y is greater, lower down
         if ((byte) thePoints[i].getY() > theGhost.getY()) {
@@ -223,8 +226,6 @@ public class Pacman extends JPanel {
           theDirections[i] = PacmanItem.Direction.UP;
         }
       }
-      
-      // If y's are the same
       else if ((byte) thePoints[i].getY() == theGhost.getY()) {
         // If x is greater, further out
         if ((byte) thePoints[i].getX() > theGhost.getX()) {
@@ -246,9 +247,7 @@ public class Pacman extends JPanel {
     if (theDirection == null) {
       return;
     }
-    
     theItem.setFacingDirection(theDirection);
-    
     final byte itemInNextDirection = getItemInNextMove(pacman, theDirection);
     
     if (itemInNextDirection == OUT) {
@@ -256,7 +255,7 @@ public class Pacman extends JPanel {
     }
     
     if (itemInNextDirection == GHOST) {
-      if (ghostMode()) {
+      if (isFrightened()) {
         eatGhost(theDirection);
       }
       else {
@@ -283,13 +282,18 @@ public class Pacman extends JPanel {
     updateLabels();
   }
   
+  /** Eats the Ghost if it is not frightened mode */
   private void eatGhost() { 
+    if(!isFrightened()) { 
+      hitGhost();
+      return;
+    }
     final Point pacmanOnGhostPoint = pacman.getPoint();
     for (TheGhost theGhost : theGhosts) {
       if (theGhost.getPoint().equals(pacmanOnGhostPoint)) {
+        System.out.println("EATEN:\t" + theGhost.toString());
         pacmanScore += 200;
         theGhost.returnToStartPosition();
-        //pinkGhost.updateBoard(board);
         updateBoard(theGhost.getPoint(), FREE);
         updateBoard(theGhost.getPoint(), GHOST);
         ghostRespawn(theGhost);
@@ -331,6 +335,7 @@ public class Pacman extends JPanel {
     public void run() { 
       while(true)  {
         eatGhost();
+        hitGhost();
         moveItem(pacman, pacman.getFacingDirection());
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
@@ -341,7 +346,7 @@ public class Pacman extends JPanel {
           }
         }
         eatGhost();
-        
+        hitGhost();
         try { 
           Thread.sleep(100);
         }
@@ -360,11 +365,19 @@ public class Pacman extends JPanel {
     if(isFrightened()) { 
       return;
     }
-    updateBoard(pacman.getPoint(), FREE);
-    pacman.returnToStartPosition();
-    updateBoard(pacman.getPoint(), PACMAN);
-    pacmanLives--;
-    updateLabels();
+    final Point pacmanOnGhostPoint = pacman.getPoint();
+    for (TheGhost theGhost : theGhosts) {
+      if (theGhost.getPoint().equals(pacmanOnGhostPoint)) {
+        updateBoard(pacman.getPoint(), FREE);
+        pacman.returnToStartPosition();
+        updateBoard(pacman.getPoint(), FREE);
+        
+        pacmanLives--;
+        updateLabels();
+        return;
+        
+      }
+    }   
   }
   
   /** Draws the entire board, including ghosts and pacman */

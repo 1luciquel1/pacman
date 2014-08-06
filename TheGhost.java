@@ -184,9 +184,7 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid) {
     super((byte)x, (byte)y, theColor);
     
-    // For the time the ghost is in the pen
     startPenTime = System.currentTimeMillis();
-    
     this.updateBoard(pacmanGrid);
   }
   
