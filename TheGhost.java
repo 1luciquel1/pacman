@@ -3,6 +3,7 @@ import java.text.DecimalFormat;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Written by Ryan D'souza Brown University CS 015 Final Project Represents the ghosts in the Pacman game
@@ -13,6 +14,7 @@ public class TheGhost extends PacmanItem {
   private final Color startColor;
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
+  private static final Random theGenerator = new Random();
   
   private static final byte SIZE = 23;
   private final byte[][] theBoard = new byte[SIZE][SIZE];
@@ -54,15 +56,26 @@ public class TheGhost extends PacmanItem {
       startBreadthFirstAlgorithm(ghostLocation);
     }
     
-    else if(gameMode == Mode.FRIGHTENED) { 
+    else if(gameMode == Mode.FRIGHTENED) {
+      frightenedMode(ghostLocation);
     }
     
     else if(gameMode == Mode.SCATTER) {
+      scatterMode(ghostLocation);
     }
   }
   
   /**Scatter mode: Move randomly */
   private void scatterMode(final Point currentLoc) { 
+    //Choose a randomDirection
+    final Direction randomDirection = theDirections[theGenerator.nextInt(theDirections.length)];
+    
+    if(itemAtPoint(randomDirection, currentLoc) == WALL) {
+      scatterMode(currentLoc);
+    }
+    else { 
+      super.move(randomDirection);
+    }
   }
   
   /**Frightened Mode: Move to corner of the board */
