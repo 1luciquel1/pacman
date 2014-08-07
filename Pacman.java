@@ -26,14 +26,10 @@ public class Pacman extends JPanel {
   private static final byte DOT_SIZE = 5;
   private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
-  private static final int TIME_CHASE = 20; //Seconds
+  private static final int TIME_CHASE = 10; //Seconds
   private static final int TIME_SCATTER = 7;
   private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;
-  
-  private static final byte FRIGHTENED = 100; // SHOULD BE 7 SECONDS
-  private static final byte CHASE = 20; // 20 Seconds
-  private static final byte SCATTER = 7; // 7 Seconds
   
   public static final byte WALL = 0;
   public static final byte FREE = 1;
@@ -280,6 +276,8 @@ public class Pacman extends JPanel {
     if (itemInNextDirection == ENERGIZER) {
       hitEnergizerAt = System.currentTimeMillis();
       pacmanScore += 100;
+      gameMode = Mode.FRIGHTENED;
+      modeStart = System.currentTimeMillis();
     }
     
     board[pacman.getY()][pacman.getX()] = PACMAN;
@@ -289,7 +287,7 @@ public class Pacman extends JPanel {
   
   /** Eats the Ghost if it is not frightened mode */
   private void eatGhost() { 
-    if(!isFrightened()) { 
+    if(gameMode != Mode.FRIGHTENED) { 
       hitGhost();
       return;
     }
@@ -352,18 +350,21 @@ public class Pacman extends JPanel {
           case FRIGHTENED:
             if(modeTime > TIME_FRIGHTENED) { 
             gameMode = Mode.SCATTER;
+            modeStart = System.currentTimeMillis();
           }
             break;
             
           case SCATTER:
             if(modeTime > TIME_SCATTER) {
             gameMode = Mode.CHASE;
+            modeStart = System.currentTimeMillis();
           }
             break;
             
           case CHASE:
             if(modeTime > TIME_CHASE) { 
             gameMode = Mode.SCATTER;
+            modeStart = System.currentTimeMillis();
           }
             break;
           default:
@@ -589,35 +590,13 @@ public class Pacman extends JPanel {
   
   /** @return true if chase mode */
   public boolean isChaseMode() {
+    return gameMode == Mode.CHASE;
     
-    // If it's chaseMode right now
-    if (isChaseMode) {
-      // if it's still chase mode
-      isChaseMode = (((System.currentTimeMillis() - ghostModeStart) / 1000) <= CHASE);
-      
-      // If ChaseMode is over now, start other mode
-      if (!isChaseMode)
-        ghostModeStart = System.currentTimeMillis();
-      
-      return isChaseMode;
-    }
-    
-    // If it's not chaseMode right now
-    else if (!isChaseMode) {
-      // If it's still not chase mode
-      isChaseMode = (((System.currentTimeMillis() - ghostModeStart) / 1000) >= SCATTER);
-      
-      if (isChaseMode)
-        ghostModeStart = System.currentTimeMillis();
-      
-      return isChaseMode;
-    }
-    return isChaseMode;
   }
   
   /** Returns true if frightened */
   private boolean isFrightened() { 
-    return ((System.currentTimeMillis() - hitEnergizerAt) / 1000) < FRIGHTENED;
+    return gameMode == Mode.FRIGHTENED;
   }
   
   /** Draws the ghost in the parameter */
@@ -667,12 +646,12 @@ public class Pacman extends JPanel {
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: N/A");
     }
     
-    int timeLeft = (int) ((System.currentTimeMillis() - ghostModeStart) / 1000);
-    if (isFrightened())
-      ghostModeLabel.setText(SPACE + "Frightened Mode: " + (FRIGHTENED - timeLeft));
-    else if (isChaseMode())
-      ghostModeLabel.setText(SPACE + "Chase Mode: " + (CHASE - timeLeft));
-    else
-      ghostModeLabel.setText(SPACE + "Scatter Mode: " + (SCATTER - timeLeft));
+    final int currentTime = (int) ((System.currentTimeMillis() - modeStart) / 1000);
+    if (gameMode == Mode.FRIGHTENED)
+      ghostModeLabel.setText(SPACE + "Frightened Mode: " + (TIME_FRIGHTENED - currentTime));
+    else if (gameMode == Mode.CHASE)
+      ghostModeLabel.setText(SPACE + "Chase Mode: " + (TIME_CHASE - currentTime));
+    else if(gameMode == Mode.SCATTER)
+      ghostModeLabel.setText(SPACE + "Scatter Mode: " + (TIME_SCATTER - currentTime));
   }
 }
