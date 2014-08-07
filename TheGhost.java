@@ -161,19 +161,25 @@ public class TheGhost extends PacmanItem {
       }
     }
     
-    if(moveDirection == Direction.RIGHT) { 
+    return getOppositeDirection(moveDirection);
+  }
+  
+  /** Return the opposite direction */
+  public static Direction getOppositeDirection(final Direction theDirection) { 
+        if(theDirection == Direction.RIGHT) { 
       return Direction.LEFT;
     }
-    else if(moveDirection == Direction.LEFT) { 
+    else if(theDirection == Direction.LEFT) { 
       return Direction.RIGHT; 
     }
-    else if(moveDirection == Direction.UP) { 
+    else if(theDirection == Direction.UP) { 
       return Direction.DOWN;
     }
-    else if(moveDirection == Direction.DOWN) { 
+    else if(theDirection == Direction.DOWN) { 
       return Direction.UP;
     }
-    return moveDirection;
+    else
+      return null;
   }
   
   /** Updates the board at the given Point given the next Direction and the number */
