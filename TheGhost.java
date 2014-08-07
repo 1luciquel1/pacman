@@ -10,7 +10,6 @@ import java.util.Random;
  */
 
 public class TheGhost extends PacmanItem {
-  private Color theColor;
   private final Color startColor;
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
@@ -89,7 +88,7 @@ public class TheGhost extends PacmanItem {
   /**Change Ghost color based upon game mode */
   private void setColor(final Mode theMode) { 
     if(theMode == Mode.FRIGHTENED) {
-      theColor = Color.BLUE;
+      theColor = Color.GREEN;
     }
     else { 
       theColor = startColor;
@@ -162,7 +161,6 @@ public class TheGhost extends PacmanItem {
         }
       }
     }
-    
     return getOppositeDirection(moveDirection);
   }
   

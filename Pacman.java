@@ -591,7 +591,6 @@ public class Pacman extends JPanel {
   /** @return true if chase mode */
   public boolean isChaseMode() {
     return gameMode == Mode.CHASE;
-    
   }
   
   /** Returns true if frightened */
