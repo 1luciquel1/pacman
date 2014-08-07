@@ -12,9 +12,9 @@ import java.awt.Dimension;
 
 public class Pacman extends JPanel {
   
-  public static enum MODE { 
-    CHASE, SCATTER, FRIGHTENED 
-  };
+  private MODE currentMode = MODE.CHASE;
+  
+  public final boolean[] mode = {true, false, false};
   
   private final byte board[][] = getBoard();
   private final TheGhost[] theGhosts = new TheGhost[4];
