@@ -18,8 +18,9 @@ public class TheGhost extends PacmanItem {
   
   private static final byte SIZE = 23;
   private final byte[][] theBoard = new byte[SIZE][SIZE];
-  private static final Point[] corners = {new Point(1, 1), new Point(1, 22), new Point(22, 1), new Point(22, 22)};
-  private final Point cornerPoint;
+  private static final byte Z = 4;
+  private static final Point[] corners = {new Point(9, Z), new Point(4, Z), new Point(5, Z), new Point(6, Z)};
+  private Point cornerPoint;
   
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
@@ -60,11 +61,14 @@ public class TheGhost extends PacmanItem {
     setColor();
     
     if(gameMode == Mode.CHASE) {
+      lookFor = PACMAN;
       startBreadthFirstAlgorithm(ghostLocation);
     }
     
     else if(gameMode == Mode.FRIGHTENED) {
-      frightenedMode(ghostLocation);
+      //frightenedMode(ghostLocation);
+      lookFor = CORNER;
+      startBreadthFirstAlgorithm(ghostLocation);
     }
     
     else if(gameMode == Mode.SCATTER) {
@@ -102,6 +106,8 @@ public class TheGhost extends PacmanItem {
   }
   
   private Point pacmanLoc = null;
+  private Point cornerLoc = null;
+  private byte lookFor;
   
   /**
    * Checks all 4 directions around the point If that item does not have my number and it's not a wall 
@@ -118,9 +124,15 @@ public class TheGhost extends PacmanItem {
         //Skip
       }
       
-      else if(itemAtPoint(newPoint) == PACMAN) {
+      else if(itemAtPoint(newPoint) == lookFor) {
         setValue(newPoint, itemAtPoint(current) + 1);
-        pacmanLoc = newPoint;
+        
+        if(gameMode == Mode.CHASE) {
+          pacmanLoc = newPoint;
+        }
+        else if(gameMode == Mode.FRIGHTENED) { 
+          cornerLoc = newPoint;
+        }
         prospectivePoints.clear();
         return;
       }
@@ -138,6 +150,11 @@ public class TheGhost extends PacmanItem {
   }
   
   private void startBreadthFirstAlgorithm(final Point startPoint) {
+    if(startPoint.equals(cornerPoint)) {
+      cornerPoint = getCorner(startPoint);
+      return;
+    }
+    
     prospectivePoints.clear();
     prospectivePoints.add(startPoint);
     
@@ -152,8 +169,22 @@ public class TheGhost extends PacmanItem {
   }
   
   private Direction pacmanToGhost() { 
-    byte itemAtNow = itemAtPoint(pacmanLoc);
-    Point workBackwards = pacmanLoc;
+    byte itemAtNow = 0;
+    if(gameMode == Mode.CHASE) {
+      itemAtNow = itemAtPoint(pacmanLoc);
+    }
+    else if(gameMode == Mode.FRIGHTENED) { 
+      itemAtNow = itemAtPoint(cornerLoc);
+    }
+    
+    Point workBackwards = null;
+    if(gameMode == Mode.CHASE) {
+      workBackwards = pacmanLoc;
+    }
+    else if(gameMode == Mode.FRIGHTENED) { 
+      workBackwards = cornerLoc;
+    }
+    
     Direction moveDirection = null;
     
     while(itemAtNow != 0) { 
@@ -252,22 +283,8 @@ public class TheGhost extends PacmanItem {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
     
-    if(theColor == Color.CYAN) { 
-      cornerPoint = corners[0];
-    }
-    else if(theColor == Color.RED) { 
-      cornerPoint = corners[1];
-    }
-    else if(theColor == Color.ORANGE) { 
-      cornerPoint = corners[2];
-    }
-    else if(theColor == Color.PINK) { 
-      cornerPoint = corners[3];
-    }
-    else {
-      System.out.println("WHAT");
-      cornerPoint = corners[theGenerator.nextInt(corners.length)];
-    }
+    cornerPoint = getCorner(new Point(x, y));
+    cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
   }
@@ -288,6 +305,14 @@ public class TheGhost extends PacmanItem {
   /** @return timeTheGhost was in the pen */
   public long getPenTime() {
     return this.startPenTime;
+  }
+  
+  private Point getCorner(final Point currentPosition) { 
+    final Point newPoint = corners[theGenerator.nextInt(corners.length)];
+    if(currentPosition.equals(newPoint)) {
+      return getCorner(currentPosition);
+    }
+    return newPoint;
   }
   
   public void setPenTime(long time) {
