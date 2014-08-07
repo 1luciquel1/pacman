@@ -119,8 +119,7 @@ public class Pacman extends JPanel {
     final byte y = (byte) ghostStart.getY();
     
     // Left Inside
-    redGhost = new TheGhost(Color.RED, x, y, board);
-    redGhost.setX(x - 2);
+    redGhost = new TheGhost(Color.RED, x - 2, y, board);
     board[redGhost.getY()][redGhost.getX()] = GHOST;
     theGhosts[0] = redGhost;
     ghostPenQ.add(redGhost);
@@ -133,8 +132,7 @@ public class Pacman extends JPanel {
     ghostSpawnPoint = new Point(blueGhost.getX(), blueGhost.getY());
     
     // Right inside
-    orangeGhost = new TheGhost(Color.ORANGE, x, y, board);
-    orangeGhost.setX(x + 2);
+    orangeGhost = new TheGhost(Color.ORANGE, x + 2, y, board);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
     ghostPenQ.add(orangeGhost);
@@ -540,7 +538,12 @@ public class Pacman extends JPanel {
   
   /** Moves Ghost back to pen */
   public void ghostRespawn(final TheGhost theEaten) {
-    theEaten.setPoint(ghostSpawnPoint);
+    if(ghostPenQ.size() == 0) { 
+      theEaten.setPoint(ghostSpawnPoint);
+    }
+    else { 
+      theEaten.returnToStartPosition();
+    }
     ghostPenQ.add(theEaten);
     updateBoard(theEaten.getPoint(), GHOST);
     ghostReleasedAt = System.currentTimeMillis();
