@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class TheGhost extends PacmanItem {
   private final Color startColor;
+  private static final Color FRIGHTENED_COLOR = Color.GREEN;
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
   private static final Random theGenerator = new Random();
@@ -24,6 +25,7 @@ public class TheGhost extends PacmanItem {
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
   private static final byte GHOST = 0;
   private static final byte PACMAN = -2;
+  private static final byte CORNER = -3;
   
   private boolean isReleased = false;
   
@@ -44,6 +46,7 @@ public class TheGhost extends PacmanItem {
       }
     }
     this.theBoard[this.y][this.x] = GHOST;
+    this.theBoard[cornerPoint.getY()][cornerPoint.getX()] = CORNER;
     
     aPoint.setX(x);
     aPoint.setY(y);
@@ -88,7 +91,7 @@ public class TheGhost extends PacmanItem {
   /**Change Ghost color based upon game mode */
   private void setColor(final Mode theMode) { 
     if(theMode == Mode.FRIGHTENED) {
-      theColor = Color.GREEN;
+      theColor = FRIGHTENED_COLOR;
     }
     else { 
       theColor = startColor;
@@ -166,7 +169,7 @@ public class TheGhost extends PacmanItem {
   
   /** Return the opposite direction */
   public static Direction getOppositeDirection(final Direction theDirection) { 
-        if(theDirection == Direction.RIGHT) { 
+    if(theDirection == Direction.RIGHT) { 
       return Direction.LEFT;
     }
     else if(theDirection == Direction.LEFT) { 
@@ -245,8 +248,6 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
-    startPenTime = System.currentTimeMillis();
-    this.updateBoard(pacmanGrid);
     
     if(theColor == Color.CYAN) { 
       cornerPoint = corners[0];
@@ -261,8 +262,11 @@ public class TheGhost extends PacmanItem {
       cornerPoint = corners[3];
     }
     else {
+      System.out.println("WHAT");
       cornerPoint = corners[theGenerator.nextInt(corners.length)];
     }
+    startPenTime = System.currentTimeMillis();
+    this.updateBoard(pacmanGrid);
   }
   
   /** Returns true if the ghost has been released from the pen */
