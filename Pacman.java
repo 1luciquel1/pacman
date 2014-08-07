@@ -347,9 +347,9 @@ public class Pacman extends JPanel {
         moveItem(pacman, pacman.getFacingDirection());
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
-            theGhost.updateBoard(board, gameMode);
+            theGhost.updateBoard(board);
             updateBoard(theGhost.getPoint(), FREE);
-            theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
+            theGhost.move(theGhost.getPoint(), gameMode);
             updateBoard(theGhost.getPoint(), GHOST);
           }
         }

@@ -24,7 +24,9 @@ public class TheGhost extends PacmanItem {
   
   private boolean isReleased = false;
   
-  public void updateBoard(final byte[][] pacmanBoard, final Mode gameMode) {
+  private final Point aPoint = new Point();
+  
+  public void updateBoard(final byte[][] pacmanBoard) {
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
         if (pacmanBoard[i][y] == Pacman.WALL) {
@@ -40,6 +42,13 @@ public class TheGhost extends PacmanItem {
     }
     this.theBoard[this.y][this.x] = GHOST;
     
+    aPoint.setX(x);
+    aPoint.setY(y);
+  }
+  
+  public void move(final Point ghostLocation, final Mode gameMode) { 
+        
+    startBreadthFirstAlgorithm(ghostLocation);
     setColor(gameMode);
   }
   
@@ -54,7 +63,7 @@ public class TheGhost extends PacmanItem {
   }
   
   /** Starts the Breadthfirst algorithm for the start point */
-  public void startBreadthFirstAlgorithm(final Point startPoint) { 
+  private void startBreadthFirstAlgorithm(final Point startPoint) { 
     explore(startPoint);
   }
   
@@ -204,7 +213,7 @@ public class TheGhost extends PacmanItem {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
     startPenTime = System.currentTimeMillis();
-    this.updateBoard(pacmanGrid, gameMode);
+    this.updateBoard(pacmanGrid);
   }
   
   /** Returns true if the ghost has been released from the pen */
