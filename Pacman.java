@@ -12,6 +12,10 @@ import java.awt.Dimension;
 
 public class Pacman extends JPanel {
   
+  public static enum MODE { 
+    CHASE, SCATTER, FRIGHTENED 
+  };
+  
   private final byte board[][] = getBoard();
   private final TheGhost[] theGhosts = new TheGhost[4];
   
@@ -23,8 +27,10 @@ public class Pacman extends JPanel {
   private static final byte DOT_SIZE = 5;
   private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
-  private static final int CALCULATION_NORMAL = Integer.MAX_VALUE / 10;
-  private static final int CALCULATION_ENERGIZER = Integer.MAX_VALUE / 30; // 80;
+  private static final int SPEED_CHASE = 20; //Seconds
+  private static final int SPEED_SCATTER = 7;
+  private static final int SPEED_FRIGHTENED = 10; 
+  private static final byte GHOST_RELEASE = 5;
   
   private static final byte FRIGHTENED = 100; // SHOULD BE 7 SECONDS
   private static final byte CHASE = 20; // 20 Seconds
@@ -45,7 +51,6 @@ public class Pacman extends JPanel {
   
   private Graphics2D theG;
   
-  private static final int GHOST_RELEASE = 10; // Release ghost every 5 seconds
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
