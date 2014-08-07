@@ -12,9 +12,8 @@ import java.awt.Dimension;
 
 public class Pacman extends JPanel {
   
-  private MODE currentMode = MODE.CHASE;
-  
-  public final boolean[] mode = {true, false, false};
+  private Mode currentMode;
+  private long modeStart;
   
   private final byte board[][] = getBoard();
   private final TheGhost[] theGhosts = new TheGhost[4];
@@ -92,6 +91,8 @@ public class Pacman extends JPanel {
     nextGhostReleaseLabel = new JLabel(SPACE + "Ghost Release", JLabel.LEFT);
     nextGhostReleaseLabel.setForeground(Color.WHITE);
     add(nextGhostReleaseLabel);
+    
+    
     
     initializeVariables();
     addKeyListener(new ControlListener());
