@@ -31,6 +31,8 @@ public class TheGhost extends PacmanItem {
   
   private final Point aPoint = new Point();
   
+  private Mode gameMode;
+  
   public void updateBoard(final byte[][] pacmanBoard) {
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
@@ -54,7 +56,8 @@ public class TheGhost extends PacmanItem {
   
   /** Move and change colors according to gameMode */
   public void move(final Point ghostLocation, final Mode gameMode) { 
-    setColor(gameMode);
+    this.gameMode = gameMode;
+    setColor();
     
     if(gameMode == Mode.CHASE) {
       startBreadthFirstAlgorithm(ghostLocation);
@@ -89,8 +92,8 @@ public class TheGhost extends PacmanItem {
   }
   
   /**Change Ghost color based upon game mode */
-  private void setColor(final Mode theMode) { 
-    if(theMode == Mode.FRIGHTENED) {
+  private void setColor() { 
+    if(gameMode == Mode.FRIGHTENED) {
       theColor = FRIGHTENED_COLOR;
     }
     else { 
