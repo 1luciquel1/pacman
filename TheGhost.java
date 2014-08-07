@@ -18,8 +18,7 @@ public class TheGhost extends PacmanItem {
   
   private static final byte SIZE = 23;
   private final byte[][] theBoard = new byte[SIZE][SIZE];
-  private static final byte Z = 4;
-  private static final Point[] corners = {new Point(9, Z), new Point(4, Z), new Point(5, Z), new Point(6, Z)};
+  private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
   private Point cornerPoint;
   
   private static final byte WALL = -1;
