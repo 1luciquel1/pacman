@@ -18,6 +18,8 @@ public class TheGhost extends PacmanItem {
   
   private static final byte SIZE = 23;
   private final byte[][] theBoard = new byte[SIZE][SIZE];
+  private static final Point[] corners = {new Point(1, 1), new Point(1, 22), new Point(22, 1), new Point(22, 22)};
+  private final Point cornerPoint;
   
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
@@ -247,6 +249,22 @@ public class TheGhost extends PacmanItem {
     this.startColor = theColor;
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
+    
+    if(theColor == Color.CYAN) { 
+      cornerPoint = corners[0];
+    }
+    else if(theColor == Color.RED) { 
+      cornerPoint = corners[1];
+    }
+    else if(theColor == Color.ORANGE) { 
+      cornerPoint = corners[2];
+    }
+    else if(theColor == Color.PINK) { 
+      cornerPoint = corners[3];
+    }
+    else {
+      cornerPoint = corners[theGenerator.nextInt(corners.length)];
+    }
   }
   
   /** Returns true if the ghost has been released from the pen */
