@@ -81,6 +81,7 @@ public class TheGhost extends PacmanItem {
   /**Frightened Mode: Move to corner of the board */
   private void frightenedMode(final Point currentLoc) { 
     //Randomly choose 1 of 4 corners, breadthFirst to it 
+    
   }
   
   /**Change Ghost color based upon game mode */

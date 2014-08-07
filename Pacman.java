@@ -26,9 +26,9 @@ public class Pacman extends JPanel {
   private static final byte DOT_SIZE = 5;
   private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
-  private static final int SPEED_CHASE = 20; //Seconds
-  private static final int SPEED_SCATTER = 7;
-  private static final int SPEED_FRIGHTENED = 10; 
+  private static final int TIME_CHASE = 20; //Seconds
+  private static final int TIME_SCATTER = 7;
+  private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;
   
   private static final byte FRIGHTENED = 100; // SHOULD BE 7 SECONDS
@@ -94,7 +94,7 @@ public class Pacman extends JPanel {
     
     gameMode = Mode.CHASE;
     modeStart = System.currentTimeMillis();
-
+    
     initializeVariables();
     addKeyListener(new ControlListener());
     start();
@@ -345,6 +345,31 @@ public class Pacman extends JPanel {
         eatGhost();
         hitGhost();
         moveItem(pacman, pacman.getFacingDirection());
+        
+        final int modeTime = (int) ((System.currentTimeMillis() - modeStart)/1000);
+        switch(gameMode) { 
+          
+          case FRIGHTENED:
+            if(modeTime > TIME_FRIGHTENED) { 
+            gameMode = Mode.SCATTER;
+          }
+            break;
+            
+          case SCATTER:
+            if(modeTime > TIME_SCATTER) {
+            gameMode = Mode.CHASE;
+          }
+            break;
+            
+          case CHASE:
+            if(modeTime > TIME_CHASE) { 
+            gameMode = Mode.SCATTER;
+          }
+            break;
+          default:
+            break;
+        }
+        
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
             theGhost.updateBoard(board);
@@ -440,7 +465,7 @@ public class Pacman extends JPanel {
       
       if (arrowDirection == null)
         return;
-
+      
       PacmanItem.Direction movingDirection;
       board[pacman.getY()][pacman.getX()] = FREE;
       
