@@ -12,7 +12,7 @@ import java.awt.Dimension;
 
 public class Pacman extends JPanel {
   
-  private Mode currentMode;
+  private Mode gameMode;
   private long modeStart;
   
   private final byte board[][] = getBoard();
@@ -92,6 +92,8 @@ public class Pacman extends JPanel {
     nextGhostReleaseLabel.setForeground(Color.WHITE);
     add(nextGhostReleaseLabel);
     
+    gameMode = Mode.CHASE;
+    modeStart = System.currentTimeMillis();
     
     
     initializeVariables();
