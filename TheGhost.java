@@ -46,10 +46,28 @@ public class TheGhost extends PacmanItem {
     aPoint.setY(y);
   }
   
+  /** Move and change colors according to gameMode */
   public void move(final Point ghostLocation, final Mode gameMode) { 
-        
-    startBreadthFirstAlgorithm(ghostLocation);
     setColor(gameMode);
+    
+    if(gameMode == Mode.CHASE) {
+      startBreadthFirstAlgorithm(ghostLocation);
+    }
+    
+    else if(gameMode == Mode.FRIGHTENED) { 
+    }
+    
+    else if(gameMode == Mode.SCATTER) {
+    }
+  }
+  
+  /**Scatter mode: Move randomly */
+  private void scatterMode(final Point currentLoc) { 
+  }
+  
+  /**Frightened Mode: Move to corner of the board */
+  private void frightenedMode(final Point currentLoc) { 
+    //Randomly choose 1 of 4 corners, breadthFirst to it 
   }
   
   /**Change Ghost color based upon game mode */
@@ -60,11 +78,6 @@ public class TheGhost extends PacmanItem {
     else { 
       theColor = startColor;
     }
-  }
-  
-  /** Starts the Breadthfirst algorithm for the start point */
-  private void startBreadthFirstAlgorithm(final Point startPoint) { 
-    explore(startPoint);
   }
   
   private Point pacmanLoc = null;
@@ -103,7 +116,7 @@ public class TheGhost extends PacmanItem {
     }
   }
   
-  private void explore(final Point startPoint) {
+  private void startBreadthFirstAlgorithm(final Point startPoint) {
     prospectivePoints.clear();
     prospectivePoints.add(startPoint);
     
