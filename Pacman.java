@@ -94,8 +94,7 @@ public class Pacman extends JPanel {
     
     gameMode = Mode.CHASE;
     modeStart = System.currentTimeMillis();
-    
-    
+
     initializeVariables();
     addKeyListener(new ControlListener());
     start();
@@ -127,26 +126,26 @@ public class Pacman extends JPanel {
     final byte y = (byte) ghostStart.getY();
     
     // Left Inside
-    redGhost = new TheGhost(Color.RED, x - 2, y, board);
+    redGhost = new TheGhost(Color.RED, x - 2, y, board, gameMode);
     board[redGhost.getY()][redGhost.getX()] = GHOST;
     theGhosts[0] = redGhost;
     ghostPenQ.add(redGhost);
     
     // Middle inside
-    blueGhost = new TheGhost(Color.CYAN, x, y, board);
+    blueGhost = new TheGhost(Color.CYAN, x, y, board, gameMode);
     board[blueGhost.getY()][blueGhost.getX()] = GHOST;
     theGhosts[1] = blueGhost;
     ghostPenQ.add(blueGhost);
     ghostSpawnPoint = new Point(blueGhost.getX(), blueGhost.getY());
     
     // Right inside
-    orangeGhost = new TheGhost(Color.ORANGE, x + 2, y, board);
+    orangeGhost = new TheGhost(Color.ORANGE, x + 2, y, board, gameMode);
     board[orangeGhost.getY()][orangeGhost.getX()] = GHOST;
     theGhosts[2] = orangeGhost;
     ghostPenQ.add(orangeGhost);
     
     // Outside
-    pinkGhost = new TheGhost(Color.PINK, x, y - 2, board);
+    pinkGhost = new TheGhost(Color.PINK, x, y - 2, board, gameMode);
     // pinkGhost.setY(y - 2);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
@@ -209,7 +208,7 @@ public class Pacman extends JPanel {
   
   /** Returns an array of points that the Point can move (anything but a wall) */
   public Point[] getValidNeighbors(final Point thePoint) {
-    return getValidNeighbors(new TheGhost(null, (byte) thePoint.getX(), (byte) thePoint.getY(), board));
+    return getValidNeighbors(new TheGhost(null, (byte) thePoint.getX(), (byte) thePoint.getY(), board, gameMode));
   }
   
   /** Returns the direction to get from theGhost to the Point */
@@ -348,7 +347,7 @@ public class Pacman extends JPanel {
         moveItem(pacman, pacman.getFacingDirection());
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
-            theGhost.updateBoard(board);
+            theGhost.updateBoard(board, gameMode);
             updateBoard(theGhost.getPoint(), FREE);
             theGhost.startBreadthFirstAlgorithm(theGhost.getPoint());
             updateBoard(theGhost.getPoint(), GHOST);
