@@ -6,15 +6,22 @@ import java.awt.Color;
   * ie. ghosts or Pacman */
 
 public abstract class PacmanItem {
-  protected byte x, y;
-  protected Direction facingDirection;
+  
   protected final byte startX;
   protected final byte startY;
+  
+  protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+  
+  protected Direction desiredDirection;
+  protected Direction facingDirection;
+  
+  protected final Point thePoint = new Point();
+  
+  protected byte x;
+  protected byte y;
+
   protected Color theColor;
   protected String name = "";
-  protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN,
-    Direction.LEFT, Direction.RIGHT};
-  protected final Point thePoint = new Point();
   
   /** Constructor */
   public PacmanItem(final byte x, final byte y, final Color theColor){
@@ -134,9 +141,19 @@ public abstract class PacmanItem {
       return facingDirection;
     }
     
-    /** @param directionToFace */
+    /** @param direction currently facing */
     public void setFacingDirection(Direction facing) {
       this.facingDirection = facing;
+    }
+    
+    /** @param direction it is trying to face */
+    public void setDesiredDirection(Direction desired) { 
+      this.desiredDirection = desired;
+    }
+    
+    /**@return direction the item wants to go */
+    public Direction getDesiredDirection() { 
+      return this.desiredDirection;
     }
     
     /** Four possible directions to move in */
