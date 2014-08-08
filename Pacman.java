@@ -99,7 +99,6 @@ public class Pacman extends JPanel {
   /** Start the other threads */
   public void start() { 
     new Thread(new GameLogic()).start();
-    new javax.swing.Timer(0, theListener).start();
   }
   
   /** Initalizes pacman and ghosts start locations */
@@ -342,6 +341,9 @@ public class Pacman extends JPanel {
       while(true)  {
         eatGhost();
         hitGhost();
+        if(getItemInNextMove(pacman, pacman.getDesiredDirection()) != WALL) {
+          pacman.setFacingDirection(pacman.getDesiredDirection());
+        }
         moveItem(pacman, pacman.getFacingDirection());
         
         final int modeTime = (int) ((System.currentTimeMillis() - modeStart)/1000);
@@ -460,32 +462,6 @@ public class Pacman extends JPanel {
     }
   }
   
-  /** Translate arrow key presses to pacman movements */
-  private ActionListener theListener = new ActionListener() {
-    public void actionPerformed(final ActionEvent event) {
-      final String arrowDirection = (String) event.getActionCommand();
-      
-      if (arrowDirection == null)
-        return;
-      
-      PacmanItem.Direction movingDirection;
-      board[pacman.getY()][pacman.getX()] = FREE;
-      
-      if (arrowDirection.equals("RIGHT"))
-        movingDirection = PacmanItem.Direction.RIGHT;
-      else if (arrowDirection.equals("LEFT"))
-        movingDirection = PacmanItem.Direction.LEFT;
-      else if (arrowDirection.equals("UP"))
-        movingDirection = PacmanItem.Direction.UP;
-      else if (arrowDirection.equals("DOWN"))
-        movingDirection = PacmanItem.Direction.DOWN;
-      else
-        movingDirection = null;
-      
-      moveItem(pacman, movingDirection);
-    }
-  };
-  
   /**
    * Listens to keyboard events, sets the facing direction based on those events Then moves the item in regards to the
    * facing direction
@@ -526,8 +502,8 @@ public class Pacman extends JPanel {
           movingDirection = null;
           break;
       }
-      
-      moveItem(pacman, movingDirection);
+      pacman.setDesiredDirection(movingDirection);
+      //moveItem(pacman, movingDirection);
     }
     
     public void keyReleased(KeyEvent e) {
