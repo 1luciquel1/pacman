@@ -26,6 +26,7 @@ public class TheGhost extends PacmanItem {
   private static final byte GHOST = 0;
   private static final byte PACMAN = -2;
   private static final byte CORNER = -3;
+  private static final byte OTHER_GHOST = -4;
   
   private boolean isReleased = false;
   
@@ -189,8 +190,8 @@ public class TheGhost extends PacmanItem {
     while(itemAtNow != 0) { 
       for(Direction theDirection : theDirections) { 
         final Point newPoint = getNewPoint(workBackwards, theDirection);
-        
-        if(itemAtPoint(newPoint) == (itemAtNow - 1) && itemAtPoint(newPoint) != this.WALL) {
+        final byte itemAtNewPoint = itemAtPoint(newPoint);
+        if(itemAtNewPoint == (itemAtNow - 1) && itemAtNewPoint != this.WALL) {
           moveDirection = theDirection; 
           workBackwards = newPoint;
           itemAtNow = itemAtPoint(workBackwards);
