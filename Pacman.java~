@@ -264,9 +264,8 @@ public class Pacman extends JPanel {
       return;
     }
     
-    if (itemInNextDirection == DOT) { 
+    if (itemInNextDirection == DOT)
       pacmanScore += 10;
-    }
     
     if (itemInNextDirection != WALL) {
       board[pacman.getY()][pacman.getX()] = FREE;
@@ -563,9 +562,8 @@ public class Pacman extends JPanel {
   
   /** Update board location with that Pacman type */
   public void updateBoard(final Point thePoint, final byte theItem) {
-    if(thePoint.getY() >= board[0].length || thePoint.getX() >= board.length) {
+    if(thePoint.getY() >= board[0].length || thePoint.getX() >= board.length)
       return;
-    }
     board[(byte) thePoint.getY()][(byte) thePoint.getX()] = theItem;
   }
   
@@ -622,20 +620,16 @@ public class Pacman extends JPanel {
     if (ghostPenQ.size() >= 0) {
       int timeToRelease = (int) GHOST_RELEASE - (int) ((System.currentTimeMillis() - ghostReleasedAt) / 1000);
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: " + timeToRelease);
-    } 
-    else if (ghostPenQ.size() < 0 || (GHOST_RELEASE - ((System.currentTimeMillis() - ghostReleasedAt) / 1000)) < 0) {
+    } else if (ghostPenQ.size() < 0 || (GHOST_RELEASE - ((System.currentTimeMillis() - ghostReleasedAt) / 1000)) < 0) {
       nextGhostReleaseLabel.setText(SPACE + "Ghost Release: N/A");
     }
     
     final int currentTime = (int) ((System.currentTimeMillis() - modeStart) / 1000);
-    if (gameMode == Mode.FRIGHTENED) {
+    if (gameMode == Mode.FRIGHTENED)
       ghostModeLabel.setText(SPACE + "Frightened Mode: " + (TIME_FRIGHTENED - currentTime));
-    }
-    else if (gameMode == Mode.CHASE) {
+    else if (gameMode == Mode.CHASE)
       ghostModeLabel.setText(SPACE + "Chase Mode: " + (TIME_CHASE - currentTime));
-    }
-    else if(gameMode == Mode.SCATTER) {
+    else if(gameMode == Mode.SCATTER)
       ghostModeLabel.setText(SPACE + "Scatter Mode: " + (TIME_SCATTER - currentTime));
-    }
   }
 }

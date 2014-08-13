@@ -27,6 +27,7 @@ public class TheGhost extends PacmanItem {
   private static final byte PACMAN = -2;
   private static final byte CORNER = -3;
   private static final byte OTHER_GHOST = -4;
+  private static final byte RANDOM_POINT = -5;
   
   private boolean isReleased = false;
   
@@ -66,13 +67,27 @@ public class TheGhost extends PacmanItem {
     }
     
     else if(gameMode == Mode.FRIGHTENED) {
-      //frightenedMode(ghostLocation);
       lookFor = CORNER;
       startBreadthFirstAlgorithm(ghostLocation);
     }
     
     else if(gameMode == Mode.SCATTER) {
-      scatterMode(ghostLocation);
+      updateBoard(randomPointNoWall(), RANDOM_POINT);
+      lookFor = RANDOM_POINT;
+      startBreadthFirstAlgorithm(ghostLocation);
+      //scatterMode(ghostLocation);
+    }
+  }
+  
+  /** Returns a random point that doesn't point to a wall */
+  private Point randomPointNoWall() { 
+    final Point random = new Point((byte) theGenerator.nextInt(theBoard.length), 
+                                   (byte)theGenerator.nextInt(theBoard[0].length));
+    if(itemAtPoint(random) != WALL ) { 
+      return random;
+    }
+    else { 
+      return randomPointNoWall();
     }
   }
   
@@ -107,6 +122,7 @@ public class TheGhost extends PacmanItem {
   
   private Point pacmanLoc = null;
   private Point cornerLoc = null;
+  private Point randomLoc = null;
   private byte lookFor;
   
   /**
@@ -132,6 +148,9 @@ public class TheGhost extends PacmanItem {
         }
         else if(gameMode == Mode.FRIGHTENED) { 
           cornerLoc = newPoint;
+        }
+        else if(gameMode == Mode.SCATTER) { 
+          randomLoc = newPoint;
         }
         prospectivePoints.clear();
         return;
@@ -176,6 +195,9 @@ public class TheGhost extends PacmanItem {
     else if(gameMode == Mode.FRIGHTENED) { 
       itemAtNow = itemAtPoint(cornerLoc);
     }
+    else if(gameMode == Mode.SCATTER) { 
+      itemAtNow = itemAtPoint(randomLoc);
+    }
     
     Point workBackwards = null;
     if(gameMode == Mode.CHASE) {
@@ -183,6 +205,9 @@ public class TheGhost extends PacmanItem {
     }
     else if(gameMode == Mode.FRIGHTENED) { 
       workBackwards = cornerLoc;
+    }
+    else if(gameMode == Mode.SCATTER) { 
+      workBackwards = randomLoc;
     }
     
     Direction moveDirection = null;
@@ -208,7 +233,7 @@ public class TheGhost extends PacmanItem {
   
   /** Updates the board at the given Point with the given number */
   private void updateBoard(final Point thePoint, final byte num) {
-    theBoard[(byte)thePoint.getY()][(byte) thePoint.getX()] = num;
+    theBoard[thePoint.getY()][thePoint.getX()] = num;
   }
   
   /** Returns the item at a Point given the Point and its Direction */
