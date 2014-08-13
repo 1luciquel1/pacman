@@ -102,24 +102,6 @@ public abstract class PacmanItem {
       }
     }
     
-    /** Return the opposite direction */
-    public static Direction getOppositeDirection(final Direction theDirection) { 
-      if(theDirection == Direction.RIGHT) { 
-        return Direction.LEFT;
-      }
-      else if(theDirection == Direction.LEFT) { 
-        return Direction.RIGHT; 
-      }
-      else if(theDirection == Direction.UP) { 
-        return Direction.DOWN;
-      }
-      else if(theDirection == Direction.DOWN) { 
-        return Direction.UP;
-      }
-      else
-        return null;
-    }
-    
     /** @param new point */
     public void setPoint(final Point thePoint) {
       this.x = (byte) thePoint.getX();
