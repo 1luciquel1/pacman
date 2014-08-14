@@ -31,13 +31,13 @@ public class Pacman extends JPanel {
   private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;
   
-  public static final byte WALL = 0;
-  public static final byte FREE = 1;
-  public static final byte DOT = 2;
-  public static final byte ENERGIZER = 3;
-  public static final byte PACMAN = 4;
-  public static final byte GHOST = 5;
-  public static final byte OUT = 6;
+  public static final byte WALL = 1 << 0;
+  public static final byte FREE = 1 << 1;
+  public static final byte DOT = 1 << 2;
+  public static final byte ENERGIZER = 1 << 3;
+  public static final byte PACMAN = 1 << 4;
+  public static final byte GHOST = 1 << 5;
+  public static final byte OUT = 1 << 6;
   
   private final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
@@ -547,7 +547,7 @@ public class Pacman extends JPanel {
     
     for(int i = 0; i < theMap.length; i++) { 
       for(int y = 0; y < theMap[i].length; y++) { 
-        theMapByte[(byte)i][(byte)y] = (byte) theMap[i][y];
+        theMapByte[(byte)i][(byte)y] = (byte) (1 << theMap[i][y]);
       }
     }
     return theMapByte;
