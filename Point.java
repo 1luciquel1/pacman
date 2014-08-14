@@ -33,6 +33,14 @@ public class Point {
     this.y = newY;
   }
   
+  public void addX(final byte addX) { 
+    this.x += addX;
+  }
+  
+  public void addY(final byte addY) { 
+    this.y += addY;
+  }
+  
   @Override
   public String toString() { 
     return "X: " + this.x + "\tY: " + y;

@@ -21,6 +21,8 @@ public class TheGhost extends PacmanItem {
   private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
   private Point cornerPoint;
   
+  private final Point[] randomPoints = new Point[1];
+  
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
   private static final byte GHOST = 0;
@@ -72,7 +74,9 @@ public class TheGhost extends PacmanItem {
     }
     
     else if(gameMode == Mode.SCATTER) {
-      updateBoard(randomPointNoWall(), RANDOM_POINT);
+      final Point theRandomPoint = randomPoints[theGenerator.nextInt(randomPoints.length)];
+      System.out.println(theRandomPoint);
+      updateBoard(theRandomPoint, RANDOM_POINT);
       lookFor = RANDOM_POINT;
       startBreadthFirstAlgorithm(ghostLocation);
       //scatterMode(ghostLocation);
@@ -81,12 +85,14 @@ public class TheGhost extends PacmanItem {
   
   /** Returns a random point that doesn't point to a wall */
   private Point randomPointNoWall() { 
-    final Point random = new Point((byte) theGenerator.nextInt(theBoard.length), 
-                                   (byte)theGenerator.nextInt(theBoard[0].length));
-    if(itemAtPoint(random) != WALL ) { 
+    final byte x = (byte) theGenerator.nextInt(theBoard.length);
+    final byte y = (byte) theGenerator.nextInt(theBoard[0].length);
+    final Point random = new Point(x, y);
+    if(itemAtPoint(random) != WALL ) {
       return random;
     }
     else { 
+      System.out.println("Recursive");
       return randomPointNoWall();
     }
   }
@@ -294,6 +300,10 @@ public class TheGhost extends PacmanItem {
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
+    
+    for(int i = 0; i < randomPoints.length; i++) { 
+      randomPoints[i] = randomPointNoWall();
+    }
   }
   
   /** Returns true if the ghost has been released from the pen */

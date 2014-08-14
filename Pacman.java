@@ -27,7 +27,7 @@ public class Pacman extends JPanel {
   private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
   private static final int TIME_CHASE = 10; //Seconds
-  private static final int TIME_SCATTER = 7;
+  public static final int TIME_SCATTER = 7;
   private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;
   
@@ -108,12 +108,14 @@ public class Pacman extends JPanel {
     for (byte i = 0; i < board.length; i++) {
       for (byte y = 0; y < board[i].length; y++) {
         // Pacman starting location
-        if (board[i][y] == PACMAN)
+        if (board[i][y] == PACMAN) {
           pacman = new ThePacman(y, i, Color.YELLOW);
+        }
         
         // Ghost starting location
-        else if (board[i][y] == GHOST)
+        else if (board[i][y] == GHOST) {
           ghostStart = new Point(y, i);
+        }
       }
     }
     
