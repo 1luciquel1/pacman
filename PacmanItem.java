@@ -86,20 +86,30 @@ public abstract class PacmanItem {
       }
     }
     
+    private static final Point aPoint = new Point(0, 0);
+    
     /** Returns a new Point from the given point and the direction */
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
+      aPoint.setX(theOriginal.getX());
+      aPoint.setY(theOriginal.getY());
       switch(theDirection) { 
         case UP:
-          return new Point(theOriginal.getX(), theOriginal.getY() - 1);
+          aPoint.addY(-1);
+          break;
         case DOWN:
-          return new Point(theOriginal.getX(), theOriginal.getY() + 1);
+          aPoint.addY(1);
+          break;
         case LEFT:
-          return new Point(theOriginal.getX() - 1, theOriginal.getY());
+          aPoint.addX(-1);
+          break;
         case RIGHT:
-          return new Point(theOriginal.getX() + 1, theOriginal.getY());
+          aPoint.addX(1);
+          break;
         default:
           return null;
       }
+      
+      return aPoint;
     }
     
     /** Return the opposite direction */
