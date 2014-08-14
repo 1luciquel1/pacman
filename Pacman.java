@@ -326,7 +326,7 @@ public class Pacman extends JPanel {
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
             theGhost.updateBoard(board);
-            updateBoard(theGhost.getPoint(), theGhost.getPrevious());
+            updateBoard(theGhost.getPoint(), FREE);
             theGhost.move(theGhost.getPoint(), gameMode);
             updateBoard(theGhost.getPoint(), GHOST);
           }
