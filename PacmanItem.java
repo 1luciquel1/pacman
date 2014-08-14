@@ -8,16 +8,16 @@ import java.util.Random;
 
 public abstract class PacmanItem {
   
-  protected final byte startX;
-  protected final byte startY;
-  
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
   protected static final Random theGenerator = new Random();
   
+  protected final Point thePoint = new Point();
+  
+  protected final byte startX;
+  protected final byte startY;
+  
   protected Direction desiredDirection;
   protected Direction facingDirection;
-  
-  protected final Point thePoint = new Point();
   
   protected byte x;
   protected byte y;

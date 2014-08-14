@@ -46,6 +46,11 @@ public class Pacman extends JPanel {
   
   private final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
   
+  private final JLabel pacmanScoreLabel;
+  private final JLabel pacmanLivesLabel;
+  private final JLabel ghostModeLabel;
+  private final JLabel nextGhostReleaseLabel;
+  
   private TheGhost redGhost, pinkGhost, blueGhost, orangeGhost;
   private ThePacman pacman;
   
@@ -54,20 +59,15 @@ public class Pacman extends JPanel {
   private Point ghostReleasePoint;
   private Point ghostSpawnPoint;
   
-  private long pacmanScore = 0;
-  private byte pacmanLives = 3;
-  
-  private final JLabel pacmanScoreLabel;
-  private final JLabel pacmanLivesLabel;
-  private final JLabel ghostModeLabel;
-  private final JLabel nextGhostReleaseLabel;
-  
-  private boolean controlTouch = false;
-  private boolean isChaseMode;
-  
   private long ghostModeStart;
   private long hitEnergizerAt;
   private long ghostReleasedAt;
+  
+  private long pacmanScore = 0;
+  private byte pacmanLives = 3;
+  
+  private boolean controlTouch = false;
+  private boolean isChaseMode;
   
   /** Constructor, initializes JPanel and board */
   public Pacman() {
@@ -148,15 +148,11 @@ public class Pacman extends JPanel {
     
     // Outside
     pinkGhost = new TheGhost(Color.PINK, x, y - 2, board, gameMode);
-    // pinkGhost.setY(y - 2);
     board[pinkGhost.getY()][pinkGhost.getX()] = GHOST;
     theGhosts[3] = pinkGhost;
     ghostReleasePoint = new Point(pinkGhost.getX(), pinkGhost.getY());
     ghostReleasedAt = System.currentTimeMillis();
     pinkGhost.release();
-    
-    // for(int i = 0; i < theGhosts.length; i++)
-    // System.out.println(theGhosts[i]);
     
     isChaseMode = true;
     ghostModeStart = System.currentTimeMillis();
@@ -244,6 +240,7 @@ public class Pacman extends JPanel {
       hitGhost();
       return;
     }
+    
     final Point pacmanOnGhostPoint = pacman.getPoint();
     for (TheGhost theGhost : theGhosts) {
       if (theGhost.getPoint().equals(pacmanOnGhostPoint)) {
@@ -301,8 +298,8 @@ public class Pacman extends JPanel {
         moveItem(pacman, pacman.getFacingDirection());
         
         final int modeTime = (int) ((System.currentTimeMillis() - modeStart)/1000);
+        
         switch(gameMode) { 
-          
           case FRIGHTENED:
             if(modeTime > TIME_FRIGHTENED) { 
             gameMode = Mode.CHASE;
@@ -349,6 +346,7 @@ public class Pacman extends JPanel {
     }
   };
   
+  /** Sets the value of the point to the value in the board[][] */
   private void setValue(final Point thePoint, final byte theValue) { 
     board[thePoint.getY()][thePoint.getX()] = theValue;
   }

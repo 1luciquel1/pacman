@@ -9,15 +9,9 @@ import java.util.Queue;
  */
 
 public class TheGhost extends PacmanItem {
-  private final Color startColor;
-  private static final Color FRIGHTENED_COLOR = Color.GREEN;
-  private long startPenTime;
-  private final Queue<Point> prospectivePoints = new LinkedList<Point>();
   
-  private static final byte SIZE = 23;
-  private final byte[][] theBoard = new byte[SIZE][SIZE];
+  private static final Color FRIGHTENED_COLOR = Color.GREEN;
   private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
-  private Point cornerPoint;
   
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
@@ -25,14 +19,37 @@ public class TheGhost extends PacmanItem {
   private static final byte PACMAN = -2;
   private static final byte CORNER = -3;
   
-  private boolean isReleased = false;
+  private static final byte SIZE = 23;
   
+  private final byte[][] theBoard = new byte[SIZE][SIZE];
   private final Point aPoint = new Point();
+  private final Queue<Point> prospectivePoints = new LinkedList<Point>();
+  
+  private final Color startColor;
   
   private Mode gameMode;
+  private Direction randomDirection;
   
-  private byte previousValue;
+  private Point cornerPoint;
+  private Point pacmanLoc = null;
+  private Point cornerLoc = null;
   
+  private byte lookFor;
+  private long startPenTime;
+  private boolean isReleased = false;
+  
+  /** Constructor */
+  public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
+    super((byte)x, (byte)y, theColor);
+    this.startColor = theColor;
+    
+    cornerPoint = getCorner(new Point(x, y));
+    cornerLoc = cornerPoint;
+    startPenTime = System.currentTimeMillis();
+    this.updateBoard(pacmanGrid);
+  }
+  
+  /** Updates the ghost's internal board with the ghost's custom values */
   public void updateBoard(final byte[][] pacmanBoard) {
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
@@ -47,16 +64,11 @@ public class TheGhost extends PacmanItem {
         }
       }
     }
-    this.previousValue = pacmanBoard[this.y][this.x];
     this.theBoard[this.y][this.x] = GHOST;
     this.theBoard[cornerPoint.getY()][cornerPoint.getX()] = CORNER;
     
     aPoint.setX(x);
     aPoint.setY(y);
-  }
-  
-  public byte getPrevious() { 
-    return this.previousValue;
   }
   
   /** Move and change colors according to gameMode */
@@ -79,8 +91,6 @@ public class TheGhost extends PacmanItem {
     }
   }
   
-  
-  private Direction randomDirection;
   /**Scatter mode: Move randomly */
   private void scatterMode(final Point currentLoc) { 
     
@@ -106,10 +116,6 @@ public class TheGhost extends PacmanItem {
       theColor = startColor;
     }
   }
-  
-  private Point pacmanLoc = null;
-  private Point cornerLoc = null;
-  private byte lookFor;
   
   /**
    * Checks all 4 directions around the point If that item does not have my number and it's not a wall 
@@ -151,6 +157,7 @@ public class TheGhost extends PacmanItem {
     }
   }
   
+  /** Starts the BFA to find a point */
   private void startBreadthFirstAlgorithm(final Point startPoint) {
     if(startPoint.equals(cornerPoint)) {
       cornerPoint = getCorner(startPoint);
@@ -163,13 +170,13 @@ public class TheGhost extends PacmanItem {
     while (!prospectivePoints.isEmpty()) {
       availableInDirections(prospectivePoints.remove());
     }
-    //printBoard();
     
     if(pacmanLoc != null) { 
       super.move(pacmanToGhost());
     }
   }
   
+  /** Returns the direction to a get to the correct item. Item is based upon game mode */
   private Direction pacmanToGhost() { 
     byte itemAtNow = 0;
     if(gameMode == Mode.CHASE) {
@@ -215,7 +222,8 @@ public class TheGhost extends PacmanItem {
   
   /** Returns the item at a Point */
   private byte itemAtPoint(final Point thePoint) {
-    if(thePoint.getX() >= theBoard.length || thePoint.getY() >= theBoard[0].length ||  thePoint.getX() < 0 || thePoint.getY() < 0) { 
+    if(thePoint.getX() >= theBoard.length || thePoint.getY() >= theBoard[0].length
+         ||  thePoint.getX() < 0 || thePoint.getY() < 0) { 
       if(gameMode == Mode.CHASE) {
         return PACMAN;
       }
@@ -234,54 +242,17 @@ public class TheGhost extends PacmanItem {
     theBoard[(byte) thePoint.getY()][(byte) thePoint.getX()] = (byte) theNum;
   }
   
-  public Queue<Point> getProspectivePoints() {
-    return this.prospectivePoints;
-  }
-  
-  public void addPoint(final Point thePoint) {
-    prospectivePoints.add(thePoint);
-  }
-  
-  public void clearQ() {
-    this.prospectivePoints.removeAll(prospectivePoints);
-  }
-  
-  public Point getFirst() {
-    return this.prospectivePoints.remove();
-  }
-  
-  public Point getButKeepFirst() {
-    return this.prospectivePoints.peek();
-  }
-  
-  public void addPoints(final Point[] thePoints) {
-    this.prospectivePoints.addAll(Arrays.asList(thePoints));
-  }
-  
-  public Point[] getPoints() {
-    return prospectivePoints.toArray(new Point[prospectivePoints.size()]);
-  }
-  
-  /** Constructor */
-  public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
-    super((byte)x, (byte)y, theColor);
-    this.startColor = theColor;
-    
-    cornerPoint = getCorner(new Point(x, y));
-    cornerLoc = cornerPoint;
-    startPenTime = System.currentTimeMillis();
-    this.updateBoard(pacmanGrid);
-  }
-  
   /** Returns true if the ghost has been released from the pen */
   public boolean isReleased() { 
     return isReleased;
   }
   
+  /** Release the ghost from the pen */
   public void release() { 
     isReleased = true;
   }
   
+  /** Put the ghost in the pen */
   public void setInPen() { 
     isReleased = false;
   }
@@ -291,6 +262,7 @@ public class TheGhost extends PacmanItem {
     return this.startPenTime;
   }
   
+  /** Returns the Point for a random corner */
   private Point getCorner(final Point currentPosition) { 
     final Point newPoint = corners[theGenerator.nextInt(corners.length)];
     if(currentPosition.equals(newPoint)) {
@@ -299,30 +271,29 @@ public class TheGhost extends PacmanItem {
     return newPoint;
   }
   
-  public void setPenTime(long time) {
-    this.startPenTime = time;
-  }
-  
-  public String toString() {
-    return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y;
-  }
-  
+  /** Print the board */
   public void printBoard() {
-    DecimalFormat df = new DecimalFormat("00");
+    final DecimalFormat df = new DecimalFormat("00");
     
     for (byte i = 0; i < theBoard.length; i++) {
       for (byte y = 0; y < theBoard[i].length; y++) {
-        
         if (theBoard[i][y] == WALL) {
           System.out.print("XX\t");
-        } else if (theBoard[i][y] == UNEXPLORED) {
+        } 
+        else if (theBoard[i][y] == UNEXPLORED) {
           System.out.print("--\t");
-        } else {
+        } 
+        else {
           System.out.print(df.format(theBoard[i][y]) + "\t");
         }
       }
       System.out.println();
     }
     System.out.println();
+  }
+  
+  @Override
+  public String toString() {
+    return "GHOST:\t" + name + "\tX: " + x + "\tY: " + y;
   }
 }
