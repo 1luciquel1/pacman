@@ -1,9 +1,8 @@
- import java.awt.Color;
+import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.Queue;
-import java.util.LinkedList;
 import java.util.Arrays;
-import java.util.Random;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Written by Ryan D'souza Brown University CS 015 Final Project Represents the ghosts in the Pacman game
@@ -20,16 +19,11 @@ public class TheGhost extends PacmanItem {
   private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
   private Point cornerPoint;
   
-  private static final Point[] randomPoints = {corners[0]}; //new Point[1];
-  
-  private final Direction[] randomDirections = new Direction[50];
-  
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
   private static final byte GHOST = 0;
   private static final byte PACMAN = -2;
   private static final byte CORNER = -3;
-  private static final byte OTHER_GHOST = -4;
   
   private boolean isReleased = false;
   
@@ -103,12 +97,6 @@ public class TheGhost extends PacmanItem {
     }
   }
   
-  /**Frightened Mode: Move to corner of the board */
-  private void frightenedMode(final Point currentLoc) { 
-    //Randomly choose 1 of 4 corners, breadthFirst to it 
-    
-  }
-  
   /**Change Ghost color based upon game mode */
   private void setColor() { 
     if(gameMode == Mode.FRIGHTENED) {
@@ -121,7 +109,6 @@ public class TheGhost extends PacmanItem {
   
   private Point pacmanLoc = null;
   private Point cornerLoc = null;
-  private Point randomLoc = null;
   private byte lookFor;
   
   /**
@@ -214,11 +201,6 @@ public class TheGhost extends PacmanItem {
       }
     }
     return getOppositeDirection(moveDirection);
-  }
-  
-  /** Updates the board at the given Point given the next Direction and the number */
-  private void updateBoard(final Point thePoint, final Direction theDirection, final byte num) {
-    updateBoard(super.getNewPoint(thePoint, theDirection), num);
   }
   
   /** Updates the board at the given Point with the given number */

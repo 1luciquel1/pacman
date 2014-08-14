@@ -1,10 +1,15 @@
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * Written by Ryan D'souza Brown University CS 015 Final Project Main Class of Pacman game
@@ -187,7 +192,7 @@ public class Pacman extends JPanel {
   public byte getItemAtPoint(final Point thePoint) {
     return board[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
-
+  
   /** Moves the item parameter based on the direction parameter */
   public void moveItem(final ThePacman theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;

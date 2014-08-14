@@ -21,7 +21,7 @@ public abstract class PacmanItem {
   
   protected byte x;
   protected byte y;
-
+  
   protected Color theColor;
   protected String name = "";
   
@@ -88,8 +88,6 @@ public abstract class PacmanItem {
       }
     }
     
-    private final Point aPoint = new Point(0, 0);
-    
     /** Returns a new Point from the given point and the direction */
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
       if(theOriginal == null || theDirection == null) { 
@@ -132,7 +130,7 @@ public abstract class PacmanItem {
     public static Direction getRandomDirection() { 
       return theDirections[theGenerator.nextInt(theDirections.length)];
     }
-   
+    
     /** @param new point */
     public void setPoint(final Point thePoint) {
       this.x = (byte) thePoint.getX();
@@ -215,9 +213,6 @@ public abstract class PacmanItem {
     /** @return Pointform of object's location */
     public Point getPoint() {
       return new Point(x, y);
-      /*thePoint.setX(x);
-      thePoint.setY(y);
-      return thePoint;*/
     }
     
     /** Sets the name of the item based on the color */
