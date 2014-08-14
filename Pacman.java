@@ -17,13 +17,13 @@ import javax.swing.JPanel;
 
 public class Pacman extends JPanel {
   
-  private Mode gameMode;
-  private long modeStart;
-  
-  private final byte board[][] = getBoard();
-  private final TheGhost[] theGhosts = new TheGhost[4];
-  
-  private static final String SPACE = "     ";
+  public static final byte WALL = 1 << 0;
+  public static final byte FREE = 1 << 1;
+  public static final byte DOT = 1 << 2;
+  public static final byte ENERGIZER = 1 << 3;
+  public static final byte PACMAN = 1 << 4;
+  public static final byte GHOST = 1 << 5;
+  public static final byte OUT = 1 << 6;
   
   private static final byte SCALE = 20;
   private static final byte PACMAN_SIZE = 15;
@@ -36,20 +36,19 @@ public class Pacman extends JPanel {
   private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;
   
-  public static final byte WALL = 1 << 0;
-  public static final byte FREE = 1 << 1;
-  public static final byte DOT = 1 << 2;
-  public static final byte ENERGIZER = 1 << 3;
-  public static final byte PACMAN = 1 << 4;
-  public static final byte GHOST = 1 << 5;
-  public static final byte OUT = 1 << 6;
-  
+  private static final String SPACE = "     ";
   private final Queue<TheGhost> ghostPenQ = new LinkedList<TheGhost>();
+  
+  private final byte board[][] = getBoard();
+  private final TheGhost[] theGhosts = new TheGhost[4];
   
   private final JLabel pacmanScoreLabel;
   private final JLabel pacmanLivesLabel;
   private final JLabel ghostModeLabel;
   private final JLabel nextGhostReleaseLabel;
+  
+  private Mode gameMode;
+  private long modeStart;
   
   private TheGhost redGhost, pinkGhost, blueGhost, orangeGhost;
   private ThePacman pacman;
@@ -66,7 +65,7 @@ public class Pacman extends JPanel {
   private long pacmanScore = 0;
   private byte pacmanLives = 3;
   
-  private boolean controlTouch = false;
+  private boolean controlTouch;
   private boolean isChaseMode;
   
   /** Constructor, initializes JPanel and board */
@@ -518,7 +517,7 @@ public class Pacman extends JPanel {
   
   /** Update board location with that Pacman type */
   public void updateBoard(final Point thePoint, final byte theItem) {
-    if(thePoint.getY() >= board[0].length-1 || thePoint.getX() >= board.length-1) {
+    if(thePoint.getX() >= (board.length-1) || thePoint.getY() >= (board.length-1)) {
       System.out.println("UpdateBoard\t" + thePoint);
       return;
     }
