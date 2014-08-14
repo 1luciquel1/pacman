@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.Random;
 
 /** Written by Ryan D'souza
   * Brown University CS 015 Final Project 
@@ -11,6 +12,7 @@ public abstract class PacmanItem {
   protected final byte startY;
   
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+  protected static final Random theGenerator = new Random();
   
   protected Direction desiredDirection;
   protected Direction facingDirection;
@@ -122,6 +124,11 @@ public abstract class PacmanItem {
         return null;
     }
     
+    /** Returns random direction */
+    public static Direction getRandomDirection() { 
+      return theDirections[theGenerator.nextInt(theDirections.length)];
+    }
+   
     /** @param new point */
     public void setPoint(final Point thePoint) {
       this.x = (byte) thePoint.getX();
