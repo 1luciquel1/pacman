@@ -21,7 +21,7 @@ public class TheGhost extends PacmanItem {
   private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
   private Point cornerPoint;
   
-  private final Point[] randomPoints = new Point[1];
+  private static final Point[] randomPoints = corners;//new Point[1];
   
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
@@ -309,8 +309,10 @@ public class TheGhost extends PacmanItem {
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
     
-    for(int i = 0; i < randomPoints.length; i++) { 
-      randomPoints[i] = randomPointNoWall();
+    if(randomPoints[0] == null) { 
+      for(int i = 0; i < randomPoints.length; i++) { 
+        randomPoints[i] = randomPointNoWall();
+      }
     }
   }
   
