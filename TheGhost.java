@@ -21,7 +21,9 @@ public class TheGhost extends PacmanItem {
   private static final Point[] corners = {new Point(1, 21), new Point(21, 1), new Point(21, 21), new Point(1, 1)};
   private Point cornerPoint;
   
-  private static final Point[] randomPoints = corners;//new Point[1];
+  private static final Point[] randomPoints = {corners[0]}; //new Point[1];
+  
+  private final Direction[] randomDirections = new Direction[50];
   
   private static final byte WALL = -1;
   private static final byte UNEXPLORED = Byte.MAX_VALUE;
@@ -78,8 +80,8 @@ public class TheGhost extends PacmanItem {
       System.out.println(theRandomPoint);
       updateBoard(theRandomPoint, RANDOM_POINT);
       lookFor = RANDOM_POINT;
-      startBreadthFirstAlgorithm(ghostLocation);
-      //scatterMode(ghostLocation);
+      //startBreadthFirstAlgorithm(ghostLocation);
+      scatterMode(ghostLocation);
     }
   }
   
@@ -97,10 +99,16 @@ public class TheGhost extends PacmanItem {
     }
   }
   
+  int counter = 0;
   /**Scatter mode: Move randomly */
   private void scatterMode(final Point currentLoc) { 
+    if(counter >= randomDirections.length) { 
+      counter = 0;
+    }
+    
     //Choose a randomDirection
-    final Direction randomDirection = theDirections[theGenerator.nextInt(theDirections.length)];
+    final Direction randomDirection = randomDirections[counter];
+    counter++;
     
     if(itemAtPoint(randomDirection, currentLoc) == WALL) {
       scatterMode(currentLoc);
@@ -308,6 +316,26 @@ public class TheGhost extends PacmanItem {
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
+    
+    for(int i = 0; i < randomDirections.length; i++) { 
+      final int randomNum = theGenerator.nextInt(Integer.MAX_VALUE);
+      
+      if(randomNum % 2 == 0) { 
+        randomDirections[i] = Direction.UP;
+      }
+      else if(randomNum % 3 == 0) { 
+        randomDirections[i] = Direction.LEFT;
+      }
+      else if(randomNum % 7 == 0) { 
+        randomDirections[i] = Direction.DOWN;
+      }
+      else if(randomNum % 5 == 0) { 
+        randomDirections[i] = Direction.RIGHT;
+      }
+      else { 
+        randomDirections[i] = theDirections[theGenerator.nextInt(theDirections.length)];
+      }
+    }
     
     if(randomPoints[0] == null) { 
       for(int i = 0; i < randomPoints.length; i++) { 
