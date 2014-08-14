@@ -52,10 +52,10 @@ public class Pacman extends JPanel {
   private long pacmanScore = 0;
   private byte pacmanLives = 3;
   
-  private JLabel pacmanScoreLabel;
-  private JLabel pacmanLivesLabel;
-  private JLabel ghostModeLabel;
-  private JLabel nextGhostReleaseLabel;
+  private final JLabel pacmanScoreLabel;
+  private final JLabel pacmanLivesLabel;
+  private final JLabel ghostModeLabel;
+  private final JLabel nextGhostReleaseLabel;
   
   private boolean controlTouch = false;
   private boolean isChaseMode;
@@ -187,63 +187,9 @@ public class Pacman extends JPanel {
   public byte getItemAtPoint(final Point thePoint) {
     return board[(byte) thePoint.getY()][(byte) thePoint.getX()];
   }
-  
-  /** Returns an array of points in 1 step in any direction that the ghost can move */
-  public Point[] getValidNeighbors(final TheGhost theGhost) {
-    ArrayList<Point> thePoints = new ArrayList<Point>();
-    
-    if (getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.UP)) != WALL)
-      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.UP));
-    if (getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.DOWN)) != WALL)
-      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.DOWN));
-    if (getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.LEFT)) != WALL)
-      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.LEFT));
-    if (getItemAtPoint(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT)) != WALL)
-      thePoints.add(theGhost.getProspectivePoint(PacmanItem.Direction.RIGHT));
-    return thePoints.toArray(new Point[thePoints.size()]);
-  }
-  
-  /** Returns an array of points that the Point can move (anything but a wall) */
-  public Point[] getValidNeighbors(final Point thePoint) {
-    return getValidNeighbors(new TheGhost(null, (byte) thePoint.getX(), (byte) thePoint.getY(), board, gameMode));
-  }
-  
-  /** Returns the direction to get from theGhost to the Point */
-  public PacmanItem.Direction getDirection(final TheGhost theGhost, final Point thePoint) {
-    return getDirections(theGhost, new Point[] { thePoint })[0];
-  }
-  
-  /** Returns an array of directions for getting theGhost to the Points */
-  public PacmanItem.Direction[] getDirections(final TheGhost theGhost, final Point[] thePoints) {
-    PacmanItem.Direction[] theDirections = new PacmanItem.Direction[thePoints.length];
-    
-    for (byte i = 0; i < thePoints.length; i++) {
-      if ((byte) thePoints[i].getX() == theGhost.getX()) {
-        // If y is greater, lower down
-        if ((byte) thePoints[i].getY() > theGhost.getY()) {
-          theDirections[i] = PacmanItem.Direction.DOWN;
-        }
-        // If y is less, up
-        else if ((byte) thePoints[i].getY() < theGhost.getY()) {
-          theDirections[i] = PacmanItem.Direction.UP;
-        }
-      }
-      else if ((byte) thePoints[i].getY() == theGhost.getY()) {
-        // If x is greater, further out
-        if ((byte) thePoints[i].getX() > theGhost.getX()) {
-          theDirections[i] = PacmanItem.Direction.RIGHT;
-        }
-        // If x is less, further in
-        if ((byte) thePoints[i].getX() < theGhost.getX()) {
-          theDirections[i] = PacmanItem.Direction.LEFT;
-        }
-      }
-    }
-    return theDirections;
-  }
-  
+
   /** Moves the item parameter based on the direction parameter */
-  public void moveItem(final PacmanItem theItem, final PacmanItem.Direction theDirection) {
+  public void moveItem(final ThePacman theItem, final PacmanItem.Direction theDirection) {
     controlTouch = false;
     
     if (theDirection == null) {
