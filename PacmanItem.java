@@ -86,7 +86,7 @@ public abstract class PacmanItem {
       }
     }
     
-    private static final Point aPoint = new Point(0, 0);
+    private final Point aPoint = new Point(0, 0);
     
     /** Returns a new Point from the given point and the direction */
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
