@@ -30,7 +30,6 @@ public class TheGhost extends PacmanItem {
   private static final byte PACMAN = -2;
   private static final byte CORNER = -3;
   private static final byte OTHER_GHOST = -4;
-  private static final byte RANDOM_POINT = -5;
   
   private boolean isReleased = false;
   
@@ -149,9 +148,6 @@ public class TheGhost extends PacmanItem {
         else if(gameMode == Mode.FRIGHTENED) { 
           cornerLoc = newPoint;
         }
-        else if(gameMode == Mode.SCATTER) { 
-          randomLoc = newPoint;
-        }
         prospectivePoints.clear();
         return;
       }
@@ -195,9 +191,6 @@ public class TheGhost extends PacmanItem {
     else if(gameMode == Mode.FRIGHTENED) { 
       itemAtNow = itemAtPoint(cornerLoc);
     }
-    else if(gameMode == Mode.SCATTER) { 
-      itemAtNow = itemAtPoint(randomLoc);
-    }
     
     Point workBackwards = null;
     if(gameMode == Mode.CHASE) {
@@ -205,9 +198,6 @@ public class TheGhost extends PacmanItem {
     }
     else if(gameMode == Mode.FRIGHTENED) { 
       workBackwards = cornerLoc;
-    }
-    else if(gameMode == Mode.SCATTER) { 
-      workBackwards = randomLoc;
     }
     
     Direction moveDirection = null;
@@ -249,9 +239,6 @@ public class TheGhost extends PacmanItem {
       }
       else if(gameMode == Mode.FRIGHTENED) { 
         return CORNER;
-      }
-      else if(gameMode == Mode.SCATTER) { 
-        return RANDOM_POINT;
       }
       else { 
         return PACMAN;
