@@ -89,7 +89,7 @@ public abstract class PacmanItem {
     private final Point aPoint = new Point(0, 0);
     
     /** Returns a new Point from the given point and the direction */
-    public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
+    public Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
       aPoint.setX(theOriginal.getX());
       aPoint.setY(theOriginal.getY());
       switch(theDirection) { 
