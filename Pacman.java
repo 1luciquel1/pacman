@@ -26,7 +26,7 @@ public class Pacman extends JPanel {
   private static final byte DOT_SIZE = 5;
   private static final byte ENERGIZER_SIZE = DOT_SIZE * 2;
   
-  private static final int TIME_CHASE = 10; //Seconds
+  private static final int TIME_CHASE = 5; //Seconds 10
   public static final int TIME_SCATTER = 7;
   private static final int TIME_FRIGHTENED = 10; 
   private static final byte GHOST_RELEASE = 5;

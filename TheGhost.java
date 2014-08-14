@@ -14,7 +14,6 @@ public class TheGhost extends PacmanItem {
   private static final Color FRIGHTENED_COLOR = Color.GREEN;
   private long startPenTime;
   private final Queue<Point> prospectivePoints = new LinkedList<Point>();
-  private static final Random theGenerator = new Random();
   
   private static final byte SIZE = 23;
   private final byte[][] theBoard = new byte[SIZE][SIZE];
@@ -76,10 +75,10 @@ public class TheGhost extends PacmanItem {
     }
     
     else if(gameMode == Mode.SCATTER) {
-      final Point theRandomPoint = randomPoints[theGenerator.nextInt(randomPoints.length)];
-      System.out.println(theRandomPoint);
-      updateBoard(theRandomPoint, RANDOM_POINT);
-      lookFor = RANDOM_POINT;
+      //final Point theRandomPoint = randomPoints[theGenerator.nextInt(randomPoints.length)];
+
+      //updateBoard(theRandomPoint, RANDOM_POINT);
+      //lookFor = RANDOM_POINT;
       //startBreadthFirstAlgorithm(ghostLocation);
       scatterMode(ghostLocation);
     }
@@ -99,21 +98,19 @@ public class TheGhost extends PacmanItem {
     }
   }
   
-  int counter = 0;
+  private Direction randomDirection;
   /**Scatter mode: Move randomly */
   private void scatterMode(final Point currentLoc) { 
-    if(counter >= randomDirections.length) { 
-      counter = 0;
+    
+    if(randomDirection == null) { 
+      randomDirection = super.getRandomDirection();
     }
     
-    //Choose a randomDirection
-    final Direction randomDirection = randomDirections[counter];
-    counter++;
-    
-    if(itemAtPoint(randomDirection, currentLoc) == WALL) {
+    if(itemAtPoint(randomDirection, currentLoc) == WALL) { 
+      randomDirection = super.getRandomDirection();
       scatterMode(currentLoc);
     }
-    else { 
+    else {
       super.move(randomDirection);
     }
   }
