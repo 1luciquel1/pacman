@@ -326,7 +326,7 @@ public class Pacman extends JPanel {
         for(TheGhost theGhost : theGhosts) { 
           if(theGhost.isReleased()) { 
             theGhost.updateBoard(board);
-            updateBoard(theGhost.getPoint(), FREE);
+            setValue(theGhost.getPoint(), (byte) (getItemAtPoint(theGhost.getPoint()) & (~GHOST)));
             theGhost.move(theGhost.getPoint(), gameMode);
             updateBoard(theGhost.getPoint(), GHOST);
           }
@@ -343,6 +343,10 @@ public class Pacman extends JPanel {
       }
     }
   };
+  
+  private void setValue(final Point thePoint, final byte theValue) { 
+    board[thePoint.getY()][thePoint.getX()] = theValue;
+  }
   
   /**
    * If Pacman hits a ghost and it's not on frightened mode Move pacman back to initial position, decrement lives
@@ -490,7 +494,7 @@ public class Pacman extends JPanel {
     board[theGhost.getY()][theGhost.getX()] = FREE;
     theGhost.setX((byte) ghostReleasePoint.getX());
     theGhost.setY((byte) ghostReleasePoint.getY());
-    board[theGhost.getY()][theGhost.getX()] = GHOST;
+    board[theGhost.getY()][theGhost.getX()] = (byte) (GHOST | board[theGhost.getY()][theGhost.getX()]);
     ghostReleasedAt = System.currentTimeMillis();
     theGhost.release();
   }
@@ -511,11 +515,11 @@ public class Pacman extends JPanel {
   
   /** Update board location with that Pacman type */
   public void updateBoard(final Point thePoint, final byte theItem) {
-    if(thePoint.getY() >= board[0].length || thePoint.getX() >= board.length) {
+    if(thePoint.getY() >= board[0].length-1 || thePoint.getX() >= board.length-1) {
       System.out.println("UpdateBoard\t" + thePoint);
       return;
     }
-    board[(byte) thePoint.getY()][(byte) thePoint.getX()] = theItem;
+    board[thePoint.getY()][thePoint.getX()] = (byte) (theItem | board[thePoint.getY()][thePoint.getX()]);
   }
   
   /** @return true if chase mode */
