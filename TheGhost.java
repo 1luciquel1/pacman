@@ -38,6 +38,8 @@ public class TheGhost extends PacmanItem {
   
   private Mode gameMode;
   
+  private byte previousValue;
+  
   public void updateBoard(final byte[][] pacmanBoard) {
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
@@ -52,11 +54,16 @@ public class TheGhost extends PacmanItem {
         }
       }
     }
+    this.previousValue = pacmanBoard[this.y][this.x];
     this.theBoard[this.y][this.x] = GHOST;
     this.theBoard[cornerPoint.getY()][cornerPoint.getX()] = CORNER;
     
     aPoint.setX(x);
     aPoint.setY(y);
+  }
+  
+  public byte getPrevious() { 
+    return this.previousValue;
   }
   
   /** Move and change colors according to gameMode */
@@ -75,28 +82,10 @@ public class TheGhost extends PacmanItem {
     }
     
     else if(gameMode == Mode.SCATTER) {
-      //final Point theRandomPoint = randomPoints[theGenerator.nextInt(randomPoints.length)];
-
-      //updateBoard(theRandomPoint, RANDOM_POINT);
-      //lookFor = RANDOM_POINT;
-      //startBreadthFirstAlgorithm(ghostLocation);
       scatterMode(ghostLocation);
     }
   }
   
-  /** Returns a random point that doesn't point to a wall */
-  private Point randomPointNoWall() { 
-    final byte x = (byte) theGenerator.nextInt(theBoard.length);
-    final byte y = (byte) theGenerator.nextInt(theBoard[0].length);
-    final Point random = new Point(x, y);
-    if(itemAtPoint(random) != WALL ) {
-      return random;
-    }
-    else { 
-      System.out.println("Recursive");
-      return randomPointNoWall();
-    }
-  }
   
   private Direction randomDirection;
   /**Scatter mode: Move randomly */
@@ -313,32 +302,6 @@ public class TheGhost extends PacmanItem {
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
     this.updateBoard(pacmanGrid);
-    
-    for(int i = 0; i < randomDirections.length; i++) { 
-      final int randomNum = theGenerator.nextInt(Integer.MAX_VALUE);
-      
-      if(randomNum % 2 == 0) { 
-        randomDirections[i] = Direction.UP;
-      }
-      else if(randomNum % 3 == 0) { 
-        randomDirections[i] = Direction.LEFT;
-      }
-      else if(randomNum % 7 == 0) { 
-        randomDirections[i] = Direction.DOWN;
-      }
-      else if(randomNum % 5 == 0) { 
-        randomDirections[i] = Direction.RIGHT;
-      }
-      else { 
-        randomDirections[i] = theDirections[theGenerator.nextInt(theDirections.length)];
-      }
-    }
-    
-    if(randomPoints[0] == null) { 
-      for(int i = 0; i < randomPoints.length; i++) { 
-        randomPoints[i] = randomPointNoWall();
-      }
-    }
   }
   
   /** Returns true if the ghost has been released from the pen */
