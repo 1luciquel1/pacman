@@ -352,7 +352,7 @@ public class Pacman extends JPanel {
    * If Pacman hits a ghost and it's not on frightened mode Move pacman back to initial position, decrement lives
    */
   public void hitGhost() {
-    if(isFrightened()) { 
+    if(gameMode == Mode.FRIGHTENED) { 
       return;
     }
     final Point pacmanOnGhostPoint = pacman.getPoint();
