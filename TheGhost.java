@@ -34,6 +34,8 @@ public class TheGhost extends PacmanItem {
   private Point pacmanLoc = null;
   private Point cornerLoc = null;
   
+  private final byte randomDistFromPacman;
+  
   private byte lookFor;
   private long startPenTime;
   private boolean isReleased = false;
@@ -42,7 +44,7 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
-    
+    randomDistFromPacman = 0; //(byte) theGenerator.nextInt(4);
     cornerPoint = getCorner(new Point(x, y));
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
@@ -81,10 +83,13 @@ public class TheGhost extends PacmanItem {
   /** Re-assigns pacman to a point a random distance from Pacman's actual location
     * Use is so that all the ghosts don't go for exactly Pacman */
   private void reassignPacman(final Point pacmanPoint){
-    final int randomDistFromPacman = theGenerator.nextInt(5);
-    
     for(Direction theDirection : theDirections) { 
-      
+      final Point directionDistance = getProspectivePoint(pacmanPoint, theDirection, randomDistFromPacman);
+      if(itemAtPoint(directionDistance) != WALL) { 
+        this.theBoard[pacmanPoint.getY()][pacmanPoint.getX()] = UNEXPLORED;
+        this.theBoard[directionDistance.getY()][directionDistance.getX()] = PACMAN;
+        return;
+      }
     }
   }
   

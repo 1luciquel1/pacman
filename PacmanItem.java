@@ -89,7 +89,9 @@ public abstract class PacmanItem {
     }
     
     /** @return ProspectivePoint if the item were to move in that direction a certain distance */
-    public Point getProspectivePoint(final Direction theDirection, final byte units) {
+    public Point getProspectivePoint(final Point currentLoc, final Direction theDirection, final byte units) {
+      final byte x= currentLoc.getX();
+      final byte y = currentLoc.getY();
       switch(theDirection) {
         case UP:
           return new Point(x, y - units);
