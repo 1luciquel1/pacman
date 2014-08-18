@@ -218,7 +218,7 @@ public class TheGhost extends PacmanItem {
     
     Direction moveDirection = null;
     
-    while(itemAtNow != 0) { 
+    while(itemAtNow > 0) { 
       for(Direction theDirection : theDirections) { 
         final Point newPoint = getNewPoint(workBackwards, theDirection);
         final byte itemAtNewPoint = itemAtPoint(newPoint);
