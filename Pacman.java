@@ -280,7 +280,6 @@ public class Pacman extends JPanel {
     releaseGhosts();
     updateLabels();
     drawSquares();
-    System.out.println(pacman.toString());
   }
   
   /** Thread that has most of the game logic

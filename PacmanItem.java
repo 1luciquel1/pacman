@@ -11,6 +11,10 @@ public abstract class PacmanItem {
   protected static final Direction[] theDirections = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
   protected static final Random theGenerator = new Random();
   
+  protected static final byte leftTransferX = 0;
+  protected static final byte rightTransferX = 22;
+  protected static final byte transferY = 11;
+  
   protected final Point thePoint = new Point();
   
   protected final byte startX;
@@ -69,6 +73,16 @@ public abstract class PacmanItem {
           
         default:
           break;
+      }
+      
+      
+      if(y == transferY) { 
+        if(x == leftTransferX) { 
+          x = rightTransferX;
+        }
+        else if(x == rightTransferX) { 
+          x = leftTransferX;
+        }
       }
     }
     
