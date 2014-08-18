@@ -517,7 +517,8 @@ public class Pacman extends JPanel {
   
   /** Update board location with that Pacman type */
   public void updateBoard(final Point thePoint, final byte theItem) {
-    if(thePoint.getX() >= (board.length-1) || thePoint.getY() >= (board.length-1)) {
+    if(thePoint.getX() >= (board.length) || thePoint.getY() >= (board[0].length) || 
+       thePoint.getX() < 0 || thePoint.getY() < 0) {
       System.out.println("UpdateBoard\t" + thePoint);
       return;
     }
