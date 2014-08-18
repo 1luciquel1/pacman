@@ -44,7 +44,7 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
-    randomDistFromPacman = 0; //(byte) theGenerator.nextInt(4);
+    randomDistFromPacman = (byte) theGenerator.nextInt(4);
     cornerPoint = getCorner(new Point(x, y));
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
@@ -86,8 +86,8 @@ public class TheGhost extends PacmanItem {
     for(Direction theDirection : theDirections) { 
       final Point directionDistance = getProspectivePoint(pacmanPoint, theDirection, randomDistFromPacman);
       if(itemAtPoint(directionDistance) != WALL) { 
-        this.theBoard[pacmanPoint.getY()][pacmanPoint.getX()] = UNEXPLORED;
-        this.theBoard[directionDistance.getY()][directionDistance.getX()] = PACMAN;
+        this.theBoard[pacmanPoint.getX()][pacmanPoint.getY()] = UNEXPLORED;
+        this.theBoard[directionDistance.getX()][directionDistance.getY()] = PACMAN;
         return;
       }
     }
