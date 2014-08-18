@@ -295,7 +295,8 @@ public class Pacman extends JPanel {
           pacman.setFacingDirection(pacman.getDesiredDirection());
         }
         moveItem(pacman, pacman.getFacingDirection());
-        
+        eatGhost();
+        hitGhost();
         final int modeTime = (int) ((System.currentTimeMillis() - modeStart)/1000);
         
         switch(gameMode) { 
