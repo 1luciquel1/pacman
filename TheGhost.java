@@ -51,6 +51,9 @@ public class TheGhost extends PacmanItem {
   
   /** Updates the ghost's internal board with the ghost's custom values */
   public void updateBoard(final byte[][] pacmanBoard) {
+    
+    final Point pacmanP = new Point();
+    
     for (byte i = 0; i < pacmanBoard.length; i++) {
       for (byte y = 0; y < pacmanBoard[i].length; y++) {
         if (pacmanBoard[i][y] == Pacman.WALL) {
@@ -58,6 +61,8 @@ public class TheGhost extends PacmanItem {
         }
         else if(pacmanBoard[i][y] == Pacman.PACMAN) { 
           this.theBoard[i][y] = this.PACMAN;
+          pacmanP.setX(i);
+          pacmanP.setY(y);
         }
         else {
           this.theBoard[i][y] = this.UNEXPLORED;
@@ -67,8 +72,20 @@ public class TheGhost extends PacmanItem {
     this.theBoard[this.y][this.x] = GHOST;
     this.theBoard[cornerPoint.getY()][cornerPoint.getX()] = CORNER;
     
+    reassignPacman(pacmanP);
+    
     aPoint.setX(x);
     aPoint.setY(y);
+  }
+  
+  /** Re-assigns pacman to a point a random distance from Pacman's actual location
+    * Use is so that all the ghosts don't go for exactly Pacman */
+  private void reassignPacman(final Point pacmanPoint){
+    final int randomDistFromPacman = theGenerator.nextInt(5);
+    
+    for(Direction theDirection : theDirections) { 
+      
+    }
   }
   
   /** Move and change colors according to gameMode */

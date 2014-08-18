@@ -88,6 +88,22 @@ public abstract class PacmanItem {
       }
     }
     
+    /** @return ProspectivePoint if the item were to move in that direction a certain distance */
+    public Point getProspectivePoint(final Direction theDirection, final byte units) {
+      switch(theDirection) {
+        case UP:
+          return new Point(x, y - units);
+        case DOWN:
+          return new Point(x, y + units);
+        case LEFT:
+          return new Point(x - units, y);
+        case RIGHT:
+          return new Point(x + units, y);
+        default:
+          return null;
+      }
+    }
+    
     /** Returns a new Point from the given point and the direction */
     public static Point getNewPoint(final Point theOriginal, final Direction theDirection) { 
       if(theOriginal == null || theDirection == null) { 
