@@ -44,7 +44,7 @@ public class TheGhost extends PacmanItem {
   public TheGhost(Color theColor, int x, int y, final byte[][] pacmanGrid, final Mode gameMode) {
     super((byte)x, (byte)y, theColor);
     this.startColor = theColor;
-    randomDistFromPacman = (byte) theGenerator.nextInt(4);
+    randomDistFromPacman = 0; //(byte) theGenerator.nextInt(4);
     cornerPoint = getCorner(new Point(x, y));
     cornerLoc = cornerPoint;
     startPenTime = System.currentTimeMillis();
