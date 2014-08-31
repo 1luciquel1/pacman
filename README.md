@@ -17,6 +17,8 @@ http://cs.brown.edu/courses/cs015/finalprojects/pacman/handout/PACMAN_HelpSessio
 
 Email me if you have any questions: dsouzarc@gmail.com
 
+I apologize for the poor screenshots. It was a bit difficult to take screenshots while avoiding being eaten by the ghosts.
+
 ![alt tag](https://github.com/dsouzarc/pacman/blob/master/Pacman1.png)
 ![alt tag](https://github.com/dsouzarc/pacman/blob/master/Pacman2.png)
 ![alt tag](https://github.com/dsouzarc/pacman/blob/master/Pacman3.png)
