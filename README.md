@@ -17,5 +17,4 @@ http://cs.brown.edu/courses/cs015/finalprojects/pacman/handout/PACMAN_HelpSessio
 
 Email me if you have any questions: dsouzarc@gmail.com
 
-During the creation of this game, I encountered many problems, most of which I've never had to worry about before.
-The problems mainly had to do with encapsulation, speed, memory usage, and the Breadth First Algorithm Search
+![alt tag](https://raw.github.com/dsouzarc/pacman/pacman1.png)
