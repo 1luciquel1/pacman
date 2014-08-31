@@ -17,4 +17,4 @@ http://cs.brown.edu/courses/cs015/finalprojects/pacman/handout/PACMAN_HelpSessio
 
 Email me if you have any questions: dsouzarc@gmail.com
 
-![alt tag](https://github.com/dsouzarc/pacman/blob/master/Pacman1.tiff)
+![alt tag](https://github.com/dsouzarc/pacman/blob/master/Pacman1.png)
