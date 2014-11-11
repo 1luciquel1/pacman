@@ -9,12 +9,6 @@ Running Instructions:
 2. Compile all files ( javac *.java )
 3. Run the main method of the Pacman.java file ( java Pacman )
 
-Brown University CS 015 Final Project
-
-Project Specifications: 
-http://cs.brown.edu/courses/cs015/finalprojects/pacman/handout/Pacman_2013.pdf
-http://cs.brown.edu/courses/cs015/finalprojects/pacman/handout/PACMAN_HelpSession_2013.pdf
-
 Email me if you have any questions: dsouzarc@gmail.com
 
 I apologize for the poor screenshots. It was a bit difficult to take screenshots while avoiding being eaten by the ghosts.
