@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * Written by Ryan D'souza Brown University CS 015 Final Project Main Class of Pacman game
+ * Written by Ryan D'souza Main Class of Pacman game
  */
 
 public class Pacman extends JPanel {
