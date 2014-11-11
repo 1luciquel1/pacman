@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.util.Random;
 
 /** Written by Ryan D'souza
-  * Brown University CS 015 Final Project 
   * Represents a Pacman object
   * ie. ghosts or Pacman */
 
