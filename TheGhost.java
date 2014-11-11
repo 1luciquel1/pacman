@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Written by Ryan D'souza Brown University CS 015 Final Project Represents the ghosts in the Pacman game
+ * Written by Ryan D'souza. Represents the ghosts in the Pacman game
  */
 
 public class TheGhost extends PacmanItem {
