@@ -1,19 +1,34 @@
-Written by Ryan D'souza
+##Written by Ryan D'souza
 
-Pacman as a Java GUI. Very conservative memory usage (uses bytes, not ints).
+###Pacman as a Java GUI.
 
-Pacman.java contains the main method that begins everything.
+#####Very conservative memory usage (uses bytes, not ints).
 
-Running Instructions:
+#####Pacman.java contains the main method that begins everything.
 
-1. cs015.jar should be added to the project library/file path. The .jar contains a 2D array that represents the board and its contents. 
+###Running Instructions (Commandline for Linux/OSX)
 
-2. Compile all files ( javac *.java )
+1. Download all files to the same directory
 
-3. Run the main method of the Pacman.java file ( java Pacman )
+2. Compile the files
+    javac -cp "cs015.jar" *.java
+
+3. Run the main method of the Pacman.java file
+    java -cp cs015.jar:. Pacman
 
 
-Email me if you have any questions: dsouzarc@gmail.com
+###Running Instructions (IDE)
+
+1. Download all the files to the same directory/project
+
+2. Add cs015.jar to the project library/file path.
+
+3. Run the main method of the Pacman.java file 
+
+
+Note: cs015.jar contains a 2D array that represents the board and its contents.
+
+####Email me if you have any questions: dsouzarc@gmail.com
 
 I apologize for the poor screenshots. It was a bit difficult to take screenshots while avoiding being eaten by the ghosts.
 
