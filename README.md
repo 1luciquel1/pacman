@@ -14,9 +14,11 @@
 
     javac -cp "cs015.jar" *.java
 
+
 3. Run the main method of the Pacman.java file
 
     java -cp cs015.jar:. Pacman
+
 
 
 ###Running Instructions (IDE)
